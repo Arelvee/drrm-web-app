@@ -14,6 +14,29 @@ import backgroundImage from '../assets/background.png';
 import historyImage from '../assets/history.jpg';
 
 const slides = [Slide1, Slide2, Slide3, Slide4];
+const newsItems = [
+    {
+      id: 1,
+      title: "HOPE: Strengthening Hospital Preparedness for Emergencies",
+      date: "January 00, 2025",
+      image: News1,
+      content: "This is the detailed content for HOPE program...",
+    },
+    {
+      id: 2,
+      title: "Basic Emergency Response Team Simulation Training (BERTST)",
+      date: "January 00, 2025",
+      image: News2,
+      content: "This training helps emergency teams prepare...",
+    },
+    {
+      id: 3,
+      title: "Mass Casualty Incident (MCI) and Triage Training",
+      date: "January 00, 2025",
+      image: News3,
+      content: "Mass casualty response training for healthcare professionals...",
+    },
+  ];
 
 function Body(){
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -38,7 +61,7 @@ function Body(){
                 <div className="relative z-10 px-0 md:px-6 text-center">
                     <p className="mb-4 text-sm md:text-3xl tracking-wide text-white">Welcome to</p>
                     <h1 className="text-xl font-extrabold uppercase md:text-5xl text-white">
-                        Disaster Risk Reduction and Management for Health Program
+                        Disaster Risk Reduction and Management <br /> in Health Program
                     </h1>
                     <p className="mt-4 mx-5 text-sm md:text-xl md:mx-20 text-white">
                         The UPM DRRM-H Program aims to provide virtual disaster training programs to prevent mistakes in actual 
@@ -79,62 +102,33 @@ function Body(){
                         </div>
                     </div>
                     <div className="news-section">
-                        <h2 className="text-3xl font-semibold text-center text-red-900 mb-4 uppercase">What's News?</h2>
+                        <h2 className="text-3xl font-semibold text-center text-red-900 mb-4 uppercase">
+                            What's News?
+                        </h2>
                         <div className="grid grid-cols-1 gap-2 mb-4">
-                            <a className="block sm:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative">
-                                <img src={News1} alt="News update" className="h-40 w-full object-cover rounded-md" />
+                            {newsItems.map((news) => (
+                            <Link
+                                key={news.id}
+                                to={`/news/${news.id}`}
+                                state={{ news }}
+                                className="block sm:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative"
+                            >
+                                <img
+                                src={news.image}
+                                alt={news.title}
+                                className="h-40 w-full object-cover rounded-md"
+                                />
                                 <div className="block sm:flex sm:flex-col justify-between">
-                                    <h1 className="text-xl my-2 sm:my-0 sm:text-xl font-semibold leading-relaxed hover:text-red-900">
-                                        HOPE: Strengthening Hospital Preparedness for Emergencies
-                                    </h1>
-                                    <p className="flex gap-2 mt-2 text-gray-600 sm:absolute sm:bottom-6 sm:right-8">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-calendar-days">
-                                            <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
-                                        </svg>January 00, 2025
-                                    </p>
+                                <h1 className="text-xl my-2 sm:my-0 sm:text-xl font-semibold leading-relaxed hover:text-red-900">
+                                    {news.title}
+                                </h1>
+                                <p className="flex gap-2 mt-2 text-gray-600 sm:absolute sm:bottom-6 sm:right-8">
+                                    {news.date}
+                                </p>
                                 </div>
-                            </a>
-                            <a className="block sm:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative">
-                                <img src={News2} alt="" className="h-40 w-full object-cover rounded-md"/>
-                                <div className="block sm:flex sm:flex-col justify-between">
-                                    <h1 className="text-xl my-2 mb-4 sm:my-0 sm:text-xl font-semibold leading-relaxed hover:text-red-900">
-                                        Basic Emergency Response Team Simulation Training (BERTST)
-                                    </h1>
-                                    <p className="flex gap-2 mt-2 text-gray-600 sm:absolute sm:bottom-6 sm:right-8">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-calendar-days">
-                                            <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
-                                        </svg>January 00, 2025
-                                    </p>
-                                </div>
-                            </a>
-                            <a className="block sm:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative">
-                                <img src={News3} alt="" className="h-40 w-full object-cover rounded-md"/>
-                                <div className="block sm:flex sm:flex-col justify-between">
-                                    <h1 className="text-xl my-2 sm:my-0 sm:text-xl font-semibold leading-relaxed hover:text-red-900">
-                                        Mass Casualty Incident (MCI) and Triage Training
-                                    </h1>
-                                    <p className="flex gap-2 mt-2 text-gray-600 sm:absolute sm:bottom-6 sm:right-8">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-calendar-days">
-                                            <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
-                                        </svg>January 00, 2025
-                                    </p>
-                                </div>
-                            </a>
-                            <a className="block sm:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative">
-                                <img src={News4} alt="" className="h-40 w-full object-cover rounded-md"/>
-                                <div className="block sm:flex sm:flex-col justify-between">
-                                    <h1 className="text-xl my-2 mb-4 sm:my-0 sm:text-xl font-semibold leading-relaxed hover:text-red-900">
-                                        Basic Emergency Response Team Simulation Training (BERTST)
-                                    </h1>
-                                    <p className="flex gap-2 mt-2 text-gray-600 sm:absolute sm:bottom-6 sm:right-8">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-calendar-days">
-                                            <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01 "/><path d="M16 18h.01"/>
-                                        </svg>January 00, 2025
-                                    </p>
-                                </div>
-                            </a>
+                            </Link>
+                            ))}
                         </div>
-            
                         <div className="text-center mt-6">
                             <Link to="/news" className="bg-red-900 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-red-700">
                                 Read All News

@@ -3,6 +3,10 @@ import { Eye, EyeOff } from 'lucide-react';
 import { auth } from "../firebase/firebase";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 
+import { db } from "../firebase/firebase"; 
+import { doc, setDoc } from "firebase/firestore";
+
+
 const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
     const [isLogin, setIsLogin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
@@ -33,13 +37,26 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
     
         try {
             if (isLogin) {
+                // Login user
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 setUser(userCredential.user);
             } else {
-                // Register and sign in the user immediately
+                // Register new user
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                setUser(userCredential.user); // Store user in state
+                const newUser = userCredential.user;
+    
+                // Store user in Firestore
+                const userRef = doc(db, "users", newUser.uid);
+                await setDoc(userRef, {
+                    email: newUser.email,
+                    role: "customer", // Default role for new users
+                    cart: [],
+                    orders: []
+                });
+    
+                setUser(newUser);
             }
+    
             closeForm();
         } catch (err) {
             setError(err.message);
