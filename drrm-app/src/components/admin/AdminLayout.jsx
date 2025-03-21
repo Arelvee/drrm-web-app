@@ -6,9 +6,12 @@ import Sidebar from "./AdminSidebar.jsx";
 
 function AdminLayout() {
   return (
-    <div>
-      <main className="p-6">
-        <Sidebar/>
+    <div className="flex min-h-screen">
+      {/* Sidebar - Stays Fixed on the Side */}
+      <Sidebar />
+
+      {/* Main Content */}
+      <main className="flex-1 p-6">
         <Routes>
           <Route path="/" element={<Navigate to="manual-post" />} /> {/* Default Redirect */}
           <Route path="dashboard" element={<AdminDashboard />} />
@@ -20,4 +23,3 @@ function AdminLayout() {
 }
 
 export default AdminLayout;
-

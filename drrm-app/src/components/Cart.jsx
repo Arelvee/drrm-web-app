@@ -73,7 +73,6 @@ const Cart = () => {
 
       await updateDoc(userRef, { cart: updatedCart });
 
-      setCartItems(updatedCart);
       showPopup("❌ Item removed from cart!");
     } catch (error) {
       console.error("Error removing item:", error);
@@ -112,29 +111,30 @@ const Cart = () => {
 
       {cartItems.length > 0 ? (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
+              setCartItems(updatedCart);
+  <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-300 px-4 py-2">Item</th>
-                <th className="border border-gray-300 px-4 py-2">Price</th>
-                <th className="border border-gray-300 px-4 py-2">Quantity</th>
-                <th className="border border-gray-300 px-4 py-2">Total</th>
-                <th className="border border-gray-300 px-4 py-2">Action</th>
+                <th className="px-4 py-2">Item</th>
+                <th className="px-4 py-2">Price</th>
+                <th className="px-4 py-2">Quantity</th>
+                <th className="px-4 py-2">Total</th>
+                <th className="px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
               {cartItems.map((item) => (
-                <tr key={item.manualId} className="text-center">
-                  <td className="border border-gray-300 px-4 py-2 flex items-center gap-2">
+                <tr key={item.manualId} className="text-center border-b border-gray-300">
+                  <td className="text-left px-4 py-2 flex gap-4 items-center">
                     <img
                       src={`http://localhost:5000${item.imageUrl}`}
                       alt={item.title}
                       className="h-16 w-16 object-cover rounded"
                     />
-                    <span>{item.title}</span>
+                      <p ><span className="text-sm text-gray-500">{item.category} </span><br />{item.title}</p>
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-red-900 font-bold">₱ {item.price}.00</td>
-                  <td className="border border-gray-300 px-4 py-2 gap-2">
+                  <td className=" px-4 py-2 text-red-900 font-bold">₱ {item.price}.00</td>
+                  <td className=" px-4 py-2 gap-2">
                     <button
                       onClick={() => updateQuantity(item.manualId, item.quantity - 1)}
                       className="mx-3 px-3 py-1 bg-gray-300 rounded"
@@ -149,8 +149,8 @@ const Cart = () => {
                       +
                     </button>
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">₱ {item.price * item.quantity}.00</td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className=" px-4 py-2">₱ {item.price * item.quantity}.00</td>
+                  <td className=" px-4 py-2">
                     <button
                       onClick={() => removeFromCart(item)}
                       className="text-red-600"

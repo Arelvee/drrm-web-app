@@ -10,13 +10,14 @@ import Trainings from './components/Berts.jsx';
 import Training2 from './components/Mci.jsx';
 import ELearning from './components/E-Learning.jsx';
 import Shop from './components/Shop.jsx';
+import ManualDetail from './components/ManualDetail.jsx';
+import OrderDetail from './components/OrderDetails.jsx';
 import CartPage from './components/Cart.jsx';
 import Checkout from './components/Checkout.jsx';
 import Profile from './components/Profile.jsx';
 import AdminLogin from './components/admin/AdminLoginForm.jsx';
 import PrivateRoute from './components/admin/PrivateRoute.jsx';
 import AdminLayout from './components/admin/AdminLayout.jsx';
-import MyPurchase from './components/Profile.jsx';
 
 // Public Layout
 const PublicLayout = ({ children }) => (
@@ -41,6 +42,9 @@ function App() {
       <Route path="/training2" element={<PublicLayout><Training2 /></PublicLayout>} />
       <Route path="/e-learning" element={<PublicLayout><ELearning /></PublicLayout>} />
       <Route path="/shop" element={<PublicLayout><Shop /></PublicLayout>} />
+      <Route path="/manual-detail" element={<PublicLayout><ManualDetail /></PublicLayout>} />
+      <Route path="/order/:orderId" element={<PublicLayout><OrderDetail /></PublicLayout>} />
+
 
       {/* Admin Routes (No Header/Footer) */}
       <Route path="/admin-login" element={<AdminLogin />} />
