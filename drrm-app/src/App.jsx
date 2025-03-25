@@ -38,6 +38,7 @@ function App() {
       <Route path="/checkout" element={<PublicLayout><Checkout /></PublicLayout>} />
       <Route path="/news" element={<PublicLayout><News /></PublicLayout>} />
       <Route path="/news/:id" element={<PublicLayout><NewsDetail /></PublicLayout>} />
+      <Route path="/events/:id" element={<PublicLayout><EventDetail /></PublicLayout>} />
       <Route path="/training1" element={<PublicLayout><Trainings /></PublicLayout>} />
       <Route path="/training2" element={<PublicLayout><Training2 /></PublicLayout>} />
       <Route path="/e-learning" element={<PublicLayout><ELearning /></PublicLayout>} />
