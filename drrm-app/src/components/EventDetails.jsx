@@ -15,8 +15,6 @@ function EventDetails() {
   if (!event) {
     return <div className="text-center text-red-500">Event not found!</div>;
   }
-
-
   return (
     <main className="mt-20 px-6 md:px-16">
       {/* Breadcrumbs */}
