@@ -60,24 +60,34 @@ const Cart = () => {
   
   const removeFromCart = async (manual) => {
     if (!auth.currentUser) return;
-
+  
     const userId = auth.currentUser.uid;
     const userRef = doc(db, "users", userId);
-
+  
     try {
       const userSnap = await getDoc(userRef);
       if (!userSnap.exists()) return;
-
-      const userData = userSnap.data();
-      const updatedCart = userData.cart.filter((item) => item.manualId !== manual.manualId);
-
+  
+      const updatedCart = cartItems.filter((item) => item.manualId !== manual.manualId);
+  
       await updateDoc(userRef, { cart: updatedCart });
-
+  
+      // ✅ Update UI immediately
+      setCartItems(updatedCart);
+  
       showPopup("❌ Item removed from cart!");
     } catch (error) {
       console.error("Error removing item:", error);
     }
   };
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    const newImageUrls = files.map(file => URL.createObjectURL(file));
+  
+    // ✅ Append instead of replacing
+    setImageUrls(prevUrls => [...prevUrls, ...newImageUrls]);
+  };
+  
 
   const showPopup = (msg) => {
     setMessage(msg);
@@ -111,8 +121,8 @@ const Cart = () => {
 
       {cartItems.length > 0 ? (
         <div className="overflow-x-auto">
-              setCartItems(updatedCart);
-  <table className="w-full border-collapse">
+              
+          <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
                 <th className="px-4 py-2">Item</th>

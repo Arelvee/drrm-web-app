@@ -98,6 +98,12 @@ const MyPurchase = () => {
             Pending Orders
           </button>
           <button 
+            className={`px-4 py-2 w-full ${orderFilter === "processed" ? "bg-yellow-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setOrderFilter("processed")}
+          >
+            Processed Orders
+          </button>
+          <button 
             className={`px-4 py-2 w-full ${orderFilter === "completed" ? "bg-yellow-600 text-white" : "bg-gray-200"}`}
             onClick={() => setOrderFilter("completed")}
           >
@@ -118,7 +124,9 @@ const MyPurchase = () => {
                   className="border border-gray-300 rounded-lg shadow-md "
                 >
                   <div className="flex justify-between p-4">
-                    <p className={` ${orderFilter === "completed" ? "text-green-900" : "text-red-900"}`}>{order.status} </p>
+                    <p className={`font-bold uppercase ${orderFilter === "pending" ? "text-red-900" : 
+                    order.status === "processed" ? "text-orange-700" : 
+                    "text-green-900"}`}>{order.status} </p>
                     <p className="text-gray-700 text-sm font-medium">
                     (Items: {order.cartItems.reduce((total, item) => total + item.quantity, 0)}) 
                     <span className="text-red-900 text-xl ml-1">₱{order.cartItems.reduce((total, item) => total + item.price * item.quantity, 0)} </span>

@@ -8,6 +8,7 @@ import { Pencil, Truck, Package } from "lucide-react";
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [message, setMessage] = useState("");
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
   const { cartItems = [] } = location.state || {}; // Ensure cartItems is an array
 
@@ -97,13 +98,18 @@ const Checkout = () => {
   
       // Save/update the address in the user document and clear the cart
       await updateDoc(userRef, { addressInfo: customerInfo, cart: [] });
-  
-      alert("Order placed successfully!");
+      
+      showPopup("Order placed successfully!");
       navigate("/shop");
     } catch (error) {
       console.error("Error placing order:", error);
     }
   };  
+
+  const showPopup = (msg) => {
+    setMessage(msg);
+    setTimeout(() => setMessage(""), 5000);
+  };
   
   return (
     <div className="p-6 mt-20 w-full">
@@ -283,6 +289,14 @@ const Checkout = () => {
       </button>
     </div>
   </div>
+  {/* Pop-up Message */}
+  {message && (
+        <div className="fixed inset-0 flex justify-center items-center z-50">
+          <div className="bg-black/60 text-white text-2xl font-bold px-6 py-4 rounded-lg shadow-lg">
+            {message}
+          </div>
+        </div>
+      )}
 </div>
   );
 };

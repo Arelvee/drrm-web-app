@@ -53,7 +53,13 @@ const OrderDetail = () => {
 
             </div>
             <div className="border border-gray-300 rounded-lg">
-                <p className={`rounded-t-lg text-white px-4 py-2  ${order.status === "pending" ? "bg-red-900" : "bg-green-900"}`} >{order.status}</p>
+                <p className={`rounded-t-lg text-white px-4 py-2 uppercase
+                ${order.status === "pending" ? "bg-red-900" : 
+                    order.status === "processed" ? "bg-orange-700" : 
+                    "bg-green-900"}`}>
+                {order.status}
+                </p>
+
                 <div className="px-4 py-2">
                     <h3 className="text-lg">Items:</h3>
                     {order.cartItems && order.cartItems.length > 0 ? (

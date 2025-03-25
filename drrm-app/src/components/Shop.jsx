@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import { useNavigate } from "react-router-dom";
-import {CircleUser} from "lucide-react";
+import {CircleUser, Search} from "lucide-react";
 
 const Shop = () => {
   const [manuals, setManuals] = useState([]);
@@ -156,14 +156,16 @@ const Shop = () => {
           <option value="VR Module (Facilitator)">Virtual Manual (Facilitator)</option>
           <option value="VR Module (Participant)">Virtual Manual (Participant)</option>
         </select>
-  
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="Search manuals..."
-          className="p-2 border rounded-md flex-grow"
-        />
+        <div className="flex items-center border border-gray-500 rounded-lg gap-2  p-2 flex-grow">
+          <Search className="text-gray-500" size={20}/>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search manuals..."
+            className=" flex-grow focus:outline-none"
+          />
+        </div>
       </div>
   
       {/* Manuals Grid */}

@@ -84,6 +84,11 @@ const ManualDetail = () => {
     }
   };
 
+  const showPopup = (msg) => {
+    setMessage(msg);
+    setTimeout(() => setMessage(""), 2000);
+  };
+
   return (
     <div className="p-4 mt-20">
       {/* Header with Cart and Profile Buttons */}

@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AdminDashboard from "./AdminDashboard.jsx";
 import ManualPost from "./ManualPost.jsx";
 import Sidebar from "./AdminSidebar.jsx";
+import Orders from "./Orders.jsx";
 
 function AdminLayout() {
   return (
@@ -16,10 +17,12 @@ function AdminLayout() {
           <Route path="/" element={<Navigate to="manual-post" />} /> {/* Default Redirect */}
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="manual-post" element={<ManualPost />} />
+          <Route path="orders" element={<Orders />} />
         </Routes>
       </main>
     </div>
   );
+  
 }
 
 export default AdminLayout;

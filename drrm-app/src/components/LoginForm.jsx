@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
-import { auth } from "../firebase/firebase";
+import { Eye, EyeOff, Lock, User } from 'lucide-react';
+import { auth, db } from "../firebase/firebase";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
-
-import { db } from "../firebase/firebase"; 
-import { doc, setDoc } from "firebase/firestore";
-
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -17,52 +15,69 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
     const [error, setError] = useState(alertMessage || "");
     const [message, setMessage] = useState("");
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (alertMessage) {
             setError(alertMessage);
         }
     }, [alertMessage]);
 
-    
-
     const handleAuth = async (e) => {
         e.preventDefault();
         setError("");
         setMessage("");
-    
+
         if (!isLogin && password !== confirmPassword) {
             setError("Passwords do not match.");
             return;
         }
-    
+
         try {
             if (isLogin) {
-                // Login user
+                // 🔹 Login user
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                setUser(userCredential.user);
+                const user = userCredential.user;
+
+                // 🔹 Fetch role from Firestore
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    
+                    // 🔹 Redirect based on role
+                    if (userData.role === "admin") {
+                        navigate("/admin/manual-post");
+                    } else {
+                        setUser(user);
+                        closeForm();
+                    }
+                } else {
+                    setError("User data not found.");
+                }
+
             } else {
-                // Register new user
+                // 🔹 Register new user
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const newUser = userCredential.user;
-    
-                // Store user in Firestore
+
+                // 🔹 Store user in Firestore
                 const userRef = doc(db, "users", newUser.uid);
                 await setDoc(userRef, {
                     email: newUser.email,
-                    role: "customer", // Default role for new users
+                    role: "customer", // Default role
                     cart: [],
                     orders: []
                 });
-    
+
                 setUser(newUser);
+                closeForm();
             }
-    
-            closeForm();
         } catch (err) {
             setError(err.message);
         }
     };
-    
 
     const handleForgotPassword = async () => {
         if (!email) {
@@ -86,39 +101,47 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                     {isLogin ? 'Login' : 'Register'}
                 </h2>
                 
-                {error && <p className="text-red-500 text-center">{error}</p>}
-                {message && <p className="text-green-500 text-center">{message}</p>}
+                {error ? (<p className=" text-red-500 text-center">{error}</p>):(<p className="text-green-500 text-center">{message}</p>) }
+                
 
                 <form onSubmit={handleAuth}>
                     <div className="mb-4">
                         <label className="block text-white">Email</label>
-                        <input 
-                            type="email" 
-                            value={email} 
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full pl-4 pr-4 py-2 border border-white/50 rounded-md bg-transparent text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white"
-                            placeholder="Enter email" 
-                            required 
-                        />
+                        <div className="flex gap-2 items-center p-2 border border-white/50 rounded-md bg-transparent text-white">
+                            <User size={25}/>
+                            <input 
+                                type="email" 
+                                value={email} 
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full placeholder-white/70 focus:outline-none" 
+                                placeholder="Enter email" 
+                                required 
+                            />
+                        </div>
+                        
                     </div>
 
                     <div className="mb-4 relative">
                         <label className="block text-white">Password</label>
-                        <input 
-                            type={showPassword ? "text" : "password"} 
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full pl-4 pr-10 py-2 border border-white/50 rounded-md bg-transparent text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white" 
-                            placeholder="Enter password" 
-                            required 
-                        />
-                        <button 
-                            type="button" 
-                            onClick={() => setShowPassword(!showPassword)} 
-                            className="absolute inset-y-0 right-3 flex items-center justify-center h-full text-white"
-                        >
-                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                        </button>
+                        <div className="flex gap-2 items-center p-2 border border-white/50 rounded-md bg-transparent text-white">
+                            <Lock size={25}/>
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                value={password} 
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full placeholder-white/70 focus:outline-none" 
+                                placeholder="Enter password" 
+                                required 
+                            />
+                            <button 
+                                type="button" 
+                                onClick={() => setShowPassword(!showPassword)} 
+                                className=" flex items-center justify-center text-white"
+                            >
+                                {showPassword ? <EyeOff size={25} /> : <Eye size={25} />}
+                            </button>
+                        </div>
+                        
                         {isLogin && (
                             <div className="mt-2 text-end">
                                 <button onClick={handleForgotPassword} className="text-yellow-300 hover:text-yellow-400">
@@ -128,26 +151,27 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                         )}
                     </div>
 
-                    
-
                     {!isLogin && (
                         <div className="mb-4 relative">
                             <label className="block text-white">Confirm Password</label>
-                            <input 
-                                type={showConfirmPassword ? "text" : "password"} 
-                                value={confirmPassword} 
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full pl-4 pr-10 py-2 border border-white/50 rounded-md bg-transparent text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white" 
-                                placeholder="Confirm password" 
-                                required 
-                            />
-                            <button 
-                                type="button" 
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
-                                className="absolute inset-y-0 right-3 flex items-center justify-center h-full text-white"
-                            >
-                                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                            </button>
+                            <div className="flex gap-2 items-center p-2 border border-white/50 rounded-md bg-transparent text-white">
+                                <input 
+                                    type={showConfirmPassword ? "text" : "password"} 
+                                    value={confirmPassword} 
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="w-full placeholder-white/70 focus:outline-none" 
+                                    placeholder="Confirm password" 
+                                    required 
+                                />
+                                <button 
+                                    type="button" 
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+                                    className="flex items-center justify-center text-white"
+                                >
+                                    {showConfirmPassword ? <EyeOff size={25} /> : <Eye size={25} />}
+                                </button>
+
+                            </div>
                         </div>
                     )}
 
@@ -158,8 +182,6 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                         {isLogin ? 'Login' : 'Register'}
                     </button>
                 </form>
-
-                
 
                 <div className="mt-4 text-center">
                     <button 
