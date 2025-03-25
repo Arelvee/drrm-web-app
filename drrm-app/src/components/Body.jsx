@@ -116,6 +116,7 @@ function Body(){
                         </div>
 
 
+
                         {/* Dots for manual navigation */}
                         <div id="dots" className="flex justify-center  space-x-2">
                             {slides.map((_, index) => (

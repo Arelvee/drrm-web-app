@@ -46,7 +46,6 @@ function App() {
       <Route path="/manual-detail" element={<PublicLayout><ManualDetail /></PublicLayout>} />
       <Route path="/order/:orderId" element={<PublicLayout><OrderDetail /></PublicLayout>} />
 
-
       {/* Admin Routes (No Header/Footer) */}
       <Route path="/admin-login" element={<AdminLogin />} />
       <Route path="/admin/*" element={

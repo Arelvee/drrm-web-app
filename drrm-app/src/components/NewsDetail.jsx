@@ -53,6 +53,7 @@ const newsItems = [
 ];
 
 
+
 function NewsDetail() {
   const { id } = useParams();
   const location = useLocation();

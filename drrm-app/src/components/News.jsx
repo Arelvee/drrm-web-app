@@ -5,6 +5,7 @@ import News2 from "../assets/news (2).png";
 import News3 from "../assets/news (3).png";
 
 
+
 // make sure that the information here in my id 1,2,3 will show when i clicked certain news, these are important
 const newsData = [
   {
