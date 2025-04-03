@@ -171,11 +171,7 @@ function Body(){
                     </div>
                 </div>
             </section>
-
-
-
-
-                           
+            
             {/* History Section */}
             <section id="about"
              className="relative flex flex-col justify-center items-center text-center min-h-screen bg-cover bg-center p-8 md:p-16"
@@ -234,8 +230,8 @@ function Body(){
                
                 <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8">
                     <img src={TrainingImage1} alt="Broken Image" className="w-full rounded-lg mb-4"/>
-                    <p className="text-black text-lg font-medium">Training Program</p>
-                    <h2 className="text-black  text-lg md:text-3xl font-extrabold uppercase mt-2">Basic Emergency Response Team Simulation Training (BERTST)</h2>
+                    <p className="text-gray-600 text-lg font-medium ">Training Program</p>
+                    <h2 className="text-black  text-lg font-extrabold uppercase mt-2">Basic Emergency Response Team Simulation Training (BERTST)</h2>
                     <Link
                         to="/training1"
                         className="mt-4 block text-lg bg-red-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-red-700"
@@ -245,8 +241,8 @@ function Body(){
                 </div>
                 <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8">
                     <img src={TrainingImage2} alt="Broken Image" className="w-full rounded-lg mb-4"/>
-                    <p className="text-black text-lg font-medium">Training Program</p>
-                    <h2 className="text-black text-lg md:text-3xl font-extrabold uppercase mt-2">Mass Casualty Incident (MCI) and Triage Training</h2>
+                    <p className="text-gray-600 text-lg font-medium ">Training Program</p>
+                    <h2 className="text-black text-lg font-extrabold uppercase mt-2">Mass Casualty Incident (MCI) and Triage Training</h2>
                     <Link
                         to="/training2"
                         className="mt-4 block text-lg bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-blue-700"
@@ -280,7 +276,7 @@ function Body(){
                         JOENEL TAGALOG <span className="text-yellow-500">★★★★★</span>
                         </h3>
                         <p className="role text-sm opacity-80">Registered Nurse</p>
-                        <p className="review-text text-sm mt-4 italic">
+                        <p className="review-text text-sm mt-4 italic text-justify">
                             "As a Disaster Nursing instructor in the College of Nursing, the MCI and Triage Training was a valuable experience that deepened my understanding of emergency response. The hands-on simulations provided practical skills that I can share with my students. The training made triage systems easy to grasp, enhancing my ability to teach disaster preparedness effectively. I recommend this program to fellow educators and healthcare professionals who want to strengthen their emergency response skills."
                         </p>
                         </div>

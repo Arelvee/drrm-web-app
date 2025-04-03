@@ -29,10 +29,10 @@ const AdminSidebar = ({ adminName }) => {
     // Fetch the count of pending orders
     const fetchPendingOrders = async () => {
       try {
-        const ordersRef = collection(db, "orders"); // Reference to orders collection
-        const q = query(ordersRef, where("status", "==", "pending")); // Filter only pending orders
+        const ordersRef = collection(db, "orders");
+        const q = query(ordersRef, where("status", "==", "pending")); 
         const orderSnapshot = await getDocs(q);
-        setPendingOrdersCount(orderSnapshot.size); // Set the count of pending orders
+        setPendingOrdersCount(orderSnapshot.size);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -46,7 +46,7 @@ const AdminSidebar = ({ adminName }) => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/"); // Redirect to homepage after logout
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }

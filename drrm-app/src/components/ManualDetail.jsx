@@ -1,18 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { db, auth } from "../firebase/firebase";
-import { doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, getDoc, onSnapshot, collection, getDocs } from "firebase/firestore";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import { Info, ChevronsRight, ChevronRight, CircleUser } from "lucide-react";
 import { useState, useEffect } from "react";
 
+
 const ManualDetail = () => {
   const location = useLocation();
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const manual = location.state?.manual;
-
+  const [recommendedManuals, setRecommendedManuals] = useState([]);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [showShippingInfo, setShowShippingInfo] = useState(false);
   const [totalCartItems, setTotalCartItems] = useState(0);
@@ -40,6 +41,29 @@ const ManualDetail = () => {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const fetchManuals = async () => {
+      try {
+        const manualsRef = collection(db, "manuals");
+        const snapshot = await getDocs(manualsRef);
+        let manuals = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        // Exclude current manual
+        manuals = manuals.filter((item) => item.id !== manual.id);
+
+        // Shuffle and get 4 random manuals
+        const shuffled = manuals.sort(() => 0.5 - Math.random()).slice(0, 4);
+        setRecommendedManuals(shuffled);
+      } catch (error) {
+        console.error("Error fetching manuals:", error);
+      }
+    };
+
+    if (manual) {
+      fetchManuals();
+    }
+  }, [manual]);
 
   // Function to add to cart
   const addToCart = async () => {
@@ -73,10 +97,8 @@ const ManualDetail = () => {
         });
       }
 
-      // Update Firestore
       await updateDoc(userRef, { cart: cartItems });
 
-      // No need to manually update `totalCartItems`, Firestore `onSnapshot` will handle it
       showPopup("✅ Item added to cart!");
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -93,10 +115,10 @@ const ManualDetail = () => {
     <div className="p-4 mt-20">
       {/* Header with Cart and Profile Buttons */}
       <div className="flex justify-between items-center mb-4">
-        <button className="flex items-center text-black px-4" onClick={() => navigate(-1)}>
+        <button className="flex items-center text-black" onClick={() => navigate(-1)}>
           Manual Shop <ChevronsRight size={20} className="mx-3" /> {manual.title}
         </button>
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end">
           <button
             onClick={() => navigate("/cart")}
             className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center gap-2"
@@ -209,6 +231,31 @@ const ManualDetail = () => {
       <div className="my-4 px-4">
         <h2 className="text-xl font-bold my-2">Manual Overview</h2>
         <p className="text-justify">{manual.content}</p>
+      </div>
+      <div className="my-4 px-4">
+        <h2 className="text-xl font-bold my-2">You May Also Like</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+          {recommendedManuals.map((item) => (
+            <div key={item.id} onClick={() => {
+              navigate(`/manual-detail`, { state: { manual: item } });
+              window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top when navigating
+            }} className=" cursor-pointer p-4 rounded-lg shadow-lg">
+              <img
+                src={`http://localhost:5000${item.imageUrls[0]}`}
+                alt={item.title}
+                className="h-40 w-full object-cover mb-2"
+              />
+              <div className="my-4">
+                <p className="text-sm text-gray-500">{item.category}</p>
+                <h2 className="text-lg font-semibold">{item.title}</h2>
+              </div>
+              <div className="flex justify-between items-center">
+                <p className="text-2xl font-bold text-red-900">₱ {item.price}.00</p>
+                <p className="text-sm text-gray-500">Stock: {item.stock}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       {/* Pop-up Message */}
       {message && (

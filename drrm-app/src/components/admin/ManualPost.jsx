@@ -16,7 +16,7 @@ function ManualPost() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [manuals, setManuals] = useState([]);
-    const [zoomedImage, setZoomedImage] = useState(null);
+  const [zoomedImage, setZoomedImage] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [selectedManual, setSelectedManual] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -40,6 +40,13 @@ function ManualPost() {
   const closeModal = () => {
     setZoomedImage(null);
   };
+
+  useEffect(() => {
+    fetchOrders(); // Run on component mount
+    const interval = setInterval(fetchOrders, 5000); // Fetch every 5 seconds (adjust as needed)
+    return () => clearInterval(interval);
+  }, []);
+  
   
   const fetchOrders = async () => {
     try {
@@ -49,33 +56,59 @@ function ManualPost() {
         ...doc.data(),
       }));
   
-      // Compute total quantity and amount per manual
       const stats = {};
   
       ordersData.forEach((order) => {
-        order.cartItems.forEach((item) => {
-          if (!stats[item.title]) {
-            stats[item.title] = { sold: 0, totalAmount: 0, price: item.price, imageUrl: item.imageUrl };
-          }
-          stats[item.title].sold += item.quantity;
-          stats[item.title].totalAmount += item.quantity * item.price;
-        });
+        if (order.status === "processed") {
+          order.cartItems.forEach((item) => {
+            if (!stats[item.manualId]) {
+              stats[item.manualId] = { sold: 0, totalAmount: 0 };
+            }
+            stats[item.manualId].sold += item.quantity;
+            stats[item.manualId].totalAmount += item.quantity * item.price;
+          });
+        }
       });
   
-      setOrders(ordersData);
+      const manualsQuery = await getDocs(collection(db, "manuals"));
+      const updatedManuals = [];
+  
+      const updates = manualsQuery.docs.map(async (docSnapshot) => {
+        const manualId = docSnapshot.id;
+        const manualData = docSnapshot.data();
+        const updatedData = {
+          sold: stats[manualId]?.sold || 0,
+          totalRevenue: stats[manualId]?.totalAmount || 0,
+        };
+  
+        if (stats[manualId]) {
+          const manualRef = doc(db, "manuals", manualId);
+          await updateDoc(manualRef, updatedData);
+        }
+  
+        updatedManuals.push({ id: manualId, ...manualData, ...updatedData });
+      });
+  
+      await Promise.all(updates);
+      setManuals(updatedManuals);
+  
+      console.log("Manuals updated with sales data:", updatedManuals);
       setManualStats(stats);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
   };
-
+  
+  
+  
+  
   const handleImageUpload = async (event) => {
     const files = event.target.files;
     if (!files.length) return;
   
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
-      formData.append("images", files[i]); // Assuming backend supports multiple file uploads
+      formData.append("images", files[i]);
     }
   
     try {
@@ -111,8 +144,6 @@ function ManualPost() {
         throw new Error("Please fill all fields and upload at least one image.");
       }
   
-      console.log("Posting data:", { title, content, price, stock, category, imageUrls });
-  
       const docRef = await addDoc(collection(db, "manuals"), {
         title,
         content,
@@ -120,12 +151,26 @@ function ManualPost() {
         stock: parseInt(stock, 10),
         category,
         imageUrls,
+        sold: 0,  // Ensure new manuals start with 0 sold
+        totalRevenue: 0,
         createdAt: serverTimestamp(),
       });
   
-      console.log("Document written with ID: ", docRef.id);
-      
-      setManuals((prev) => [...prev, { id: docRef.id, title, content, price, stock, category, imageUrls }]);
+      setManuals((prev) => [
+        ...prev,
+        {
+          id: docRef.id,
+          title,
+          content,
+          price: parseFloat(price),
+          stock: parseInt(stock, 10),
+          category,
+          imageUrls,
+          sold: 0,
+          totalRevenue: 0,
+        },
+      ]);
+  
       setSuccess("Manual posted successfully!");
       setShowForm(false);
       setTitle("");
@@ -135,7 +180,6 @@ function ManualPost() {
       setCategory("Non Virtual Module");
       setImages([]);
       setImageUrls([]);
-  
     } catch (error) {
       console.error("Error posting manual:", error);
       alert(`Failed to post manual: ${error.message}`);
@@ -143,6 +187,7 @@ function ManualPost() {
       setLoading(false);
     }
   };
+  
   
 
   const handleEdit = () => {
@@ -160,7 +205,7 @@ function ManualPost() {
 
   const handleUpdate = async () => {
     if (!selectedManual) return;
-
+  
     try {
       const manualRef = doc(db, "manuals", selectedManual.id);
       await updateDoc(manualRef, {
@@ -169,19 +214,24 @@ function ManualPost() {
         price: parseFloat(price),
         stock: parseInt(stock, 10),
         category,
+        imageUrls, // Include updated images
       });
-
+  
       // Update UI
-      setManuals(manuals.map(m => (m.id === selectedManual.id ? { ...m, title, content, price, stock, category } : m)));
-
-      setSelectedManual({ ...selectedManual, title, content, price, stock, category });
+      setManuals((manuals.map(m => 
+        m.id === selectedManual.id 
+          ? { ...m, title, content, price, stock, category, imageUrls } 
+          : m
+      )));
+  
+      setSelectedManual({ ...selectedManual, title, content, price, stock, category, imageUrls });
       setIsEditing(false);
       setSuccess("Manual updated successfully!");
     } catch (error) {
       console.error("Error updating manual:", error);
       setSuccess("Failed to update manual.");
     }
-  };
+  };  
 
   const handleDelete = async () => {
     if (!selectedManual) return;
@@ -218,66 +268,143 @@ function ManualPost() {
     {isEditing ? (
       <>
         <h2 className="text-xl font-bold mb-4">Edit Manual</h2>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded mb-2" />
-        <textarea 
-          value={content} 
-          onChange={(e) => setContent(e.target.value)} 
-          className="w-full p-2 border rounded mb-2 h-full"
-        />
+        <div className="flex items-center w-full gap-2 pt-2">
+          <p className="py-1 w-1/8">Manual Title:</p>
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded mb-2 text-justify" />
 
-        <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full p-2 border rounded mb-2" />
-        <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2 border rounded mb-2" />
-        <label className="w-1/8 "> Category: 
-        </label>
-        <div className=" flex items-center gap-4 mb-4">
-          <label className="flex items-center space-x-2">
-            <input 
-              type="radio" 
-              value="Non Virtual Module" 
-              checked={category === "Non Virtual Module"} 
-              onChange={(e) => setCategory(e.target.value)} 
-              className="mr-2 accent-red-900"
-              required 
-            />
-            <span>Non Virtual Module</span>
-          </label>
-
-          <label className="flex items-center space-x-2">
-            <input 
-              type="radio" 
-              value="VR Module (Facilitator)" 
-              checked={category === "VR Module (Facilitator)"} 
-              onChange={(e) => setCategory(e.target.value)} 
-              className="mr-2 accent-red-900"
-              required 
-            />
-            <span>VR Module (Facilitator)</span>
-          </label>
-
-          <label className="flex items-center space-x-2">
-            <input 
-              type="radio" 
-              value="VR Module (Participant)" 
-              checked={category === "VR Module (Participant)"} 
-              onChange={(e) => setCategory(e.target.value)} 
-              className="mr-2 accent-red-900"
-              required 
-            />
-            <span>VR Module (Participant)</span>
-          </label>
         </div>
+        <div className="flex items-center w-full gap-2 pt-2">
+          <p className="py-1 w-1/8">Content:</p>
+          <textarea 
+            value={content} 
+            onChange={(e) => {
+              setContent(e.target.value);
+              e.target.style.height = "auto";
+              e.target.style.height = e.target.scrollHeight + "px";
+            }}
+            className="w-full p-2 border rounded mb-2 h-full"
+          />
 
+        </div>
+        <div className="flex items-center w-full gap-2 pt-2">
+          <p className="py-1 w-1/8">Price:</p>
+          <div className="relative w-full">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₱</span>
+            <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} className="block w-full p-2 pl-8 border border-gray-400 rounded" />
+          </div>
+        </div>
+        <div className="flex items-center w-full gap-2 pt-2">
+          <p className="py-1 w-1/8">Stock:</p>
+          <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2 border rounded mb-2" />
+        </div>
+        
 
         
+        <div className="flex items-center w-full gap-2 pt-2 mb-4">
+          <label className="w-1/8 "> Category: 
+          </label>
+          <div className=" flex items-center gap-4">
+            <label className="flex items-center space-x-2">
+              <input 
+                type="radio" 
+                value="Non Virtual Module" 
+                checked={category === "Non Virtual Module"} 
+                onChange={(e) => setCategory(e.target.value)} 
+                className="mr-2 accent-red-900"
+                required 
+              />
+              <span>Non Virtual Module</span>
+            </label>
+
+            <label className="flex items-center space-x-2">
+              <input 
+                type="radio" 
+                value="VR Module (Facilitator)" 
+                checked={category === "VR Module (Facilitator)"} 
+                onChange={(e) => setCategory(e.target.value)} 
+                className="mr-2 accent-red-900"
+                required 
+              />
+              <span>VR Module (Facilitator)</span>
+            </label>
+
+            <label className="flex items-center space-x-2">
+              <input 
+                type="radio" 
+                value="VR Module (Participant)" 
+                checked={category === "VR Module (Participant)"} 
+                onChange={(e) => setCategory(e.target.value)} 
+                className="mr-2 accent-red-900"
+                required 
+              />
+              <span>VR Module (Participant)</span>
+            </label>
+          </div>
+        </div>
+        <div className="flex gap-2 w-full mb-4">
+          <label className="w-1/8">Upload Image:</label>
+          <div>
+            {/* Preview multiple images */}
+            <div className="flex space-x-2 mt-2">
+              {imageUrls.map((url, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={`http://localhost:5000${url}`}
+                    alt={`Uploaded ${index}`}
+                    className="w-24 h-24 cursor-pointer hover:scale-105 transition-transform rounded"
+                    value={imageUrls} onChange={(e) => setImageUrls(e.target.value)}
+                    onClick={() => setSelectedImage(`http://localhost:5000${url}`)}
+                  />
+                  {/* X Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering the image click event
+                      setImageUrls(imageUrls.filter((_, i) => i !== index));
+                    }}
+                    className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    ✖
+                  </button>
+                </div>
+              ))}
+
+              {/* Add Photo Button */}
+              <label
+                htmlFor="fileInput"
+                className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded cursor-pointer hover:bg-gray-100"
+              >
+                <span className="text-gray-400 text-sm">+</span>
+                <span className="text-gray-400 text-xs">Add Photo</span>
+              </label>
+              <input
+                id="fileInput"
+                type="file"
+                multiple
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </div>
+            {/* Zoomed Image Modal */}
+            {selectedImage && (
+              <div
+                className="fixed inset-0 !bg-black/50 flex items-center justify-center"
+                onClick={() => setSelectedImage(null)}
+              >
+                <img src={selectedImage} alt="Zoomed" className="max-w-[90%] max-h-[90%] rounded-lg shadow-lg" />
+              </div>
+            )}
+          </div>
+        </div>
+        
         <button onClick={handleUpdate} className="bg-green-600 text-white p-2 rounded w-full mb-2">Save Changes</button>
-        <button onClick={() => setIsEditing(false)} className="bg-gray-500 text-white p-2 rounded w-full">Cancel</button>
+        <button onClick={() => setIsEditing(false)} className="bg-gray-500 text-white p-2 rounded w-full hover:bg-gray-600">Cancel</button>
       </>
     ) : (
       <>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Manual Details</h2>
           <button
-            onClick={() => setSelectedManual(null)} // Hide details & show table
+            onClick={() => setSelectedManual(null)}
             className="text-gray-600 text-xl font-bold"
           >
             <XIcon size={30}/>
@@ -301,7 +428,7 @@ function ManualPost() {
         </div>
         <div className="flex w-full gap-2 pt-2">
           <p className="py-1 w-1/6 pr-15"><strong>Content:</strong></p>
-          <p className="whitespace-pre-line break-words">{selectedManual.content}</p>
+          <p className="whitespace-pre-line break-words text-justify">{selectedManual.content}</p>
         </div>
         <div className="flex w-full gap-2 pt-2">
           <p className="py-1 w-1/9"><strong>Specification:</strong></p>
@@ -310,8 +437,8 @@ function ManualPost() {
             <li>Booktype: Ringbind</li>
           </ul>
         </div>
-        <div className="flex w-full gap-2 pt-2">
-            <p className="font-bold w-1/8">Images</p>
+        <div className="flex w-full gap-2 pt-2 mb-4">
+          <p className="font-bold w-1/8">Images</p>
             <div className="flex flex-wrap gap-2 mt-2">
               {selectedManual.imageUrls?.map((url, index) => (
                 <img
@@ -324,8 +451,6 @@ function ManualPost() {
               ))}
             </div>
           </div>
-
-        
 
             {/* Zoom Modal */}
             {zoomedImage && (
@@ -349,8 +474,8 @@ function ManualPost() {
               </div>
             )}
 
-        <button onClick={handleEdit} className="bg-blue-500 text-white p-2 rounded w-full mt-2">Edit</button>
-        <button onClick={() => setShowDeleteConfirmation(true)} className="bg-red-600 text-white p-2 rounded w-full mt-2">Delete</button>
+        <button onClick={handleEdit} className="bg-yellow-500 text-white p-2 rounded w-full mt-2 hover:bg-yellow-600">Edit</button>
+      <button onClick={() => setShowDeleteConfirmation(true)} className="bg-red-600 text-white p-2 rounded w-full  hover:bg-red-900 mt-2">Delete</button>
       </>
     )}
   </div>
@@ -358,153 +483,150 @@ function ManualPost() {
   <div className="w-full ">
     <h2 className="text-xl font-bold mb-4">Post a New Manual</h2>
     <form onSubmit={handlePost} className="space-y-4">
-      <div className="flex items-center gap-2 w-full"><label className="w-1/8 ">Manual Title: </label>
-      <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="block w-full p-2 border border-gray-400 rounded uppercase" required /></div>
-      <div className="gap-2 w-full flex">
-        <label className="w-1/8 ">Content:</label>
-        <textarea
-          value={content}
-          onChange={(e) => {
-            setContent(e.target.value);
-            e.target.style.height = "auto"; // Reset height
-            e.target.style.height = e.target.scrollHeight + "px"; // Set new height
-          }}
-          className="block w-full p-2 border border-gray-400 rounded overflow-hidden resize-none"
-          required
-        />
-
-      </div>
-      <div className="flex items-center gap-2 w-full relative">
-        <label className="w-1/8">Price:</label>
-        <div className="relative w-full">
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₱</span>
-          <input 
-            type="number" 
-            value={price} 
-            onChange={(e) => setPrice(e.target.value)} 
-            className="block w-full p-2 pl-8 border border-gray-400 rounded" 
-            required 
+        <div className="flex items-center gap-2 w-full">
+          <label className="w-1/8 ">Manual Title: </label>
+          <input type="text" onChange={(e) => setTitle(e.target.value)} className="block w-full p-2 border border-gray-400 rounded" required />
+        </div>
+        <div className="gap-2 w-full flex">
+          <label className="w-1/8 ">Content:</label>
+          <textarea
+            onChange={(e) => {
+              setContent(e.target.value);
+              e.target.style.height = "auto"; // Reset height
+              e.target.style.height = e.target.scrollHeight + "px"; // Set new height
+            }}
+            className="block w-full p-2 border border-gray-400 rounded overflow-hidden resize-none"
+            required
           />
         </div>
-      </div>
-
-      <div className="flex items-center gap-2 w-full">
-        <label className="w-1/8 ">Stock:
-        </label>
-        <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="block w-full p-2 border border-gray-400 rounded" required />
-        </div>
-      <div className="flex items-center gap-2 w-full">
-        <label className="w-1/8 "> Category: 
-        </label>
-        <div className=" flex items-center gap-4">
-          <label className="flex items-center space-x-2">
+        <div className="flex items-center gap-2 w-full relative">
+          <label className="w-1/8">Price:</label>
+          <div className="relative w-full">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₱</span>
             <input 
-              type="radio" 
-              value="Non Virtual Module" 
-              checked={category === "Non Virtual Module"} 
-              onChange={(e) => setCategory(e.target.value)} 
-              className="mr-2 accent-red-900"
+              type="number" 
+              onChange={(e) => setPrice(e.target.value)} 
+              className="block w-full p-2 pl-8 border border-gray-400 rounded" 
               required 
             />
-            <span>Non Virtual Module</span>
-          </label>
-
-          <label className="flex items-center space-x-2">
-            <input 
-              type="radio" 
-              value="VR Module (Facilitator)" 
-              checked={category === "VR Module (Facilitator)"} 
-              onChange={(e) => setCategory(e.target.value)} 
-              className="mr-2 accent-red-900"
-              required 
-            />
-            <span>VR Module (Facilitator)</span>
-          </label>
-
-          <label className="flex items-center space-x-2">
-            <input 
-              type="radio" 
-              value="VR Module (Participant)" 
-              checked={category === "VR Module (Participant)"} 
-              onChange={(e) => setCategory(e.target.value)} 
-              className="mr-2 accent-red-900"
-              required 
-            />
-            <span>VR Module (Participant)</span>
-          </label>
-        </div>
-      </div>
-
-      <div className="flex gap-2 w-full">
-        <label className="w-1/8">Upload Image:</label>
-        <div>
-        {/* Preview multiple images */}
-        <div className="flex space-x-2 mt-2">
-          {imageUrls.map((url, index) => (
-            <div key={index} className="relative group">
-              <img
-                src={`http://localhost:5000${url}`}
-                alt={`Uploaded ${index}`}
-                className="w-24 h-24 cursor-pointer hover:scale-105 transition-transform rounded"
-                onClick={() => setSelectedImage(`http://localhost:5000${url}`)}
-              />
-              {/* X Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent triggering the image click event
-                  setImageUrls(imageUrls.filter((_, i) => i !== index));
-                }}
-                className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                ✖
-              </button>
-            </div>
-          ))}
-
-          {/* Add Photo Button */}
-          <label
-            htmlFor="fileInput"
-            className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded cursor-pointer hover:bg-gray-100"
-          >
-            <span className="text-gray-400 text-sm">+</span>
-            <span className="text-gray-400 text-xs">Add Photo</span>
-          </label>
-          <input
-            id="fileInput"
-            type="file"
-            multiple
-            onChange={handleImageUpload}
-            className="hidden"
-          />
-        </div>
-        {/* Zoomed Image Modal */}
-        {selectedImage && (
-          <div
-            className="fixed inset-0 !bg-black/50 flex items-center justify-center"
-            onClick={() => setSelectedImage(null)}
-          >
-            <img src={selectedImage} alt="Zoomed" className="max-w-[90%] max-h-[90%] rounded-lg shadow-lg" />
           </div>
-        )}
-      </div>
+        </div>
+
+        <div className="flex items-center gap-2 w-full">
+          <label className="w-1/8 ">Stock:
+          </label>
+          <input type="number" onChange={(e) => setStock(e.target.value)} className="block w-full p-2 border border-gray-400 rounded" required />
+        </div>
+        <div className="flex items-center gap-2 w-full">
+          <label className="w-1/8 "> Category: 
+          </label>
+          <div className=" flex items-center gap-4">
+            <label className="flex items-center space-x-2">
+              <input 
+                type="radio" 
+                value="Non Virtual Module" 
+                checked={category === "Non Virtual Module"} 
+                onChange={(e) => setCategory(e.target.value)} 
+                className="mr-2 accent-red-900"
+                required 
+              />
+              <span>Non Virtual Module</span>
+            </label>
+
+            <label className="flex items-center space-x-2">
+              <input 
+                type="radio" 
+                value="VR Module (Facilitator)" 
+                checked={category === "VR Module (Facilitator)"} 
+                onChange={(e) => setCategory(e.target.value)} 
+                className="mr-2 accent-red-900"
+                required 
+              />
+              <span>VR Module (Facilitator)</span>
+            </label>
+
+            <label className="flex items-center space-x-2">
+              <input 
+                type="radio" 
+                value="VR Module (Participant)" 
+                checked={category === "VR Module (Participant)"} 
+                onChange={(e) => setCategory(e.target.value)} 
+                className="mr-2 accent-red-900"
+                required 
+              />
+              <span>VR Module (Participant)</span>
+            </label>
+          </div>
+        </div>
+
+        <div className="flex gap-2 w-full mb-4">
+          <label className="w-1/8">Upload Image:</label>
+          <div>
         
+          <div className="flex space-x-2 mt-2">
+            {imageUrls.map((url, index) => (
+              <div key={index} className="relative group">
+                <img
+                  src={`http://localhost:5000${url}`}
+                  alt={`Uploaded ${index}`}
+                  className="w-24 h-24 cursor-pointer hover:scale-105 transition-transform rounded"
+                  onClick={() => setSelectedImage(`http://localhost:5000${url}`)}
+                />
+            
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); 
+                    setImageUrls(imageUrls.filter((_, i) => i !== index));
+                  }}
+                  className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  ✖
+                </button>
+              </div>
+            ))}
+
+          
+            <label
+              htmlFor="fileInput"
+              className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded cursor-pointer hover:bg-gray-100"
+            >
+              <span className="text-gray-400 text-sm">+</span>
+              <span className="text-gray-400 text-xs">Add Photo</span>
+            </label>
+            <input
+              id="fileInput"
+              type="file"
+              multiple
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </div>
+        
+          {selectedImage && (
+            <div
+              className="fixed inset-0 !bg-black/50 flex items-center justify-center"
+              onClick={() => setSelectedImage(null)}
+            >
+              <img src={selectedImage} alt="Zoomed" className="max-w-[90%] max-h-[90%] rounded-lg shadow-lg" />
+            </div>
+          )}
+        </div>
       </div>
 
-      <button type="submit" className="bg-green-600 text-white p-2 rounded w-full" disabled={loading}>
+      <button type="submit" className="bg-yellow-500 text-white p-2 rounded w-full hover:bg-yellow-600" disabled={loading}>
         {loading ? "Posting..." : "Post Manual"}
       </button>
-
-      {/* Close Form Button */}
       <button
         type="button"
         onClick={() => setShowForm(false)}
-        className="bg-red-600 text-white p-2 rounded w-full mt-2"
+        className="bg-gray-500 text-white p-2 rounded w-full hover:bg-gray-600"
       >
         Cancel
       </button>
     </form>
   </div>
-):(<div className="w-full">
+):(
+<div className="w-full">
   <div className="flex justify-between">
     <h2 className="text-2xl font-bold mb-4">Manuals List</h2>
     <button
@@ -541,15 +663,16 @@ function ManualPost() {
                 src={`http://localhost:5000${manual.imageUrls[0]}`}
                 alt={manual.title}
                 className="w-15 h-20 object-cover"
-                onError={(e) => (e.target.style.display = 'none')}
+                onError={(e) => (e.target.style.display = "none")}
               />
             )}
             {manual.title}
           </td>
+
           <td className="px-4 py-2">₱{Number(manual.price).toFixed(2)}</td>
           <td className="px-4 py-2">{manual.stock}</td>
           <td className="px-4 py-2">{manual.sold || 0}</td>
-          <td className="px-4 py-2 font-bold">₱{((manual.sold || 0) * manual.price).toFixed(2)}</td>
+          <td className="px-4 py-2 font-bold">₱{manual.totalRevenue}.00</td>
           <td className="px-4 py-2">
             <button
               onClick={() => {
@@ -584,7 +707,7 @@ function ManualPost() {
               </button>
               <button
                 onClick={() => setShowDeleteConfirmation(false)}
-                className="bg-gray-400 text-white px-4 py-2 rounded"
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
               >
                 Cancel
               </button>

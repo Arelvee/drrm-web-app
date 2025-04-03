@@ -6,6 +6,7 @@ import Footer from './components/Footer.jsx';
 import Body from './components/Body.jsx';
 import News from './components/News.jsx';
 import NewsDetail from './components/NewsDetail.jsx';
+import EventDetail from './components/EventDetails.jsx';
 import Trainings from './components/Berts.jsx';
 import Training2 from './components/Mci.jsx';
 import ELearning from './components/E-Learning.jsx';
@@ -17,6 +18,7 @@ import Checkout from './components/Checkout.jsx';
 import Profile from './components/Profile.jsx';
 import AdminLogin from './components/admin/AdminLoginForm.jsx';
 import PrivateRoute from './components/admin/PrivateRoute.jsx';
+import TermsCondition from './components/TermsCondition.jsx';
 import AdminLayout from './components/admin/AdminLayout.jsx';
 
 // Public Layout
@@ -44,6 +46,7 @@ function App() {
       <Route path="/e-learning" element={<PublicLayout><ELearning /></PublicLayout>} />
       <Route path="/shop" element={<PublicLayout><Shop /></PublicLayout>} />
       <Route path="/manual-detail" element={<PublicLayout><ManualDetail /></PublicLayout>} />
+      <Route path="/terms-condition" element={<PublicLayout><TermsCondition /></PublicLayout>} />
       <Route path="/order/:orderId" element={<PublicLayout><OrderDetail /></PublicLayout>} />
 
       {/* Admin Routes (No Header/Footer) */}

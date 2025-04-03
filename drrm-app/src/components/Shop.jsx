@@ -46,10 +46,8 @@ const Shop = () => {
         });
       }
   
-      // Update Firestore with the modified cart array
       await updateDoc(userRef, { cart: cartItems });
   
-      // No need to manually update `totalCartItems`, Firestore `onSnapshot` will handle it
       showPopup("✅ Item added to cart!");
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -125,7 +123,7 @@ const Shop = () => {
   
 
   return (
-    <div className="shop-container p-6 mt-20">
+    <div className="shop-container p-4 mt-20">
       {/* Render All Manuals */}
       <div className="flex justify-between">
         <h1 className="text-4xl font-semibold">Manuals</h1>
@@ -144,19 +142,18 @@ const Shop = () => {
         </div>
       </div>
   
-      {/* Filters: Category Dropdown + Search Bar */}
       <div className="flex gap-4 my-4">
         <select
           value={selectedCategory}
           onChange={handleCategoryChange}
-          className="p-2 border rounded-md"
+          className="p-2 border border-gray-500 rounded-lg focus:outline-none"
         >
           <option value="All">All</option>
           <option value="Non-Virtual Module">Non-Virtual Manual</option>
           <option value="VR Module (Facilitator)">Virtual Manual (Facilitator)</option>
           <option value="VR Module (Participant)">Virtual Manual (Participant)</option>
         </select>
-        <div className="flex items-center border border-gray-500 rounded-lg gap-2  p-2 flex-grow">
+        <div className="flex items-center border border-gray-500 rounded-lg gap-2 p-2 flex-grow">
           <Search className="text-gray-500" size={20}/>
           <input
             type="text"
@@ -168,7 +165,6 @@ const Shop = () => {
         </div>
       </div>
   
-      {/* Manuals Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         {filteredManuals.length > 0 ? (
           filteredManuals.map((manual) => (
@@ -207,6 +203,7 @@ const Shop = () => {
           <p className="text-center text-gray-500">No manuals available.</p>
         )}
       </div>
+      
       {/* Pop-up Message */}
       {message && (
         <div className="fixed inset-0 flex justify-center items-center z-50">

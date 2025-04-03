@@ -60,7 +60,7 @@ function Training2(){
                         <p className="text-white">PHP 6,500
                             <span className="mx-2">(Late Registration)</span>
                         </p>
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdh5Bx157shCh1S566Y5XyXip8OuCTiv2LFR5_yvGw8qaSfoA/viewform" 
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfeSXyPo0XvruCV7-5Ei32lPkmoPSua15XX8VF19lLjAKImlw/viewform" 
                             class="mt-4 block sm:text-lg bg-yellow-500 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-yellow-600">
                             JOIN NOW!
                         </a>

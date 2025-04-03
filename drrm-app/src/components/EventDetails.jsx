@@ -3,8 +3,6 @@ import { useLocation, useParams, Link } from "react-router-dom";
 import News1 from "../assets/news (1).png";
 import News2 from "../assets/news (2).png";
 import News3 from "../assets/news (3).png";
-import FirstAid from "../assets/Firstaid.png";
-
 
 function EventDetails() {
   const { id } = useParams();

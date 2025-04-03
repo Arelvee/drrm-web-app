@@ -3,6 +3,7 @@ import { db } from "../firebase/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 
 
 const Cart = () => {
@@ -72,7 +73,6 @@ const Cart = () => {
   
       await updateDoc(userRef, { cart: updatedCart });
   
-      // ✅ Update UI immediately
       setCartItems(updatedCart);
   
       showPopup("❌ Item removed from cart!");
@@ -117,7 +117,10 @@ const Cart = () => {
 
   return (
     <div className="p-6 mt-20">
-      <h1 className="text-2xl font-bold mb-4">🛒 My Cart</h1>
+      <div className="flex items-center mb-4">
+        <button onClick={() => navigate(-1)} className="text-white hover:bg-yellow-600 rounded-full bg-yellow-500 mr-4"><ChevronLeft size={35} /></button>
+        <h2 className="text-2xl font-bold">My Cart</h2>
+      </div>
 
       {cartItems.length > 0 ? (
         <div className="overflow-x-auto">

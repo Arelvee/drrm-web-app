@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, query, where, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { Pencil, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ const MyPurchase = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [orderFilter, setOrderFilter] = useState("pending"); // Default: Pending Orders
   const [customer, setCustomer] = useState(null); // Store customer details
+  const [totalCartItems, setTotalCartItems] = useState(0);
+
   const [showEditForm, setShowEditForm] = useState(false); // Edit form visibility
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
@@ -17,6 +19,25 @@ const MyPurchase = () => {
     address: "",
     email: "",
   });
+
+  useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        if (!user) return;
+  
+        const userRef = doc(db, "users", user.uid);
+        const cartUnsubscribe = onSnapshot(userRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const cart = docSnap.data().cart || [];
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            setTotalCartItems(totalItems);
+          }
+        });
+  
+        return () => cartUnsubscribe();
+      });
+  
+      return () => unsubscribe();
+    }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -86,8 +107,16 @@ const MyPurchase = () => {
       </div>
 
       {/* Orders Section */}
-      <div className="lg:w-2/3">
-        <h2 className="text-2xl font-bold mb-4">My Purchase</h2>
+      <div className="lg:w-2/3 mt-4">
+        <div className="flex items-center justify-between mb-4 ">
+          <h2 className="text-2xl font-bold">My Purchase</h2>
+          <button
+            onClick={() => navigate("/cart")}
+            className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center gap-2 hover:bg-yellow-600 transition"
+          >
+            Cart ({totalCartItems})
+          </button>
+        </div>
         
         {/* Navigation Tabs for Pending & Completed Orders */}
         <div className="flex mb-6 w-full">

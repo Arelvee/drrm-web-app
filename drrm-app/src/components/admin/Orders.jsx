@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebase";
 import { collection, getDocs, updateDoc, doc, getDoc, serverTimestamp } from "firebase/firestore";
-import { ReceiptText, XIcon, Search } from "lucide-react";
+import { ReceiptText, XIcon, Search, ArrowUp, ArrowDown } from "lucide-react";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -10,6 +10,7 @@ function Orders() {
   const [courier, setCourier] = useState("");
   const [receiptImage, setReceiptImage] = useState(null);
   const [zoomedImage, setZoomedImage] = useState(null);
+  const [sortOrder, setSortOrder] = useState("desc"); // Default to descending
 
 
   useEffect(() => {
@@ -60,16 +61,14 @@ function Orders() {
       const data = await response.json();
       console.log("✅ Upload Success:", data);
   
-      // Construct full receipt URL
       const fullReceiptUrl = `http://localhost:5000${data.receiptUrl}`;
   
-      // Update Firestore with new status, courier, timestamp, and full receipt URL
       const orderRef = doc(db, "orders", orderId);
       await updateDoc(orderRef, { 
         status: newStatus, 
         courier, 
         processedTime: serverTimestamp(), 
-        receiptUrl: fullReceiptUrl // Save full receipt URL
+        receiptUrl: fullReceiptUrl 
       });
   
       console.log("✅ Order Updated in Firestore");
@@ -98,9 +97,6 @@ function Orders() {
     }
   };
   
-  
-  
-
   const handleOrderClick = (order) => {
     setSelectedOrder(order);
     setCourier(order.courier || "");
@@ -111,7 +107,6 @@ function Orders() {
     setReceiptImage(file);
   };
   
-
   const filteredOrders = orders.filter(
     (order) =>
       order.customerInfo?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -119,9 +114,60 @@ function Orders() {
       order.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  };
+  
+  // Sorting function for orders by createdAt timestamp
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
+    if (!a.createdAt || !b.createdAt) return 0; // Handle missing timestamps
+    return sortOrder === "asc"
+      ? a.createdAt.toDate() - b.createdAt.toDate()
+      : b.createdAt.toDate() - a.createdAt.toDate();
+  });
 
   return (
     <div className="ml-68 py-6 px-auto">
+    <div className="mb-5">
+        <h2 className="text-2xl font-bold mb-4">Overview</h2>
+
+        <div className="flex gap-6">
+          <div className=" p-6 rounded-lg shadow-md w-1/3 flex justify-between">
+            
+              <h3 className="text-lg font-semibold">Total Orders</h3>
+              <p className="text-gray-700 text-5xl font-semibold">{orders.filter(order => order.status).length}</p>
+          </div>
+
+          {/* Pending Orders */}
+          <div className=" p-6 rounded-lg shadow-md w-1/3 bg-red-100 gap">
+            <div className="flex justify-between">
+              <h3 className="text-lg font-semibold text-red-900">Pending</h3>
+              <p className="text-gray-700 text-5xl font-semibold">{orders.filter(order => order.status === "pending").length}</p>
+            </div>
+            <p className="text-gray-700">
+              Total Amount: ₱{" "}
+              {orders
+                .filter(order => order.status === "pending")
+                .reduce((acc, order) => acc + order.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0), 0)}.00
+            </p>
+          </div>
+
+          {/* Processed Orders */}
+          <div className="p-6 rounded-lg shadow-md w-1/3 bg-green-100">
+            <div className="flex justify-between">
+              <h3 className="text-lg font-semibold text-green-900">Processed</h3>
+              <p className="text-gray-700 text-5xl font-semibold">{orders.filter(order => order.status === "processed").length}</p>
+            </div>
+            <p className="text-gray-700">
+              Total Amount: ₱{" "}
+              {orders
+                .filter(order => order.status === "processed")
+                .reduce((acc, order) => acc + order.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0), 0)}.00
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold"> Orders</h1>
         <div className="flex items-center border border-gray-500 px-3 py-2 rounded-lg gap-2">
@@ -146,45 +192,68 @@ function Orders() {
                 <th className="px-4 py-2">Customer</th>
                 <th className="px-4 py-2">Items</th>
                 <th className="px-4 py-2">Total Price</th>
+                <th className="px-4 py-2">
+                  <button onClick={toggleSortOrder} className="flex gap-1 text-center items-center">
+                    Order At
+                    {sortOrder === "desc" ? (
+                      <span className="text-gray-500"><ArrowDown size={25}/></span> // Down arrow for descending
+                    ) : (
+                      <span className="text-gray-500"><ArrowUp size={25}/></span> // Up arrow for ascending
+                    )}
+                  </button>
+                </th>
                 <th className="px-4 py-2">Status</th>
                 <th className="px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredOrders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="cursor-pointer text-center border-b border-gray-300 text-sm hover:bg-gray-200"
-                  onClick={() => handleOrderClick(order)}
-                >
-                  <td className="px-4 py-2 text-gray-600">{order.id}</td>
-                  <td className="px-4 py-2">{order.customerInfo?.name || "Unknown"}</td>
-                  <td className="px-4 py-2">
-                    {order?.cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0}
-                  </td>
+  {sortedOrders.map((order) => (
+    <tr
+      key={order.id}
+      className="cursor-pointer text-center border-b border-gray-300 text-sm hover:bg-gray-200"
+      onClick={() => handleOrderClick(order)}
+    >
+      <td className="px-4 py-2 text-gray-600">{order.id}</td>
+      <td className="px-4 py-2">{order.customerInfo?.name || "Unknown"}</td>
+      <td className="px-4 py-2">
+        {order?.cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0}
+      </td>
 
-                  <td className="px-4 py-2 text-red-900 font-bold">
-                    ₱ {order.cartItems?.reduce((acc, item) => acc + (item.price * item.quantity), 0)}.00
-                  </td>
+      <td className="px-4 py-2 text-red-900 font-bold">
+        ₱ {order.cartItems?.reduce((acc, item) => acc + (item.price * item.quantity), 0)}.00
+      </td>
+      <td className="px-4 py-2">
+        <p>
+          {order.createdAt?.toDate().toLocaleString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true, // Use 12-hour format
+          }) || "N/A"}
+        </p>
+      </td>
 
-                  <td className="px-4 py-2">
-                    <p
-                      className={`rounded-lg px-4 py-1 font-bold
-                      ${order.status === "pending" ? "bg-red-200 text-red-900" : 
-                        order.status === "processed" ? "bg-orange-200 text-orange-900" : 
-                        "bg-green-200 text-green-900"}`}
-                    >
-                      {order.status}
-                    </p>
-                  </td>
-                  <td className="px-4 py-2">
-                    <button className=" text-gray-500 px-3 py-1">
-                      <ReceiptText size={30}/>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+      <td className="px-4 py-2">
+        <p
+          className={`rounded-lg px-4 py-1 font-bold
+          ${order.status === "pending" ? "bg-red-200 text-red-900" : 
+            order.status === "processed" ? "bg-orange-200 text-orange-900" : 
+            "bg-green-200 text-green-900"}`}
+        >
+          {order.status}
+        </p>
+      </td>
+      <td className="px-4 py-2">
+        <button className=" text-gray-500 px-3 py-1">
+          <ReceiptText size={30} />
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </table>
         </div>
       ) : (
@@ -216,7 +285,14 @@ function Orders() {
             </div>
             <div className="flex items-center">
               <p className="py-2 font-bold w-1/7 ">Order Time:</p>
-              <p>{selectedOrder.createdAt?.toDate().toLocaleString() || "N/A"}</p>
+              <p>{selectedOrder.createdAt?.toDate().toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, 
+                      }) || "N/A"}</p>
             </div>
             
             {selectedOrder.processedTime && (
