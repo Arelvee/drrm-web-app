@@ -7,9 +7,8 @@ import LectureIcon4 from "../assets/lecture-icon (4).png";
 function ELearning() {
     const [completedLectures, setCompletedLectures] = useState([]);
     const [selectedLecture, setSelectedLecture] = useState(null);
-    const [watching, setWatching] = useState(false);
     const [quizUnlocked, setQuizUnlocked] = useState({});
-
+    
     const youtubeVideo = "https://www.youtube.com/embed/ijFKVcLt6uI";
     const quizLink = "https://forms.gle/9rF68RJwdH6pqNkBA";
 
@@ -18,38 +17,97 @@ function ELearning() {
             id: 1,
             title: "MODULE 1: Basic Emergency Response Training (BERST)",
             lectures: [
-                { id: 1, title: "Introduction to BERST", video: youtubeVideo, icon: LectureIcon1, description: "Introduction to BERST." },
-                { id: 2, title: "Hazards and Risk Assessment", video: youtubeVideo, icon: LectureIcon2, description: "Understanding hazards and risks." },
-                { id: 3, title: "First Aid & Life Support", video: youtubeVideo, icon: LectureIcon3, description: "Learning first aid basics." },
-                { id: 4, title: "Emergency Preparedness", video: youtubeVideo, icon: LectureIcon4, description: "Being prepared for emergencies." },
-            ],
+                {
+                    id: 1,
+                    title: "Introduction to BERST",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon1,
+                    description: "Introduction to BERST."
+                },
+                {
+                    id: 2,
+                    title: "Hazards and Risk Assessment",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon2,
+                    description: "Understanding hazards and risks."
+                },
+                {
+                    id: 3,
+                    title: "First Aid & Life Support",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon3,
+                    description: "Learning first aid basics."
+                },
+                {
+                    id: 4,
+                    title: "Emergency Preparedness",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon4,
+                    description: "Being prepared for emergencies."
+                }
+            ]
         },
         {
             id: 2,
             title: "MODULE 2: Mass Casualty Incident (MCI) and Triage Training",
             lectures: [
-                { id: 5, title: "Introduction to MCI", video: youtubeVideo, icon: LectureIcon1, description: "Intro to MCI." },
-                { id: 6, title: "Hazards and Risk Assessment", video: youtubeVideo, icon: LectureIcon2, description: "Understanding risks." },
-                { id: 7, title: "First Aid & Life Support", video: youtubeVideo, icon: LectureIcon3, description: "First Aid basics." },
-                { id: 8, title: "Emergency Preparedness", video: youtubeVideo, icon: LectureIcon4, description: "Emergency Preparedness." },
-            ],
-        },
+                {
+                    id: 5,
+                    title: "Introduction to MCI",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon1,
+                    description: "Intro to MCI."
+                },
+                {
+                    id: 6,
+                    title: "Hazards and Risk Assessment",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon2,
+                    description: "Understanding risks."
+                },
+                {
+                    id: 7,
+                    title: "First Aid & Life Support",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon3,
+                    description: "First Aid basics."
+                },
+                {
+                    id: 8,
+                    title: "Emergency Preparedness",
+                    video: "https://www.youtube.com/embed/ijFKVcLt6uI",
+                    icon: LectureIcon4,
+                    description: "Emergency Preparedness."
+                }
+            ]
+        }
     ];
+    
+
     const handleLectureClick = (lecture, module) => {
         const isUnlocked = lecture.id === module.lectures[0].id || completedLectures.includes(lecture.id - 1);
         if (isUnlocked) {
             setSelectedLecture(lecture);
-            setWatching(true);
         } else {
             alert("You must complete the previous lecture first.");
         }
     };
-    
 
     const completeLecture = () => {
         if (selectedLecture && !completedLectures.includes(selectedLecture.id)) {
             setCompletedLectures([...completedLectures, selectedLecture.id]);
             setQuizUnlocked((prev) => ({ ...prev, [selectedLecture.id]: true }));
+        }
+    };
+
+    const playNextLecture = () => {
+        const module = modules.find((m) => m.lectures.some((l) => l.id === selectedLecture.id));
+        const currentIndex = module.lectures.findIndex((l) => l.id === selectedLecture.id);
+
+        if (currentIndex !== -1 && currentIndex < module.lectures.length - 1) {
+            setSelectedLecture(module.lectures[currentIndex + 1]);
+        } else {
+            alert("This is the last lecture in the module.");
         }
     };
 
@@ -68,46 +126,57 @@ function ELearning() {
                                 <h2 className="text-2xl font-bold text-gray-800 mb-6">{module.title}</h2>
                                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center w-full">
                                     {module.lectures.map((lecture) => {
-                                        const isUnlocked = lecture.id === module.lectures[0].id ||completedLectures.includes(lecture.id - 1);
+                                        const isUnlocked = lecture.id === module.lectures[0].id || completedLectures.includes(lecture.id - 1);
                                         return (
                                             <button
-    key={lecture.id}
-    onClick={() => handleLectureClick(lecture, module)}
-    className={`${
-        isUnlocked ? "bg-red-900" : "bg-gray-400 cursor-not-allowed"
-    } text-white font-semibold rounded-lg shadow-lg p-4 lg:p-5 transform transition-transform hover:-translate-y-2 flex flex-col items-center justify-center`}
-    disabled={!isUnlocked}
->
-    <div className="flex items-center justify-center w-full">
-        <img src={lecture.icon} alt="Lecture Icon" className="w-24 lg:w-32 h-auto" />
-    </div>
-    <p className="text-md lg:text-lg mt-2">{lecture.title}</p>
-</button>
-
-);
+                                                key={lecture.id}
+                                                onClick={() => handleLectureClick(lecture, module)}
+                                                className={`${
+                                                    isUnlocked ? "bg-red-900" : "bg-gray-400 cursor-not-allowed"
+                                                } text-white font-semibold rounded-lg shadow-lg p-4 lg:p-5 transform transition-transform hover:-translate-y-2 flex flex-col items-center justify-center`}
+                                                disabled={!isUnlocked}
+                                            >
+                                                <div className="flex items-center justify-center w-full">
+                                                    <img src={lecture.icon} alt="Lecture Icon" className="w-24 lg:w-32 h-auto" />
+                                                </div>
+                                                <p className="text-md lg:text-lg mt-2">{lecture.title}</p>
+                                            </button>
+                                        );
                                     })}
                                 </div>
                             </div>
                         ))
                     ) : (
                         <div className="flex flex-col lg:flex-row lg:items-start px-2">
-                            <div className="lg:w-1/2 flex flex-col items-center">
-                                <iframe
-                                    className="w-full max-w-3xl h-64 lg:h-[350px] rounded-md"
-                                    src={selectedLecture.video}
-                                    title={selectedLecture.title}
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                    onLoad={() => setTimeout(completeLecture, 5000)}
-                                ></iframe>
+                            <button
+                                    onClick={() => setSelectedLecture(null)}
+                                    className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1 rounded-full text-lg hover:bg-red-700"
+                                >
+                                    ✖
+                                </button>
+                            <div className="lg:w-1/2 flex flex-col items-center relative">
+                                {/* Exit Button */}
+
+                                <div className="relative w-full max-w-3xl h-64 lg:h-[350px] rounded-md">
+                                    <iframe
+                                        className="w-full h-full rounded-md"
+                                        src={`${selectedLecture.video}?autoplay=1&modestbranding=1&rel=0&showinfo=0&controls=0&disablekb=1`}
+                                        title={selectedLecture.title}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        onLoad={() => setTimeout(completeLecture, 5000)}
+                                    ></iframe>
+                                </div>
                             </div>
+
                             <div className="lg:w-1/2 mt-4 lg:mt-0 lg:pl-6 h-[350px] rounded-lg p-2 bg-white flex flex-col justify-between">
                                 <div className="overflow-y-auto flex-grow p-2">
                                     <h4 className="text-black font-semibold mb-2">Description</h4>
                                     <p className="text-black leading-relaxed text-justify">{selectedLecture.description}</p>
                                 </div>
-                                <div className="p-2">
+                                <div className="p-2 flex flex-col gap-2">
+                                    {/* Take Quiz Button */}
                                     <a
                                         href={quizUnlocked[selectedLecture.id] ? quizLink : "#"}
                                         target="_blank"
@@ -118,6 +187,14 @@ function ELearning() {
                                     >
                                         Take Quiz
                                     </a>
+
+                                    {/* Next Lecture Button */}
+                                    <button
+                                        onClick={playNextLecture}
+                                        className="w-full px-6 py-2 font-bold text-lg rounded-lg transition duration-300 bg-blue-600 hover:bg-blue-700 text-white"
+                                    >
+                                        Next Lecture
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -129,3 +206,4 @@ function ELearning() {
 }
 
 export default ELearning;
+

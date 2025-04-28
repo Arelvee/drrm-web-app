@@ -23,7 +23,6 @@ function ManualPost() {
   const [manualStats, setManualStats] = useState({});
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-  // Fetch manuals from Firestore
   useEffect(() => {
     const fetchManuals = async () => {
       const querySnapshot = await getDocs(collection(db, "manuals"));
@@ -42,8 +41,8 @@ function ManualPost() {
   };
 
   useEffect(() => {
-    fetchOrders(); // Run on component mount
-    const interval = setInterval(fetchOrders, 5000); // Fetch every 5 seconds (adjust as needed)
+    fetchOrders(); 
+    const interval = setInterval(fetchOrders, 5000); 
     return () => clearInterval(interval);
   }, []);
   
@@ -99,9 +98,6 @@ function ManualPost() {
     }
   };
   
-  
-  
-  
   const handleImageUpload = async (event) => {
     const files = event.target.files;
     if (!files.length) return;
@@ -119,7 +115,6 @@ function ManualPost() {
   
       if (response.ok) {
         const data = await response.json();
-        // Append new image URLs instead of replacing
         setImageUrls((prev) => [...prev, ...data.imageUrls]);
       } else {
         console.error("Upload failed");

@@ -58,15 +58,13 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                 }
 
             } else {
-                // 🔹 Register new user
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const newUser = userCredential.user;
 
-                // 🔹 Store user in Firestore
                 const userRef = doc(db, "users", newUser.uid);
                 await setDoc(userRef, {
                     email: newUser.email,
-                    role: "customer", // Default role
+                    role: "customer",
                     cart: [],
                     orders: []
                 });

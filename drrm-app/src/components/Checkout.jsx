@@ -3,7 +3,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import { doc, collection, addDoc, updateDoc, getDoc } from "firebase/firestore";
 import { auth } from "../firebase/firebase";
-import { Pencil, Truck, Package, ChevronLeft } from "lucide-react";
+import { Pencil, Truck, Package, ChevronLeft, XIcon } from "lucide-react";
 
 const Checkout = () => {
   const location = useLocation();
@@ -35,9 +35,8 @@ const Checkout = () => {
     };
   
     fetchAddress();
-  }, [auth.currentUser]); // 👈 Trigger when the user logs in or changes
+  }, [auth.currentUser]); 
 
-  // Redirect user if no cart items
   useEffect(() => {
     if (cartItems.length === 0) {
       alert("Your cart is empty. Redirecting to shop...");
@@ -45,12 +44,10 @@ const Checkout = () => {
     }
   }, [cartItems, navigate]);
 
-  // Handle input changes
   const handleChange = (e) => {
     setCustomerInfo({ ...customerInfo, [e.target.name]: e.target.value });
   };
 
-  // Handle Checkout
   const handleCheckout = async () => {
     if (!auth.currentUser) {
       alert("Please log in to checkout.");
@@ -99,7 +96,7 @@ const Checkout = () => {
         userId: auth.currentUser.uid,
         cartItems,
         customerInfo,
-        courier, // Store selected courier
+        courier, 
         status: "pending",
         createdAt: new Date(),
       });
@@ -336,8 +333,8 @@ const Checkout = () => {
           <p className="text-lg text-gray-700">{message}</p>
           <button
             onClick={() => {
-              setMessage(""); // Clear message
-              navigate("/shop"); // Redirect only after closing
+              setMessage(""); 
+              navigate("/shop"); 
             }}
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
           >
@@ -348,15 +345,48 @@ const Checkout = () => {
     )}
 
 {showTermsCondition && (
-  <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto">
-      <h1 className="text-3xl font-bold py-4">Terms and Conditions</h1>
-      <p className="text-justify">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem ipsum reiciendis atque id quae ullam! Corrupti distinctio aliquid quia nobis culpa et error voluptatibus dolores a ut in temporibus aliquam reprehenderit repudiandae ad earum impedit expedita labore nemo quibusdam, sint quae! Ut minima veniam eaque cupiditate fuga, architecto rerum magnam id facilis cumque quasi vitae consequuntur animi unde, necessitatibus sapiente aperiam velit molestias vel doloremque amet perspiciatis repellendus...
+  <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl max-h-[80vh] overflow-y-auto relative">
+      {/* Close Button */}
+      <button
+        onClick={() => setShowTermsCondition(false)}
+        className="absolute top-2 right-2 text-gray-600 hover:text-black"
+      >
+        <XIcon size={25} />
+      </button>
+
+      <h1 className="text-2xl font-bold mb-4 mt-2 text-center">Terms and Conditions</h1>
+      <p className="text-justify text-gray-700 leading-relaxed">
+        By placing an order through this platform, you agree to be bound by the following Terms and Conditions. Please read them carefully before proceeding with your purchase.
+        <br /><br />
+        <strong>1. Order Processing:</strong><br />
+        All orders are subject to availability and confirmation. We reserve the right to cancel or refuse any order for any reason, including but not limited to stock issues or pricing errors.
+        <br /><br />
+        <strong>2. Delivery:</strong><br />
+        Delivery times may vary based on your chosen courier service. We are not liable for delays caused by the courier, weather conditions, or other unforeseen events. Please ensure your delivery address and contact information are accurate.
+        <br /><br />
+        <strong>3. Payment:</strong><br />
+        All orders must be paid upon delivery (Cash on Delivery). Please prepare the exact amount. Failure to do so may result in non-delivery or cancellation.
+        <br /><br />
+        <strong>4. Returns and Refunds:</strong><br />
+        We do not accept returns unless the product is damaged or incorrect. Any return requests must be submitted within 48 hours of receiving the order. Refunds, if applicable, will be processed after item inspection.
+        <br /><br />
+        <strong>5. User Information:</strong><br />
+        You are responsible for maintaining the accuracy of your personal information. This includes your name, contact number, and address. We are not responsible for failed deliveries due to incorrect information.
+        <br /><br />
+        <strong>6. Modification of Terms:</strong><br />
+        We reserve the right to update or change these Terms and Conditions at any time without prior notice. Continued use of the service after such changes constitutes your acceptance.
+        <br /><br />
+        <strong>7. Privacy:</strong><br />
+        Your data is stored securely and will not be shared with third parties without your consent. We value your privacy and are committed to protecting your personal information.
+        <br /><br />
+        By submitting your order, you acknowledge that you have read, understood, and agree to all the terms stated above.
       </p>
+
     </div>
   </div>
 )}
+
 
 </div>
   );

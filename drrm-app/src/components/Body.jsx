@@ -6,10 +6,14 @@ import Slide3 from '../assets/slide-image (3).jpg';
 import News1 from '../assets/news (1).png';
 import News2 from '../assets/news (2).png';
 import News3 from '../assets/news (3).png';
+import Vision from '../assets/Vision.png';
+import Target from '../assets/Target.png';
+import Values from '../assets/Values.png';
 import TrainingImage1 from '../assets/training (1).jpg';
 import TrainingImage2 from '../assets/training (2).jpg';
 import backgroundImage from '../assets/background.png';
 import historyImage from '../assets/history.jpg';
+import {EyeIcon, HouseIcon, ScanEyeIcon, TargetIcon} from 'lucide-react';
 
 
 const slides = [Slide1, Slide2, Slide3];
@@ -52,11 +56,12 @@ const newsItems = [
     },
   ];
 
+  
+    
 
 function Body(){
     const [currentIndex, setCurrentIndex] = useState(0);
    
-    // Auto-slide every 3 seconds
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
@@ -65,7 +70,6 @@ function Body(){
     }, []);
 
 
-    // Function to switch slides when clicking dots
     const goToSlide = (index) => {
         setCurrentIndex(index);
     };
@@ -135,6 +139,7 @@ function Body(){
                         <h2 className="text-3xl font-bold text-center uppercase text-red-900 tracking-wide mb-4">
                             What's New?
                         </h2>
+
                         <div className="grid grid-rows-3 gap-4 flex-grow">
                             {newsItems.map((news) => (
                                 <Link
@@ -190,62 +195,108 @@ function Body(){
             </div>
             </section>
 
-
             {/* Vision & Mission Section */}
-            <section className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 text-center bg-white py-12 px-6 md:px-16">
-            {/* Vision */}
-            <div className="bg-gray-100 p-8 md:p-12 rounded-2xl shadow-lg border border-gray-300">
-                <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide mb-4">
-                VISION
-                </h2>
-                <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify">
-                The UP Manila Disaster Risk Reduction and Management in Health Center aims to serve
-                as the center of excellence in academia for DRRM-H related issues.
-                </p>
-            </div>
+            <section className="relative grid gap-8 text-center bg-gray-50 py-12 px-6 md:px-16">
+                {/* Vision */}
+                <div className="bg-white p-8 md:p-12 rounded-2xl shadow-lg border border-gray-300">
+                    
+                    <div className="flex items-center justify-center">
+                        <img src={Vision} alt="Vision" className="h-30 w-auto" />
+                        <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
+                            VISION
+                        </h2>
+                    </div>
+                    
+                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify">
+                    The academe's center for world class capacity building, research and public services in DRRM-H related issues in the Philippines by 2030.
+                    </p>
+                </div>
+
+                {/* Mission */}
+                <div className="bg-white p-8 md:p-12 rounded-2xl shadow-lg border border-gray-300">
+                    <div className="flex items-center justify-center">
+                        <img src={Target} alt="Target" className="h-30 w-auto" />
+                        <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
+                            MISSION
+                        </h2>
+                        
+                    </div>
+                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
+                        <strong className="text-2xl mr-1">UP</strong>lift the value and status level of the organization as the lead resource in disaster risk reduction and management in health. 
+                    </p>
+                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
+                        <strong className="text-2xl mr-1">D</strong>evelop individual’s competence in disaster risk reduction and management in health to minimize disaster related injuries, disabilities, diseases, and deaths through capacity building programs, research, and public service. 
+                    </p>
+                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
+                        <strong className="text-2xl mr-1">R</strong>evitalize institutional linkages with multiple stakeholders enabling enhanced collaborationg among healthcare providers, community leaders, private institutions, and the academe.
+                    </p>
+                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
+                        <strong className="text-2xl mr-1">R</strong>einforce research agendas to gather evidence based data. create policies, programs, and publications to contribute knowledge and build capacity towards health resilient communities during disaster.
+                    </p>
+                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
+                        <strong className="text-2xl mr-1">M</strong>otivate internal stakeholders towards professional and personal upliftment while managing scarce resources to achieve  sustainability.
+                    </p>
+                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
+                        <strong className="text-2xl mr-1">H</strong>airness technological advancement to create world-class processes and    systems that would promote innovative programs and technical know news promoting quality of life and sustainability of the communities we serve.
+                    </p>
+                </div>
+                
+                {/* Core Values */}
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-300 ">
+                    <div className="flex items-center justify-center">
+                        <img src={Values} alt="Values" className="h-30 w-auto" />
+                        <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
+                            CORE VALUES
+                        </h2>
+                    </div>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 max-w-lg gap-2 list-disc-none text-md sm:text-lg text-gray-800 leading-relaxed py-2 m-auto">
+                        <li>Honor</li>
+                        <li>Excellence</li>
+                        <li>Accountability</li>
+                        <li>Leadership</li>
+                        <li>Transformation</li>
+                        <li>Harmony</li>
+                    </ul>
+                </div>
+            </section>       
+
+            {/* <section>
+                <h1>
+                    DRRM-H BRIDGE 2030
+                </h1>
+                <div>
+                    <p><strong className="text-3xl">B</strong>ASIC MANDATE OF EDUCATION RESEARCH AND PUBLIC SERVICES</p>
+                </div>
+            
+            
+            </section>
+            */}
 
 
-            {/* Mission */}
-            <div className="bg-gray-100 p-8 md:p-12 rounded-2xl shadow-lg border border-gray-300">
-                <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide mb-4">
-                MISSION
-                </h2>
-                <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify">
-                The UP Manila Disaster Risk Reduction and Management in Health Center is composed
-                of health sciences experts from the University of the Philippines Manila, collaborating
-                to improve DRRM-H in the country by establishing institutional linkages with multiple
-                stakeholders, documenting and publishing relevant information on DRRM-H, and creating
-                plans, programs, and capacity-building activities to address DRRM-H related issues.
-                </p>
-            </div>
-            </section>              
-
-
-           
             {/* Trainings Section */}
             <sections id="trainings" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 text-center text-white bg-cover bg-center p-8">
                 <div className="col-span-full">
                     <h2 className="text-3xl font-extrabold uppercase text-red-900 tracking-wide mb-4">What We Offer?</h2>
                 </div>
                
-                <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8">
+                <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8 flex flex-col">
                     <img src={TrainingImage1} alt="Broken Image" className="w-full rounded-lg mb-4"/>
                     <p className="text-gray-600 text-lg font-medium ">Training Program</p>
-                    <h2 className="text-black  text-lg font-extrabold uppercase mt-2">Basic Emergency Response Team Simulation Training (BERTST)</h2>
+                    <h2 className="text-black  text-lg font-extrabold uppercase mt-2 mb-3">Basic Emergency Response Team Simulation Training (BERTST)</h2>
                     <Link
                         to="/training1"
-                        className="mt-4 block text-lg bg-red-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-red-700"
+                        className="mt-auto block text-lg bg-red-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-red-700"
                     >
                         Read and Join Us!
                     </Link>
                 </div>
-                <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8">
+                <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8 flex flex-col">
                     <img src={TrainingImage2} alt="Broken Image" className="w-full rounded-lg mb-4"/>
                     <p className="text-gray-600 text-lg font-medium ">Training Program</p>
                     <h2 className="text-black text-lg font-extrabold uppercase mt-2">Mass Casualty Incident (MCI) and Triage Training</h2>
                     <Link
                         to="/training2"
-                        className="mt-4 block text-lg bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-blue-700"
+                        className="mt-auto block text-lg bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-blue-700"
                     >
                         Read and Join Us!
                     </Link>
