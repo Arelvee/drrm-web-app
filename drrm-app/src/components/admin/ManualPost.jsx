@@ -256,20 +256,22 @@ function ManualPost() {
   };
 
   return (
-    <div className="ml-68 py-6 flex px-auto">
+    <div className="w-full justify-end py-6 flex px-auto">
       {selectedManual ? (
   // Show Manual Details When Selected
-  <div className="w-full">
+  <div className="md:w-4/5">
     {isEditing ? (
       <>
-        <h2 className="text-xl font-bold mb-4">Edit Manual</h2>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8">Manual Title:</p>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded mb-2 text-justify" />
+        <h2 className="font-bold mb-4">Edit Manual</h2>
+        <div className="md:flex items-center w-full gap-2">
+          <p className="py-2 w-full font-bold md:w-1/8">Manual Title:
+          
+          </p>
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-2 border rounded md:w-auto md:flex-grow w-full border-zinc-300 outline-none text-justify" />
 
         </div>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8">Content:</p>
+        <div className="md:flex items-center w-full gap-2 pt-2">
+          <p className="py-2 w-full font-bold md:w-1/8">Content:</p>
           <textarea 
             value={content} 
             onChange={(e) => {
@@ -277,29 +279,27 @@ function ManualPost() {
               e.target.style.height = "auto";
               e.target.style.height = e.target.scrollHeight + "px";
             }}
-            className="w-full p-2 border rounded mb-2 h-full"
+            className="p-2 md:w-auto md:flex-grow w-full border-zinc-300 outline-none border rounded h-full"
           />
 
         </div>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8">Price:</p>
+        <div className="md:flex items-center w-full gap-2 pt-2">
+          <p className="py-2 w-full font-bold md:w-1/8">Price:</p>
           <div className="relative w-full">
             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₱</span>
-            <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} className="block w-full p-2 pl-8 border border-gray-400 rounded" />
+            <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} className="block w-full p-2 pl-8 border border-zinc-300 rounded outline-none" />
           </div>
         </div>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8">Stock:</p>
-          <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2 border rounded mb-2" />
+        <div className="md:flex items-center w-full gap-2 pt-2">
+          <p className="py-2 w-full font-bold md:w-1/8">Stock:</p>
+          <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="md:w-auto md:flex-grow w-full border-zinc-300 outline-none p-2 border rounded" />
         </div>
-        
-
-        
-        <div className="flex items-center w-full gap-2 pt-2 mb-4">
-          <label className="w-1/8 "> Category: 
+      
+        <div className="md:flex items-center w-full gap-2 pt-2 my-4">
+          <label className="py-2 w-full font-bold md:w-1/8 "> Category: 
           </label>
-          <div className=" flex items-center gap-4">
-            <label className="flex items-center space-x-2">
+          <div className=" sm:flex items-center gap-4 ml-4 sm:ml-0 mt-2">
+            <label className="flex sm:text-sm items-center space-x-2">
               <input 
                 type="radio" 
                 value="Non Virtual Module" 
@@ -311,7 +311,7 @@ function ManualPost() {
               <span>Non Virtual Module</span>
             </label>
 
-            <label className="flex items-center space-x-2">
+            <label className="flex sm:text-sm items-center space-x-2">
               <input 
                 type="radio" 
                 value="VR Module (Facilitator)" 
@@ -323,7 +323,7 @@ function ManualPost() {
               <span>VR Module (Facilitator)</span>
             </label>
 
-            <label className="flex items-center space-x-2">
+            <label className="flex sm:text-sm items-center space-x-2">
               <input 
                 type="radio" 
                 value="VR Module (Participant)" 
@@ -336,11 +336,11 @@ function ManualPost() {
             </label>
           </div>
         </div>
-        <div className="flex gap-2 w-full mb-4">
-          <label className="w-1/8">Upload Image:</label>
+        <div className="md:flex gap-2 w-full mb-4">
+          <label className="py-2 w-full md:w-1/8 font-bold">Upload Image:</label>
           <div>
             {/* Preview multiple images */}
-            <div className="flex space-x-2 mt-2">
+            <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 mt-2">
               {imageUrls.map((url, index) => (
                 <div key={index} className="relative group">
                   <img
@@ -405,36 +405,38 @@ function ManualPost() {
             <XIcon size={30}/>
           </button>
         </div>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8"><strong>Manual Title:</strong></p>
+        <div className="md:flex items-center w-full gap-2 pt-2">
+          <p className="py-2 md:w-1/8"><strong>Manual Title:</strong></p>
           <p>{selectedManual.title}</p>
         </div>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8"><strong>Category:</strong></p>
+        <div className="md:flex items-center w-full gap-2 pt-2">
+          <p className="py-2 w-1/8"><strong>Category:</strong></p>
           <p>{selectedManual.category}</p>
         </div>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8"><strong>Price:</strong></p>
+        <div className="grid grid-cols-2 items-center w-full gap-2 pt-2">
+        <div className="flex items-center gap-2">
+          <p className="py-2"><strong>Price:</strong></p>
           <p>₱{selectedManual.price}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="py-2"><strong>Stock:</strong></p>
+            <p>{selectedManual.stock}</p>
+          </div >
         </div>
-        <div className="flex items-center w-full gap-2 pt-2">
-          <p className="py-1 w-1/8"><strong>Stock:</strong></p>
-          <p>{selectedManual.stock}</p>
-        </div>
-        <div className="flex w-full gap-2 pt-2">
-          <p className="py-1 w-1/6 pr-15"><strong>Content:</strong></p>
+        <div className="md:flex w-full gap-2 pt-2">
+          <p className="py-2 w-1/6 pr-15"><strong>Content:</strong></p>
           <p className="whitespace-pre-line break-words text-justify">{selectedManual.content}</p>
         </div>
-        <div className="flex w-full gap-2 pt-2">
-          <p className="py-1 w-1/9"><strong>Specification:</strong></p>
+        <div className="md:flex w-full gap-2 pt-2">
+          <p className="py-2 w-1/9"><strong>Specification:</strong></p>
           <ul className="px-5">
             <li>Dimension: 8.27in X 11.69in (A4)</li>
             <li>Booktype: Ringbind</li>
           </ul>
         </div>
-        <div className="flex w-full gap-2 pt-2 mb-4">
+        <div className="md:flex w-full gap-2 pt-2 mb-4">
           <p className="font-bold w-1/8">Images</p>
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="grid grid-cols-2 sm:grid-cols-6  gap-2 mt-2">
               {selectedManual.imageUrls?.map((url, index) => (
                 <img
                   key={index}
@@ -475,48 +477,48 @@ function ManualPost() {
     )}
   </div>
 ) : showForm ? (
-  <div className="w-full ">
-    <h2 className="text-xl font-bold mb-4">Post a New Manual</h2>
-    <form onSubmit={handlePost} className="space-y-4">
-        <div className="flex items-center gap-2 w-full">
-          <label className="w-1/8 ">Manual Title: </label>
-          <input type="text" onChange={(e) => setTitle(e.target.value)} className="block w-full p-2 border border-gray-400 rounded" required />
+  <div className="md:w-4/5 ">
+    <h2 className="font-bold mb-4">Post Manual</h2>
+    <form onSubmit={handlePost} className="space-y-3">
+        <div className="md:flex items-center w-full space-y-4 ">
+          <label className=" w-1/8 font-bold">Manual Title: </label>
+          <input type="text" onChange={(e) => setTitle(e.target.value)} className="block w-full p-2 border border-zinc-300 outline-none rounded" required />
         </div>
-        <div className="gap-2 w-full flex">
-          <label className="w-1/8 ">Content:</label>
+        <div className="gap-2 w-full md:flex">
+          <label className="w-1/8 font-bold">Content:</label>
           <textarea
             onChange={(e) => {
               setContent(e.target.value);
               e.target.style.height = "auto"; // Reset height
               e.target.style.height = e.target.scrollHeight + "px"; // Set new height
             }}
-            className="block w-full p-2 border border-gray-400 rounded overflow-hidden resize-none"
+            className="block w-full p-2 border border-zinc-300 outline-none rounded overflow-hidden resize-none"
             required
           />
         </div>
-        <div className="flex items-center gap-2 w-full relative">
-          <label className="w-1/8">Price:</label>
+        <div className="md:flex items-center gap-2 w-full relative">
+          <label className="w-1/8 font-bold">Price:</label>
           <div className="relative w-full">
             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₱</span>
             <input 
               type="number" 
               onChange={(e) => setPrice(e.target.value)} 
-              className="block w-full p-2 pl-8 border border-gray-400 rounded" 
+              className="block w-full p-2 pl-8 border border-zinc-300 outline-none rounded" 
               required 
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-2 w-full">
-          <label className="w-1/8 ">Stock:
+        <div className="md:flex items-center gap-2 w-full">
+          <label className="w-1/8 font-bold ">Stock:
           </label>
-          <input type="number" onChange={(e) => setStock(e.target.value)} className="block w-full p-2 border border-gray-400 rounded" required />
+          <input type="number" onChange={(e) => setStock(e.target.value)} className="block w-full p-2 border border-zinc-300 outline-none rounded" required />
         </div>
-        <div className="flex items-center gap-2 w-full">
-          <label className="w-1/8 "> Category: 
+        <div className="md:flex items-center gap-2 w-full">
+          <label className="py-2 w-full md:w-1/8 font-bold "> Category: 
           </label>
-          <div className=" flex items-center gap-4">
-            <label className="flex items-center space-x-2">
+          <div className="sm:flex items-center gap-4 ml-4 sm:ml-0 mt-2 ">
+            <label className="flex sm:text-sm items-center space-x-2">
               <input 
                 type="radio" 
                 value="Non Virtual Module" 
@@ -528,7 +530,7 @@ function ManualPost() {
               <span>Non Virtual Module</span>
             </label>
 
-            <label className="flex items-center space-x-2">
+            <label className="flex sm:text-sm items-center space-x-2">
               <input 
                 type="radio" 
                 value="VR Module (Facilitator)" 
@@ -540,7 +542,7 @@ function ManualPost() {
               <span>VR Module (Facilitator)</span>
             </label>
 
-            <label className="flex items-center space-x-2">
+            <label className="flex sm:text-sm items-center space-x-2">
               <input 
                 type="radio" 
                 value="VR Module (Participant)" 
@@ -554,11 +556,11 @@ function ManualPost() {
           </div>
         </div>
 
-        <div className="flex gap-2 w-full mb-4">
-          <label className="w-1/8">Upload Image:</label>
+        <div className="md:flex gap-2 w-full mb-4">
+          <label className="py-2 w-full md:w-1/8 font-bold">Upload Image:</label>
           <div>
         
-          <div className="flex space-x-2 mt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 space-x-2 mt-2">
             {imageUrls.map((url, index) => (
               <div key={index} className="relative group">
                 <img
@@ -583,7 +585,7 @@ function ManualPost() {
           
             <label
               htmlFor="fileInput"
-              className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded cursor-pointer hover:bg-gray-100"
+              className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-zinc-300 outline-none rounded cursor-pointer hover:bg-gray-100"
             >
               <span className="text-gray-400 text-sm">+</span>
               <span className="text-gray-400 text-xs">Add Photo</span>
@@ -621,7 +623,7 @@ function ManualPost() {
     </form>
   </div>
 ):(
-<div className="w-full">
+<div className="md:w-4/5">
   <div className="flex justify-between">
     <h2 className="text-2xl font-bold mb-4">Manuals List</h2>
     <button
@@ -692,7 +694,8 @@ function ManualPost() {
       {showDeleteConfirmation && (
         <div className="fixed top-0 left-0 w-full h-full !bg-black/50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-lg">
-            <h3 className="text-lg font-bold mb-4">Are you sure you want to delete this manual?</h3>
+            <h3 className="text-lg font-bold mb-4">Are you sure you want to delete this manual?
+            </h3>
             <div className="flex justify-between">
               <button
                 onClick={handleDelete}

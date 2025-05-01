@@ -127,15 +127,15 @@ function Orders() {
   });
 
   return (
-    <div className="ml-68 py-6 px-auto">
-    <div className="mb-5">
-        <h2 className="text-2xl font-bold mb-4">Overview</h2>
+    <div className="lg:ml-68 py-6 px-auto">
+    <div className="  mb-5">
+        <h2 className="font-bold mb-4">Overview</h2>
 
         <div className="flex gap-6">
           <div className=" p-6 rounded-lg shadow-md w-1/3 flex justify-between">
             
-              <h3 className="text-lg font-semibold">Total Orders</h3>
-              <p className="text-gray-700 text-5xl font-semibold">{orders.filter(order => order.status).length}</p>
+              <h3 className="font-semibold">Total Orders</h3>
+              <p className="text-gray-700 font-semibold">{orders.filter(order => order.status).length}</p>
           </div>
 
           {/* Pending Orders */}
@@ -169,8 +169,8 @@ function Orders() {
       </div>
 
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold"> Orders</h1>
-        <div className="flex items-center border border-gray-500 px-3 py-2 rounded-lg gap-2">
+        <h2 className="text-2xl font-bold"> Orders</h2>
+        <div className="flex items-center border border-zinc-300 px-3 py-2 rounded-lg gap-2">
           <Search  className="text-gray-500" size={20}/>
           <input
             type="text"
@@ -188,11 +188,11 @@ function Orders() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200 text-center">
-                <th className="px-4 py-2">Order ID</th>
+                <th className="p-2">Order ID</th>
                 <th className="px-4 py-2">Customer</th>
-                <th className="px-4 py-2">Items</th>
+                <th className="p-2">Items</th>
                 <th className="px-4 py-2">Total Price</th>
-                <th className="px-4 py-2">
+                <th className="px-4 py-2 items-center text-center justify-center">
                   <button onClick={toggleSortOrder} className="flex gap-1 text-center items-center">
                     Order At
                     {sortOrder === "desc" ? (
@@ -213,7 +213,7 @@ function Orders() {
       className="cursor-pointer text-center border-b border-gray-300 text-sm hover:bg-gray-200"
       onClick={() => handleOrderClick(order)}
     >
-      <td className="px-4 py-2 text-gray-600">{order.id}</td>
+      <td className="p-2 text-gray-600">{order.id}</td>
       <td className="px-4 py-2">{order.customerInfo?.name || "Unknown"}</td>
       <td className="px-4 py-2">
         {order?.cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0}
@@ -223,7 +223,6 @@ function Orders() {
         ₱ {order.cartItems?.reduce((acc, item) => acc + (item.price * item.quantity), 0)}.00
       </td>
       <td className="px-4 py-2">
-        <p>
           {order.createdAt?.toDate().toLocaleString("en-US", {
             year: "numeric",
             month: "short",
@@ -232,7 +231,6 @@ function Orders() {
             minute: "2-digit",
             hour12: true, // Use 12-hour format
           }) || "N/A"}
-        </p>
       </td>
 
       <td className="px-4 py-2">
@@ -262,7 +260,7 @@ function Orders() {
 
       {/* Order Details Modal */}
       {selectedOrder && (
-        <div className="fixed inset-0 !bg-gray-800/50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 !bg-gray-800/50 flex items-center justify-center p-4 z-30">
           <div className=" text-sm bg-white p-6 rounded-lg w-full max-w-4xl">
             <div className="flex items-center justify-between mb-4">
               <p className="text-xl"> <strong>Order ID :</strong> {selectedOrder.id}</p>

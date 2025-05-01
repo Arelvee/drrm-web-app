@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
-import { Link as ScrollLink } from 'react-scroll';
+import { HashLink } from 'react-router-hash-link';
 import { auth } from "../firebase/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import LoginRegisterForm from './LoginForm.jsx';
@@ -65,45 +65,41 @@ function Header() {
                 <nav className="hidden lg:flex flex-grow justify-center">
                     <ul className="flex gap-8 text-white font-semibold text-sm">
                         <li>
-                            <Link to="/" className="flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white
-                            hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
+                            <Link to="/" className="flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
                             <House size={25}/>
                             Home
                             </Link>
                         </li>
                         <li>
-                            <ScrollLink to="about" smooth={true} duration={500} className="cursor-pointer flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white
+                            <HashLink smooth to="/#about"  duration={500} className="cursor-pointer flex items-center gap-2
                             hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
                             <Users size={25}/>
                             About Us
-                            </ScrollLink>
+                            </HashLink>
                         </li>
                         <li>
-                            <ScrollLink to="trainings" smooth={true} duration={500} className="cursor-pointer flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white
-                            hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
+                            <HashLink smooth to="/#trainings"  duration={500} className="cursor-pointer flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
                             <Info size={25}/>
                                 Trainings
-                            </ScrollLink>
+                            </HashLink>
                         </li>
                         <li>
-                            <Link to={user ? "/e-learning" : "#"} onClick={(e) => handleProtectedRouteClick("/e-learning", e)} className="flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white
-                            hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
+                            <Link to={user ? "/e-learning" : "#"} onClick={(e) => handleProtectedRouteClick("/e-learning", e)} className="flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
                             <MonitorPlay size={25}/>
                             E-Learning
                             </Link>
                         </li>
                         <li>
-                            <Link to={user ? "/shop" : "#"} onClick={(e) => handleProtectedRouteClick("/shop", e)} className="flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white
-                            hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
+                            <Link to="/shop" className="flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
                             <ShoppingCart size={25}/>
                             Shop
                             </Link>
                         </li>
                         <li>
-                            <ScrollLink to="contact" smooth={true} duration={500} className="cursor-pointer flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white
-                            hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">     <PhoneCall size={25}/>
+                            <HashLink smooth to="/#contact"  duration={500} className="cursor-pointer flex items-center gap-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
+                            <PhoneCall size={25}/>
                                 Contact
-                            </ScrollLink>
+                            </HashLink>
                         </li>
                     </ul>
                 </nav>
@@ -115,8 +111,7 @@ function Header() {
                             <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-base text-white font-bold">
                                 {user.email.slice(0, 2).toUpperCase()}
                             </div>
-                            <span className="ml-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white
-                            hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8">Log Out</span>
+                            <span className="ml-2  hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">Log Out</span>
                         </button>
                     ) : (
                         <button onClick={() => setShowLogin(true)} className="hidden lg:flex bg-yellow-500 items-center border border-transparent hover:bg-transparent hover:border hover:border-white text-white font-semibold text-sm px-4 gap-1 transition rounded-full p-2"> Log In
@@ -134,24 +129,24 @@ function Header() {
 
             {/* Mobile Sidebar */}
             {menuOpen && (
-                <div className="lg:hidden fixed top-0 left-0 w-64 h-full bg-red-900 text-white p-5 z-50 shadow-lg transition-transform">
-                    <button className="absolute top-4 right-4" onClick={() => setMenuOpen(false)}>
+                <div className="lg:hidden fixed top-15 left-0 w-64 h-full bg-red-900 text-white p-5 z-50 shadow-lg transition-transform">
+                    {/* <button className="absolute top-4 right-4" onClick={() => setMenuOpen(false)}>
                         <X size={24} />
-                    </button>
+                    </button> */}
                     <ul className="flex flex-col gap-6 mt-10">
                         <li>
                             <Link to="/" className="flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}><House size={25}/>Home
                             </Link>
                         </li>
                         <li>
-                            <ScrollLink to="about" smooth={true} duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>
+                            <HashLink smooth to="/#about"  duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>
                             <Users size={25}/>About Us
-                            </ScrollLink>
+                            </HashLink>
                         </li>
                         <li>
-                            <ScrollLink to="trainings" smooth={true} duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>
+                            <HashLink smooth to="/#trainings"  duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>
                             <Info size={25}/>Trainings
-                            </ScrollLink>
+                            </HashLink>
                         </li>
                         <li>
                             <Link to={user ? "/e-learning" : "#"} onClick={(e) => handleProtectedRouteClick("/e-learning", e)} className="flex items-center gap-2 hover:underline">
@@ -159,14 +154,14 @@ function Header() {
                             </Link>
                         </li>
                         <li>
-                            <Link to={user ? "/shop" : "#"} onClick={(e) => handleProtectedRouteClick("/shop", e)} className="flex items-center gap-2 hover:underline">
+                            <Link to="/shop" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 hover:underline">
                             <ShoppingCart size={25}/>Shop
                             </Link>
                         </li>
                         <li>
-                            <ScrollLink to="contact" smooth={true} duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>
+                            <HashLink smooth to="/#contact"  duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>
                             <PhoneCall size={25}/>Contact
-                            </ScrollLink>
+                            </HashLink>
                         </li>
                     </ul>
                     <div className="mt-10">

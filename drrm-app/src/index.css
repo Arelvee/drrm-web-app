@@ -3,6 +3,44 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+
+/* Base font sizes (for large screens) */
+h1 {
+  font-size: 3rem;
+}
+h2 {
+  font-size: 2rem;
+}
+p {
+  font-size: 1.125rem;
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 991px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1rem;
+  }
+}
+
+/* Small screens (phones) */
+@media (max-width: 575px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  p {
+    font-size: 0.95rem;
+  }
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

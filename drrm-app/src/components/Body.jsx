@@ -56,11 +56,36 @@ const newsItems = [
     },
   ];
 
-  
+
     
 
 function Body(){
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [activeSection, setActiveSection] = useState(() => {
+        const isMobile = window.innerWidth < 1024;
+        return isMobile ? null : 'ALL'; // Show all on desktop by default
+      });
+      const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+      
+
+      useEffect(() => {
+        const handleResize = () => {
+          const mobile = window.innerWidth < 1024;
+          setIsMobile(mobile);
+          setActiveSection(mobile ? null : 'ALL');
+        };
+      
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+      }, []);
+      
+
+      const toggleSection = (key) => {
+        if (!isMobile) return;
+        setActiveSection((prev) => (prev === key ? null : key));
+      };
+      
    
     useEffect(() => {
         const interval = setInterval(() => {
@@ -122,7 +147,7 @@ function Body(){
 
 
                         {/* Dots for manual navigation */}
-                        <div id="dots" className="flex justify-center  space-x-2">
+                        <div id="dots" className="flex justify-center  space-x-2 mt-6">
                             {slides.map((_, index) => (
                                 <button
                                     key={index}
@@ -136,7 +161,7 @@ function Body(){
 
                     {/* WHAT'S NEW */}
                     <div className="news-section flex flex-col h-full flex-grow">
-                        <h2 className="text-3xl font-bold text-center uppercase text-red-900 tracking-wide mb-4">
+                        <h2 className="font-bold text-center uppercase text-red-900 tracking-wide mb-4">
                             What's New?
                         </h2>
 
@@ -146,7 +171,7 @@ function Body(){
                                     key={news.id}
                                     to={`/news/${news.id}`}
                                     state={{ news }}
-                                    className="flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative"
+                                    className="block lg:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative"
                                 >
                                     <img
                                         src={news.image}
@@ -154,9 +179,9 @@ function Body(){
                                         className="h-[190px] w-[300px] object-cover rounded-md"
                                     />
                                     <div className="flex flex-col justify-between flex-grow">
-                                        <h1 className="text-xl font-semibold leading-relaxed hover:text-red-900">
+                                        <p className="font-semibold leading-relaxed hover:text-red-900">
                                             {news.title}
-                                        </h1>
+                                        </p>
                                         <p className="text-gray-600 text-sm">{news.date}</p>
                                     </div>
                                 </Link>
@@ -179,29 +204,28 @@ function Body(){
             
             {/* History Section */}
             <section id="about"
-             className="relative flex flex-col justify-center items-center text-center min-h-screen bg-cover bg-center p-8 md:p-16"
+             className="relative flex flex-col justify-center items-center text-center min-h-screen bg-cover bg-center py-8 px-6 md:px-16"
              style={{ backgroundImage: `url(${historyImage})` }}
                 >
-                <div className="relative z-10 max-w-4xl bg-white/20 backdrop-blur-xl p-10 md:p-14 rounded-3xl shadow-2xl border border-white/30">
-                <h2 className="text-5xl font-extrabold uppercase text-red-900 tracking-widest mb-6 drop-shadow-lg">
-                HISTORY
-                </h2>
-                <p className="text-lg sm:text-xl text-black leading-relaxed text-justify font-light">
-                The University of the Philippines Manila Disaster Risk Reduction and Management in Health (UPM DRRM-H) Center was officially launched on 8 June 2022 to conduct state-of-the-art disaster simulation trainings and evidence-based research. Established to provide virtual disaster training programs, the center aims to prevent mistakes in actual catastrophic situations by utilizing advanced simulation technologies. Located on the 2nd floor of Joaquin Gonzales Hall in UPM, it also serves as a hub for research.
-                </p>
-                <p className="mt-6 text-lg sm:text-xl text-black leading-relaxed text-justify font-light">
-                Dr. Carlos Primero Gundran, UPM DRRM-H Center Head, highlighted its significance: "The Philippines is one of the most disaster-prone countries in the world. Through the Center, we seek to conduct training and seminars that will prepare our responders, even ordinary employees, in disaster preparedness through our state-of-the-art facilities. We can finally hold disaster preparedness training virtually, and mistakes could be prevented in actual situations."
-                </p>
-            </div>
+                <div className="relative z-10 max-w-4xl bg-white/20 backdrop-blur-xl  p-6 md:p-10 rounded-xl shadow-2xl">
+                    <h2 className="text-5xl font-extrabold uppercase text-red-900 tracking-widest mb-6 drop-shadow-lg">
+                    HISTORY
+                    </h2>
+                    <p className="text-lg sm:text-xl text-black text-justify font-light">
+                    The University of the Philippines Manila Disaster Risk Reduction and Management in Health (UPM DRRM-H) Center was officially launched on 8 June 2022 to conduct state-of-the-art disaster simulation trainings and evidence-based research. Established to provide virtual disaster training programs, the center aims to prevent mistakes in actual catastrophic situations by utilizing advanced simulation technologies. Located on the 2nd floor of Joaquin Gonzales Hall in UPM, it also serves as a hub for research.
+                    </p>
+                    <p className="mt-6 text-lg sm:text-xl text-black leading-relaxed text-justify font-light">
+                    Dr. Carlos Primero Gundran, UPM DRRM-H Center Head, highlighted its significance: "The Philippines is one of the most disaster-prone countries in the world. Through the Center, we seek to conduct training and seminars that will prepare our responders, even ordinary employees, in disaster preparedness through our state-of-the-art facilities. We can finally hold disaster preparedness training virtually, and mistakes could be prevented in actual situations."
+                    </p>
+                </div>
             </section>
 
             {/* Vision & Mission Section */}
-            <section className="relative grid gap-8 text-center bg-gray-50 py-12 px-6 md:px-16">
+            <section className="relative grid gap-8 text-center bg-gray-50 py-8 px-4 md:px-16">
                 {/* Vision */}
-                <div className="bg-white p-8 md:p-12 rounded-2xl shadow-lg border border-gray-300">
-                    
-                    <div className="flex items-center justify-center">
-                        <img src={Vision} alt="Vision" className="h-30 w-auto" />
+                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg">
+                    <div className="flex items-center gap-5 justify-center my-4">
+                        <img src={Vision} alt="Vision" className="h-10 lg:h-15 w-auto" />
                         <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
                             VISION
                         </h2>
@@ -213,15 +237,14 @@ function Body(){
                 </div>
 
                 {/* Mission */}
-                <div className="bg-white p-8 md:p-12 rounded-2xl shadow-lg border border-gray-300">
-                    <div className="flex items-center justify-center">
-                        <img src={Target} alt="Target" className="h-30 w-auto" />
+                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg">
+                    <div className="flex items-center gap-5 justify-center my-4">
+                        <img src={Target} alt="Target" className="h-15 lg:h-20 w-auto" />
                         <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
                             MISSION
                         </h2>
-                        
                     </div>
-                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
+                    <p className="sm:text-sm text-gray-800 leading-relaxed text-justify py-2">
                         <strong className="text-2xl mr-1">UP</strong>lift the value and status level of the organization as the lead resource in disaster risk reduction and management in health. 
                     </p>
                     <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
@@ -242,14 +265,14 @@ function Body(){
                 </div>
                 
                 {/* Core Values */}
-                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-300 ">
-                    <div className="flex items-center justify-center">
-                        <img src={Values} alt="Values" className="h-30 w-auto" />
-                        <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
+                <div className="bg-white py-6 md:py-10 rounded-2xl shadow-lg ">
+                    <div className="flex items-center gap-3 justify-center my-4">
+                        <img src={Values} alt="Values" className=" h-15 lg:h-25 w-auto" />
+                        <h2 className="font-extrabold uppercase text-red-900 tracking-wide">
                             CORE VALUES
                         </h2>
                     </div>
-                    <ul className="grid grid-cols-1 md:grid-cols-2 max-w-lg gap-2 list-disc-none text-md sm:text-lg text-gray-800 leading-relaxed py-2 m-auto">
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 max-w-lg gap-2 list-disc-none text-md sm:text-lg text-gray-800 py-2 m-auto">
                         <li>Honor</li>
                         <li>Excellence</li>
                         <li>Accountability</li>
@@ -260,43 +283,149 @@ function Body(){
                 </div>
             </section>       
 
-            {/* <section>
-                <h1>
+            {/*DRRM-H BRIDGE-2030 */}
+            <section className="grid gap-4 text-white text-center bg-gray-50 py-8 px-4 md:px-16">
+                <p className="font-extrabold uppercase tracking-wide drop-shadow-lg p-2 bg-fuchsia-950 ">
                     DRRM-H BRIDGE 2030
-                </h1>
-                <div>
-                    <p><strong className="text-3xl">B</strong>ASIC MANDATE OF EDUCATION RESEARCH AND PUBLIC SERVICES</p>
+                </p>
+                <div className="gap-2 grid text-white lg:flex">
+                    <p
+                        className="text-2xl rounded-md bg-black p-4 cursor-pointer"
+                        onClick={() => toggleSection('B')}
+                    >
+                        <span className="text-3xl font-bold mr-1">B</span>ASIC MANDATE OF EDUCATION, RESEARCH AND PUBLIC SERVICES
+                    </p>
+                    {(activeSection === 'B' || activeSection === 'ALL') && (
+                        <div className="grid-cols-1 grid lg:grid-cols-8 gap-2">
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">100% PASSING ON TRAINING PROGRAMS</div>
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">Launch Basic and Advance MCI</div>
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">12 Trainings for both MCI and BERTs</div>
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">Promote results in at least 3 exhibits</div>
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">3 Research proposal/year</div>
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">At least 2 ongoing research projects/year</div>
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">Disseminate at least 1 research result annually</div>
+                            <div className="bg-black/30 text-black p-2 rounded flex items-center justify-center text-center">Promote DRRCCA research agenda in at least 1 webinar</div>
+                        </div>
+                    )}
                 </div>
-            
-            
+
+                <div className="gap-2 grid text-white lg:flex ">
+                    <p className="text-2xl rounded-md font-bold bg-fuchsia-950 p-4 cursor-pointer items-center justify-center text-center" onClick={() => toggleSection('R')}
+                    ><span className="text-3xl">R</span>ESOURCES HUMAN INCLUDING INFRATRUCTURE AND EQUIPMENT</p>
+                    {(activeSection === 'R' || activeSection === 'ALL') && (
+                        <div className="grid-cols-1 grid lg:grid-cols-6 gap-2">
+                            <div className="bg-fuchsia-950/30 text-black p-2 rounded flex items-center justify-center text-center">20 Fulltime FACULTY 100% MASTER's/PHDS</div>
+                            <div className="bg-fuchsia-950/30 text-black p-2 rounded flex items-center justify-center text-center">100% ACCESS TO HEALTH SERVICES</div>
+                            <div className="bg-fuchsia-950/30 text-black p-2 rounded flex items-center justify-center text-center">VS FEEDBACK FROM FACULTY AND STAFF</div>
+                            <div className="bg-fuchsia-950/30 text-black p-2 rounded flex items-center justify-center text-center">ANNUAL PERFOMANCE FEEDBACK</div>
+                            <div className="bg-fuchsia-950/30 text-black p-2 rounded flex items-center justify-center text-center lg:col-span-2">100% procurement and management suplplies and equipment</div>
+                            <div className="bg-fuchsia-950/30 text-black p-2 rounded flex items-center justify-center text-center lg:col-span-3">Provide each staff with at least 1 local DRMMH related training every year</div>
+                            <div className="bg-fuchsia-950/30 text-black p-2 rounded lg:col-span-3">Provide each staff with at least 1 international DRMMH related training every three years</div>
+                        </div>
+                    )}
+                </div>
+                <div className="gap-2 grid text-white lg:flex">
+                    <p className="text-2xl rounded-md font-bold bg-pink-800 p-4 cursor-pointer items-center justify-center text-center " onClick={() => toggleSection('I')}
+                    ><strong className="text-3xl">I</strong>NSTITUTIONAL QUALITY MANAGEMENT</p>
+                    {(activeSection === 'I' || activeSection === 'ALL') && (
+                        <div className="grid-cols-1 grid lg:grid-cols-8 gap-2">
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center">
+                            Institutionalize UP MDRRM-H Center under CPH</div>
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center">Review and Revise training programs</div>
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center">100% Satisfactory rating for every training</div>
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center ">Propose at least 1 health policy</div>
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center ">Adapt, upgrade and implement DRRMH related innovations</div>
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center ">2 News trainings in 5 years for Community base health workers</div>
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center ">100% conduct Faculty evaluation after every training</div>
+                            <div className="bg-pink-800/30 text-black p-2 rounded flex items-center justify-center text-center ">60 graduates per year</div>
+                        </div>
+                    )}
+                </div>
+                <div className="gap-2 grid text-white lg:flex ">
+                    <p
+                        className="text-2xl rounded-md font-bold bg-blue-950 p-4 cursor-pointer w-full lg:w-2/6"
+                        onClick={() => toggleSection('D')}
+
+                    >
+                        <strong className="text-3xl">D</strong>IVERSITY AND CO-CREATION OF ENABLING ENVIRONMENT
+                    </p>
+                    {(activeSection === 'D' || activeSection === 'ALL') && (
+                        <div className="grid grid-cols-1 gap-2 w-full lg:w-4/6">
+                            <div className="bg-blue-200 text-black p-3 rounded shadow flex items-center justify-center text-center ">
+                                100% access to personnel support mechanisms as prescribed by the department and as needed
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="gap-2 grid text-white lg:flex">
+                    <p className="text-2xl rounded-md font-bold bg-green-800 p-4 cursor-pointer w-full lg:w-1/6"
+                        onClick={() => toggleSection('G')}><strong className="text-3xl">G</strong>OVERNANCE AND LEADERSHIP</p>
+                    {(activeSection === 'G' || activeSection === 'ALL') && (
+                        <div className="grid-cols-1 grid lg:grid-cols-3 gap-2">
+                            <div className="bg-green-800/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                Faculty peer evaluation is administered regulary at the end of each term
+                            </div>
+                            <div className="bg-green-800/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                Update the department faculty and staff of the financial status of the department regulary
+                            </div>
+                            <div className="bg-green-800/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                Revenues of &lt; 7.5M <br /> Expense = Budget 5.5M
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="gap-2 grid text-white lg:flex">
+                    <p className="text-2xl rounded-md font-bold bg-zinc-600 p-4 cursor-pointer w-full lg:w-1/6"
+                        onClick={() => toggleSection('E')}><strong className="text-3xl">E</strong>NGAGEMENT AND COLLABORATION WITH STUDENTS, ALUMNI AND PARTNERS
+                    </p>
+                    {(activeSection === 'E' || activeSection === 'ALL') && (
+                        <div className="grid-cols-1 grid lg:grid-cols-5 gap-2">
+                            <div className="bg-zinc-600/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                Trainees and alumni information data base and monitoring sheet
+                            </div>
+                            <div className="bg-zinc-600/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                Completed or existing MOA, MOU with at least 5 targeted institutions/partners
+                            </div>
+                            <div className="bg-zinc-600/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                Conduct 1 training workshop or benchmarking                            
+                            </div>
+                            <div className="bg-zinc-600/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                At least public service or community engagement annually                            
+                            </div>
+                            <div className="bg-zinc-600/30 text-black p-3 rounded shadow flex items-center justify-center text-center">
+                                Participate as attendee or as organizer in at least 6 meetings with stakeholders                            
+                            </div>
+                        </div>
+                    )}
+                </div>
             </section>
-            */}
+           
 
 
             {/* Trainings Section */}
-            <sections id="trainings" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 text-center text-white bg-cover bg-center p-8">
+            <sections id="trainings" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 text-center  bg-gray-50 text-white bg-cover bg-center py-8 px-4 md:px-16">
                 <div className="col-span-full">
-                    <h2 className="text-3xl font-extrabold uppercase text-red-900 tracking-wide mb-4">What We Offer?</h2>
+                    <h2 className="font-extrabold uppercase text-red-900 tracking-wide">What We Offer?</h2>
                 </div>
                
-                <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8 flex flex-col">
+                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col">
                     <img src={TrainingImage1} alt="Broken Image" className="w-full rounded-lg mb-4"/>
                     <p className="text-gray-600 text-lg font-medium ">Training Program</p>
-                    <h2 className="text-black  text-lg font-extrabold uppercase mt-2 mb-3">Basic Emergency Response Team Simulation Training (BERTST)</h2>
+                    <p className="text-black font-extrabold uppercase my-3">Basic Emergency Response Team Simulation Training (BERTST)</p>
                     <Link
                         to="/training1"
-                        className="mt-auto block text-lg bg-red-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-red-700"
+                        className="mt-auto block text-lg bg-red-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-700"
                     >
                         Read and Join Us!
                     </Link>
                 </div>
-                <div className="relative z-10 px-6 bg-white rounded-2xl shadow-lg p-8 flex flex-col">
+                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col">
                     <img src={TrainingImage2} alt="Broken Image" className="w-full rounded-lg mb-4"/>
-                    <p className="text-gray-600 text-lg font-medium ">Training Program</p>
-                    <h2 className="text-black text-lg font-extrabold uppercase mt-2">Mass Casualty Incident (MCI) and Triage Training</h2>
+                    <p className="text-gray-600 font-medium ">Training Program</p>
+                    <p className="text-black font-extrabold uppercase my-3">Mass Casualty Incident (MCI) and Triage Training</p>
                     <Link
                         to="/training2"
-                        className="mt-auto block text-lg bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg transition-transform transform hover:scale-105 hover:bg-blue-700"
+                        className="mt-auto block bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
                     >
                         Read and Join Us!
                     </Link>
@@ -307,7 +436,7 @@ function Body(){
             {/* Contact And Review Section */}
             <section
                 id="contact"
-                className="bg-cover bg-center py-20 px-6 text-white"
+                className="bg-cover bg-center py-20 px-4 text-white"
                 style={{ backgroundImage: `url(${backgroundImage})` }}
                 >
                 <div className="container mx-auto relative flex flex-col md:flex-row max-w-5xl lg:max-w-6xl px-6 md:px-10 py-12 bg-black/50 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] items-start gap-8">

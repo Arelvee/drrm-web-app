@@ -42,6 +42,16 @@ app.post("/upload", upload.array("images", 5), (req, res) => {
   res.json({ imageUrls }); 
 });
 
+app.post("/upload", upload.single("images"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  const imageUrl = `/uploads/${req.file.filename}`;
+  res.json({ imageUrls: [imageUrl] });
+});
+
+
 const receiptStorage = multer.diskStorage({
   destination: receiptDir, 
   filename: (req, file, cb) => {

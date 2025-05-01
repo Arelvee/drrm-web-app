@@ -145,7 +145,8 @@ const ManualDetail = () => {
 
         {/* Manual Details */}
         <div className="md:w-2/3">
-          <h2 className="text-3xl font-bold mb-4">{manual.title}{manual.category}</h2>
+          <p className="text-gray-500">{manual.category}</p>
+          <h2 className="text-3xl font-bold mb-4">{manual.title}</h2>
           <p className="text-2xl font-bold text-red-900">₱ {manual.price}.00</p>
           <p><strong>Stock:</strong> {manual.stock}</p>
 
@@ -195,19 +196,20 @@ const ManualDetail = () => {
       </div>
 
       {/* Shipping Info */}
-      <div className="my-8 border border-gray-300 p-4 rounded-lg">
-      <button
-        onClick={() => setShowShippingInfo(!showShippingInfo)}
-        className="text-xl font-bold flex justify-between items-center w-full text-left"
-        >
-        <div className="flex items-center gap-2">
-            <Info size={25} />
-            Shipping Fee Information
-        </div>
-        <ChevronRight
-            size={25}
-            className={`transition-transform duration-300 ${showShippingInfo ? "rotate-90" : ""}`}
-        />
+      <div className="my-6 border border-zinc-300 p-4 rounded-lg">
+        <button
+          onClick={() => setShowShippingInfo(!showShippingInfo)}
+          className="text-xl font-bold flex justify-between items-center w-full text-left"
+          >
+          <p className="flex items-center gap-2">
+            
+              <Info size={25} />
+              Shipping Fee Information
+          </p>
+          <ChevronRight
+              size={25}
+              className={`transition-transform duration-300 ${showShippingInfo ? "rotate-90" : ""}`}
+          />
         </button>
 
         {showShippingInfo && (
@@ -228,13 +230,16 @@ const ManualDetail = () => {
       </div>
 
       {/* Manual Overview */}
-      <div className="my-4 px-4">
+      <div className="my-4 md:px-4">
         <h2 className="text-xl font-bold my-2">Manual Overview</h2>
         <p className="text-justify">{manual.content}</p>
       </div>
-      <div className="my-4 px-4">
-        <h2 className="text-xl font-bold my-2">You May Also Like</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+
+
+      {/* You May Also Like */}
+      <div className="my-4 md:px-4">
+        <h2 className=" font-bold ">You May Also Like</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
           {recommendedManuals.map((item) => (
             <div key={item.id} onClick={() => {
               navigate(`/manual-detail`, { state: { manual: item } });
@@ -247,7 +252,7 @@ const ManualDetail = () => {
               />
               <div className="my-4">
                 <p className="text-sm text-gray-500">{item.category}</p>
-                <h2 className="text-lg font-semibold">{item.title}</h2>
+                <p className="text-lg font-semibold">{item.title}</p>
               </div>
               <div className="flex justify-between items-center">
                 <p className="text-2xl font-bold text-red-900">₱ {item.price}.00</p>

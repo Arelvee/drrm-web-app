@@ -3,28 +3,30 @@ import { Link } from 'react-router-dom';
 import BertsQR from '../assets/berts-qr.png';
 import BertsImg from '../assets/berts-img.png';
 import backgroundImage from '../assets/berts-bg.png';
+import { ChevronsRight } from "lucide-react";
 
 
 
 function Trainings(){
     return(
-        <main class="bg-gray-250">
-            <section class="mt-20">
-                <div class="flex items-start text-black font-semibold px-10 py-4">
+        <main>
+            <section class="mt-20 mb-8 p-4">
+                <div class="flex items-start font-semibold">
                     <Link
                         to="/"
-                        className="flex items-center"
+                        className="flex items-center text-gray-500"
                     >
-                        Home <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-right mx-2"><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
+                        Home<ChevronsRight className="text-black mx-2" size={20}/>
+
                     </Link>
                     <p className="text-red-900">BERTST Training</p>
                 </div>
             </section>
 
-            <section id="berts-training" class="relative flex flex-col lg:flex-row min-h-screen justify-center items-start text-red-900 text-white px-8 mb-8 lg:px-8 gap-8">
-                <div class="lg:w-3/4 p-6 bg-white rounded shadow-md sm:w-full"  style={{ backgroundImage: `url(${backgroundImage})` }}>
-                    <h1 class="text-red-900 text-3xl sm:text-5xl font-extrabold">Basic Emergency Response Team Simulation Training (BERTST)</h1>
-                    <p class="text-black text-sm sm:text-lg text-justify leading-relaxed my-6">
+            <section id="berts-training" class="relative flex flex-col lg:flex-row min-h-screen justify-center items-start text-red-900 px-4 mb-8 gap-8">
+                <div class="lg:w-3/4 p-3 rounded shadow-md sm:w-full"  style={{ backgroundImage: `url(${backgroundImage})` }}>
+                    <h2 class="text-red-900 font-extrabold">Basic Emergency Response Team Simulation Training (BERTST)</h2>
+                    <p class="text-black text-justify leading-relaxed my-6">
                         The University of the Philippines Manila Disaster Risk Reduction and Management for Health Program's Basic Emergency response team simulation training aims to improve the skilss on command, communication and collaboration.
                     </p>
                 
@@ -46,7 +48,7 @@ function Trainings(){
                         </div>
                     </div>
                     </div>
-                    <div class="p-6 bg-red-900 rounded shadow-md text-center w-full grid  grid-cols-2 lg:grid-cols-1 gap-2 lg:w-1/3 sm:w-full">
+                    <div class="p-6 bg-red-900 rounded shadow-md text-center w-full grid  grid-cols-1 gap-2 lg:w-1/3 sm:w-full">
                         <div className="flex flex-col items-center sm:col-span-1">
                             <p className="text-yellow-400 sm:text-xl font-bold">Training Fee:</p>
                             <p className="text-white sm:text-3xl mb-4">Php 5,500/Participant</p>

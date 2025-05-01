@@ -55,7 +55,7 @@ function Footer() {
 
                     {/* Newsletter Section */}
                     <div className="space-y-4 text-center md:text-left">
-                        <h1 className="text-2xl font-bold text-white">Be Updated!</h1>
+                        <h2 className="font-bold text-white">Be Updated!</h2>
                         <p className="text-gray-300">Stay in the loop and sign up for the UP DRRM-H Program newsletter:</p>
                         <div className="flex items-center bg-white border rounded-xl shadow-md overflow-hidden">
                             <input type="email" placeholder="Enter your email" className="flex-1 px-4 py-2 text-gray-900 placeholder-gray-500 focus:outline-none" />
