@@ -7,11 +7,11 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import UPLogo from "../../assets/UP.png";
 import UPDrrm from "../../assets/updrrm.png";
 import UPNAME from "../../assets/dname-yw-v2.png";
-import { BookOpenText, LogOutIcon, Newspaper, PackageOpenIcon } from "lucide-react";
+import { BookOpenText, Globe, LogOutIcon, Newspaper, PackageOpenIcon } from "lucide-react";
 
 const AdminSidebar = ({ adminName, menuOpen, setMenuOpen }) => {
   const sidebarClasses = `
-    fixed top-18 md:top-0 left-0 h-screen bg-red-900 text-white flex flex-col p-4 transition-transform duration-300 z-30
+    fixed top-18 md:top-0 left-0 h-screen bg-red-900 text-white flex flex-col p-4 transition-transform duration-300 z-50
     ${menuOpen ? "translate-x-0" : "-translate-x-full"} 
     w-4/5 md:w-1/5 md:translate-x-0
   `;
@@ -91,9 +91,13 @@ const AdminSidebar = ({ adminName, menuOpen, setMenuOpen }) => {
             <div className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
               <Newspaper size={25} /> News
             </div>
-            
           </Link>
-
+          <Link to="/" className="flex items-center justify-between px-4 py-2 rounded hover:bg-gray-700">
+            <div className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+              <Globe size={25}/> Website
+            </div>
+          </Link>
+          
         </nav>
 
         {/* Logout and Close */}

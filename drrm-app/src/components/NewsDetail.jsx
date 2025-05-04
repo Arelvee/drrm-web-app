@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, Link, useNavigate } from "react-router-dom";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/firebase"; 
 import {Calendar} from "lucide-react";
 
@@ -13,6 +13,7 @@ function NewsDetail() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchNews = async () => {
       try {
         const docRef = doc(db, "news", id);
@@ -66,13 +67,20 @@ function NewsDetail() {
         <div className="container mx-auto py-4 flex flex-col md:flex-row">
           <div className="md:w-2/3">
             <h1 className=" md:text-4xl font-bold text-gray-900">{news.title}</h1>
-            <p className=" flex items-center text-gray-500 text-sm md:text-base mt-2"><Calendar size={20} className="mr-1"/>{news.date}</p>
+            <p className=" flex items-center text-gray-500 text-sm md:text-base mt-2"><Calendar size={20} className="mr-1"/>{news.createdAt?.toDate().toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }) || "N/A"}</p>
 
             <div className="mt-4">
               <img src={news.image} alt={news.title} className="w-full rounded-lg object-cover shadow-md" />
             </div>
 
-            <p className="mt-6 text-base md:text-lg leading-relaxed text-gray-800 text-justify">{news.content}</p>
+            <p className="mt-6 text-base md:text-lg leading-relaxed text-gray-800 text-justify whitespace-pre-wrap">{news.content}</p>
 
             {/* Optional fields based on your schema */}
             {news.purpose && (
@@ -96,7 +104,14 @@ function NewsDetail() {
                   <img src={item.image} alt={item.title} className="w-16 h-16 rounded-lg object-cover" />
                   <div>
                     <p className="text-sm font-bold text-gray-800 mb-2">{item.title}</p>
-                    <p className="flex text-xs text-gray-500"><Calendar size={20} className="mr-1"/>{item.date}</p>
+                    <p className="flex text-xs text-gray-500"><Calendar size={20} className="mr-1"/>{item.createdAt?.toDate().toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }) || "N/A"}</p>
                   </div>
                 </Link>
               ))}

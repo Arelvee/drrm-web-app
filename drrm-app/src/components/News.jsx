@@ -20,6 +20,7 @@ function News() {
     .filter((news) => !category || news.tags.includes(category));
 
     useEffect(() => {
+      window.scrollTo(0, 0);
       const fetchNews = async () => {
         try {
           const querySnapshot = await getDocs(collection(db, "news"));
@@ -113,7 +114,14 @@ function News() {
                 <h3 className="text-xl font-semibold mt-2 text-gray-800 hover:text-red-900">
                   {news.title}
                 </h3>
-                <p className="flex items-center text-gray-600 text-sm my-3"><Calendar size={20} className="mr-1"/>{news.date} • {news.readTime}</p>
+                <p className="flex items-center text-gray-600 text-sm my-3"><Calendar size={20} className="mr-1"/>{news.createdAt?.toDate().toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }) || "N/A"} • {news.readTime}</p>
                 <div className="mt-2">
                   {news.tags.map((tag) => (
                     <span key={tag} className="text-xs bg-gray-200 rounded-full px-2 py-1 mr-2">

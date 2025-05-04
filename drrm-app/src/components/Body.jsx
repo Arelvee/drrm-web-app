@@ -56,9 +56,6 @@ const newsItems = [
     },
   ];
 
-
-    
-
 function Body(){
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeSection, setActiveSection] = useState(() => {
@@ -69,6 +66,7 @@ function Body(){
       
 
       useEffect(() => {
+        window.scrollTo(0, 0);
         const handleResize = () => {
           const mobile = window.innerWidth < 1024;
           setIsMobile(mobile);
@@ -93,7 +91,6 @@ function Body(){
         }, 3000);
         return () => clearInterval(interval);
     }, []);
-
 
     const goToSlide = (index) => {
         setCurrentIndex(index);
@@ -265,26 +262,26 @@ function Body(){
                 </div>
                 
                 {/* Core Values */}
-                <div className="bg-white py-6 md:py-10 rounded-2xl shadow-lg ">
-                    <div className="flex items-center gap-3 justify-center my-4">
+                <div className="bg-white py-6 md:py-10 rounded-2xl shadow-lg grid grid-cols-2 justify-items-start">
+                    <div className="gap-3 my-4">
                         <img src={Values} alt="Values" className=" h-15 lg:h-25 w-auto" />
-                        <h2 className="font-extrabold uppercase text-red-900 tracking-wide">
+                        <h2 className="font-extrabold uppercase text-red-900">
                             CORE VALUES
                         </h2>
                     </div>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 max-w-lg gap-2 list-disc-none text-md sm:text-lg text-gray-800 py-2 m-auto">
-                        <li>Honor</li>
-                        <li>Excellence</li>
-                        <li>Accountability</li>
-                        <li>Leadership</li>
-                        <li>Transformation</li>
-                        <li>Harmony</li>
-                    </ul>
+                    <div className=" max-w-lg gap-2 list-disc-none text-md sm:text-lg text-gray-800 py-2 m-auto">
+                        <p><strong className="text-2xl mr-1">H</strong>onor</p>
+                        <p><strong className="text-2xl mr-1">E</strong>xcellence</p>
+                        <p><strong className="text-2xl mr-1">A</strong>ccountability</p>
+                        <p><strong className="text-2xl mr-1">L</strong>eadership</p>
+                        <p><strong className="text-2xl mr-1">T</strong>ransformation</p>
+                        <p><strong className="text-2xl mr-1">H</strong>armony</p>
+                    </div>
                 </div>
             </section>       
 
             {/*DRRM-H BRIDGE-2030 */}
-            <section className="grid gap-4 text-white text-center bg-gray-50 py-8 px-4 md:px-16">
+            {/* <section className="grid gap-4 text-white text-center bg-gray-50 py-8 px-4 md:px-16">
                 <p className="font-extrabold uppercase tracking-wide drop-shadow-lg p-2 bg-fuchsia-950 ">
                     DRRM-H BRIDGE 2030
                 </p>
@@ -398,7 +395,7 @@ function Body(){
                         </div>
                     )}
                 </div>
-            </section>
+            </section> */}
            
 
 

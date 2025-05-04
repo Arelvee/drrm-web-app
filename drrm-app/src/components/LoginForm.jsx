@@ -111,7 +111,7 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                                 type="email" 
                                 value={email} 
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full placeholder-white/70 focus:outline-none" 
+                                className="w-full focus:outline-none" 
                                 placeholder="Enter email" 
                                 required 
                             />
@@ -127,7 +127,7 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                                 type={showPassword ? "text" : "password"} 
                                 value={password} 
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full placeholder-white/70 focus:outline-none" 
+                                className="w-full  focus:outline-none" 
                                 placeholder="Enter password" 
                                 required 
                             />
@@ -157,7 +157,7 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                                     type={showConfirmPassword ? "text" : "password"} 
                                     value={confirmPassword} 
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full placeholder-white/70 focus:outline-none" 
+                                    className="w-full  focus:outline-none" 
                                     placeholder="Confirm password" 
                                     required 
                                 />

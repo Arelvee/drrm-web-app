@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Link } from 'react-router-dom';
 import MCIQR from '../assets/mci-qr.png';
 import MCIImg from '../assets/MCI-img.png';
@@ -7,6 +7,9 @@ import { ChevronsRight } from "lucide-react";
 
 
 function Training2(){
+    useEffect(() => {
+            window.scrollTo(0, 0);
+        }, []);
     return(
         <main>
         <section class="mt-20 mb-8 p-4">

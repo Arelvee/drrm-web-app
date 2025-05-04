@@ -11,7 +11,7 @@ import {
 import { db } from "../../firebase/firebase";
 import { Pencil, Trash2 } from "lucide-react";
 
-const tagOptions = ["Health", "Emergency", "Response", "Training"];
+const tagOptions = ["Health", "Emergency", "Response", "Training", "Agenda"];
 
 const NewsPost = () => {
   const [newsList, setNewsList] = useState([]);
@@ -132,11 +132,11 @@ const handleImageUpload = async (e) => {
   };
 
   return (
-    <div className="md:w-4/5 ml-auto p-6">
+    <div className="md:w-4/5 ml-auto">
       {view === "list" && (
         <>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-red-900">News Posts</h2>
+            <h2 className="font-bold text-red-900">News Posts</h2>
             <button
               onClick={() => {
                 setView("form");
@@ -148,7 +148,7 @@ const handleImageUpload = async (e) => {
               }}
               className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
             >
-              + Create News
+              + Add News
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -157,22 +157,6 @@ const handleImageUpload = async (e) => {
                 key={news.id}
                 className="bg-white shadow rounded p-4 relative"
               >
-                <div className="absolute top-2 right-2 flex gap-2">
-                  <button
-                    onClick={() => startEdit(news)}
-                    title="Edit"
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    <Pencil size={18} />
-                  </button>
-                  <button
-                    onClick={() => deleteNews(news.id)}
-                    title="Delete"
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
                 <div
                   className="cursor-pointer"
                   onClick={() => {
@@ -191,7 +175,14 @@ const handleImageUpload = async (e) => {
                     {news.title}
                   </h3>
                   <p className="text-sm text-gray-600 mb-2">
-                    {news.date} • {news.readTime}
+                  {news.createdAt?.toDate().toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }) || "N/A"} • {news.readTime}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {news.tags.map((tag, index) => (
@@ -202,6 +193,22 @@ const handleImageUpload = async (e) => {
                         {tag}
                       </span>
                     ))}
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => startEdit(news)}
+                      title="Edit"
+                      className="flex gap-2 text-center bg-yellow-500 p-2 text-white rounded hover:text-blue-800"
+                    >
+                      <Pencil size={18} /> Edit
+                    </button>
+                    <button
+                      onClick={() => deleteNews(news.id)}
+                      title="Delete"
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -246,7 +253,14 @@ const handleImageUpload = async (e) => {
               {selectedNews.title}
             </h2>
             <p className="text-sm text-gray-600 mb-4">
-              {selectedNews.date} • {selectedNews.readTime}
+            {selectedNews.createdAt?.toDate().toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }) || "N/A"} • {selectedNews.readTime}
             </p>
             <div className="flex gap-2 mb-4">
               {selectedNews.tags.map((tag, index) => (

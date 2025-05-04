@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import UPLogo from '../assets/UP.png';
 import UPDrrm from '../assets/updrrm.png';
 import UPNAME from '../assets/dname-yw-v2.png';
+import { MapPinned, PhoneCall, Mail } from 'lucide-react';
 
 function Footer() {
     const [visitCount, setVisitCount] = useState(0);
@@ -29,25 +30,18 @@ function Footer() {
                         </div>
 
                         <div className="space-y-3">
-                            <p className="flex items-center text-sm">
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
+                            <a href="https://www.google.com/maps/place/670+Padre+Faura+St,+Ermita,+Manila,+1000+Metro+Manila/@14.5768159,120.9805563,21z/data=!4m10!1m2!2m1!1s670+Padre+Faura+St,+Ermita,+Manila,+1000+Metro+Manila!3m6!1s0x3397ca2edef4ca1d:0x2e219592a918b2e8!8m2!3d14.576844!4d120.980658!15sCjU2NzAgUGFkcmUgRmF1cmEgU3QsIEVybWl0YSwgTWFuaWxhLCAxMDAwIE1ldHJvIE1hbmlsYZIBCnN1YnByZW1pc2XgAQA!16s%2Fg%2F11rg5y2mzk?entry=ttu&g_ep=EgoyMDI1MDQyOS4wIKXMDSoASAFQAw%3D%3D"
+                            className="flex items-center text-sm">
+                                <MapPinned size={30} className='mr-2'/>
                                 670 Padre Faura St, Ermita, Manila, 1000 Metro Manila
-                            </p>
+                            </a>
                             <p className="flex items-center text-sm">
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                                </svg>
+                                <PhoneCall size={25} className='mr-2'/>
                                 123-6921-08
                             </p>
                             
                             <a href="https://mail.google.com/mail/u/0/#inbox?compose=DmwnWtMmVndXxwPCTwvfqHLTnGNVpVzDwXVqncGDVmpVZjMXCjBhPVlGXNGGCSQkTXVDlhDNMTJl" className="flex items-center text-sm">
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <rect width="20" height="16" x="2" y="4" rx="2" />
-                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                                </svg>
+                                <Mail size={25} className="mr-2"/>
                                 upm-drrmh-list@up.edu.ph
                             </a>
                         </div>
@@ -58,7 +52,7 @@ function Footer() {
                         <h2 className="font-bold text-white">Be Updated!</h2>
                         <p className="text-gray-300">Stay in the loop and sign up for the UP DRRM-H Program newsletter:</p>
                         <div className="flex items-center bg-white border rounded-xl shadow-md overflow-hidden">
-                            <input type="email" placeholder="Enter your email" className="flex-1 px-4 py-2 text-gray-900 placeholder-gray-500 focus:outline-none" />
+                            <input type="email" placeholder="Enter your email" className="flex-1 px-4 py-2 text-gray-900 placeholder-gray-500 focus:outline-none"/>
                             <button className="bg-red-900 text-white p-3 justify-center items-center rounded-full w-10 h-10 hover:bg-red-800 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />

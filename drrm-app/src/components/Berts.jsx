@@ -1,13 +1,14 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Link } from 'react-router-dom';
 import BertsQR from '../assets/berts-qr.png';
 import BertsImg from '../assets/berts-img.png';
 import backgroundImage from '../assets/berts-bg.png';
 import { ChevronsRight } from "lucide-react";
 
-
-
 function Trainings(){
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return(
         <main>
             <section class="mt-20 mb-8 p-4">
@@ -82,9 +83,6 @@ function Trainings(){
         </main>
     );
 };
-
-
-
 
 export default Trainings;
 
