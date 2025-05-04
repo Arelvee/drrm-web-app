@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
+import { Search, Calendar } from "lucide-react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/firebase"; 
 import Slide1 from '../assets/slide-image (1).jpg';
 import Slide2 from '../assets/slide-image (2).jpg';
 import Slide3 from '../assets/slide-image (3).jpg';
@@ -13,48 +16,47 @@ import TrainingImage1 from '../assets/training (1).jpg';
 import TrainingImage2 from '../assets/training (2).jpg';
 import backgroundImage from '../assets/background.png';
 import historyImage from '../assets/history.jpg';
-import {EyeIcon, HouseIcon, ScanEyeIcon, TargetIcon} from 'lucide-react';
 
 
 const slides = [Slide1, Slide2, Slide3];
-const newsItems = [
-    {
-      id: 1,
-          title: "HOPE: Strengthening Hospital Preparedness for Emergencies",
-          date: "January 00, 2025",
-          image: News1,
-          purpose:"The main purpose of the HOPE course is to enhance hospital based preparedness in Asia. In order to accomplish this aim, the HOPE course will bring medical and administrative leaders in hospital based disaster management together to discuss the principles of disaster management and work together to make practical steps toward preparing each participants home institution to respond to disasters and mass casualty incidents.",
-          objective:"The objectives of the HOPE course are based on instructional objectives and performance objectives, as outlined below:",
-          instructionalObj: "At the end of the course, the participant should be able to:Describe the relationship between hospitals and disasters.Apply a method of judging the effects of different hazards on the functional and operational components of a hospital.Simulate a mass casualty incident addressing the roles and responsibilities of each component of HICS. Discuss the basic requirements in the medical aspects of managing mass casualties. Apply concepts learned in on-site medical care to specific situations. Prepare an outline of a hospital disaster preparedness plan.",
-          perfObj: "By the end of the course, depending on the disaster scenario, the participants will be able to: Conduct a vulnerability assessment of the hospital Develop a hospital disaster plan Manage a disaster response",
-          category:"Health",
-    },
-    {
-      id: 2,
-          title: "Basic Emergency Response Team Simulation Training (BERTST)",
-          date: "January 00, 2025",
-          image: News2,
-          content: "This training helps emergency teams prepare...",
-          category: "Training",
-    },
-    {
-      id: 3,
-          title: "Mass Casualty Incident (MCI) and Triage Training",
-          date: "January 00, 2025",
-          image: News3,
-          content: "",
-          ctitle: "Mass Casualty Incident (MCI) and Triage Training Course",
-          target: "This manual on Mass Casualty Incident (MCI) and Triage Training will be used by the  health professionals who may or may not have background on triaging and disaster management, and emergency responders assigned in triaging casualties during  disaster situations for prompt medical  management",
-          desc: "Basic concepts and knowledge on triage during mass casualty incidents which will provide the trainees with better understanding on their recommended triaging skills and patient management emphasizing on the application of different triaging algorithms and systems during disaster situations using multidisciplinary approach. ",
-          prereq: "Any background on professional medical courses and/or specialized training on first aid and the like ",
-          duration: "Three days (8:00 AM to 5:00 PM)",
-          genPurpose: "This module was designed to provide trainees with concepts and purpose of triage during mass  casualty incidents, including the utilization of various triage system algorithms available using case scenario based simulation. Ultimately, this is also to prepare the trainees to be a competent triage  officer with advanced knowledge, skills, and attitude in applying disaster triage systems for correct  assignment of victims to appropriate triage categories, regardless of age, gender, socio-economic  status, nationality, cultural affiliation, or religious belief.",
-          learnOutcome: "Upon completion of this training course, the trainees should be able to: 1. State the purpose of triage algorithms during mass casualty incidents;  2. Differentiate the different triage algorithms and its respective triage categories;  3. Apply the use of appropriate triage algorithms in assigning victims correctly in triage  categories; and  4. Practice a multidisciplinary approach in the management of patient conditions.",
-          cContent: "The course contents of this training module were selected based on the set objectives of the training and the participants prior knowledge on triaging during mass casualty incidents and their varying  competence level. This was also organized in a manner that the participants can determine the  chronological sequence of concepts in triaging, from the history and development of triage, including  its purpose during mass casualty incidents to the integration of different triage algorithms and  systems.",
-          dAte: "March 21, 2025",
-          category: "Emergency",
-    },
-  ];
+// const newsItems = [
+//     {
+//       id: 1,
+//           title: "HOPE: Strengthening Hospital Preparedness for Emergencies",
+//           date: "January 00, 2025",
+//           image: News1,
+//           purpose:"The main purpose of the HOPE course is to enhance hospital based preparedness in Asia. In order to accomplish this aim, the HOPE course will bring medical and administrative leaders in hospital based disaster management together to discuss the principles of disaster management and work together to make practical steps toward preparing each participants home institution to respond to disasters and mass casualty incidents.",
+//           objective:"The objectives of the HOPE course are based on instructional objectives and performance objectives, as outlined below:",
+//           instructionalObj: "At the end of the course, the participant should be able to:Describe the relationship between hospitals and disasters.Apply a method of judging the effects of different hazards on the functional and operational components of a hospital.Simulate a mass casualty incident addressing the roles and responsibilities of each component of HICS. Discuss the basic requirements in the medical aspects of managing mass casualties. Apply concepts learned in on-site medical care to specific situations. Prepare an outline of a hospital disaster preparedness plan.",
+//           perfObj: "By the end of the course, depending on the disaster scenario, the participants will be able to: Conduct a vulnerability assessment of the hospital Develop a hospital disaster plan Manage a disaster response",
+//           category:"Health",
+//     },
+//     {
+//       id: 2,
+//           title: "Basic Emergency Response Team Simulation Training (BERTST)",
+//           date: "January 00, 2025",
+//           image: News2,
+//           content: "This training helps emergency teams prepare...",
+//           category: "Training",
+//     },
+//     {
+//       id: 3,
+//           title: "Mass Casualty Incident (MCI) and Triage Training",
+//           date: "January 00, 2025",
+//           image: News3,
+//           content: "",
+//           ctitle: "Mass Casualty Incident (MCI) and Triage Training Course",
+//           target: "This manual on Mass Casualty Incident (MCI) and Triage Training will be used by the  health professionals who may or may not have background on triaging and disaster management, and emergency responders assigned in triaging casualties during  disaster situations for prompt medical  management",
+//           desc: "Basic concepts and knowledge on triage during mass casualty incidents which will provide the trainees with better understanding on their recommended triaging skills and patient management emphasizing on the application of different triaging algorithms and systems during disaster situations using multidisciplinary approach. ",
+//           prereq: "Any background on professional medical courses and/or specialized training on first aid and the like ",
+//           duration: "Three days (8:00 AM to 5:00 PM)",
+//           genPurpose: "This module was designed to provide trainees with concepts and purpose of triage during mass  casualty incidents, including the utilization of various triage system algorithms available using case scenario based simulation. Ultimately, this is also to prepare the trainees to be a competent triage  officer with advanced knowledge, skills, and attitude in applying disaster triage systems for correct  assignment of victims to appropriate triage categories, regardless of age, gender, socio-economic  status, nationality, cultural affiliation, or religious belief.",
+//           learnOutcome: "Upon completion of this training course, the trainees should be able to: 1. State the purpose of triage algorithms during mass casualty incidents;  2. Differentiate the different triage algorithms and its respective triage categories;  3. Apply the use of appropriate triage algorithms in assigning victims correctly in triage  categories; and  4. Practice a multidisciplinary approach in the management of patient conditions.",
+//           cContent: "The course contents of this training module were selected based on the set objectives of the training and the participants prior knowledge on triaging during mass casualty incidents and their varying  competence level. This was also organized in a manner that the participants can determine the  chronological sequence of concepts in triaging, from the history and development of triage, including  its purpose during mass casualty incidents to the integration of different triage algorithms and  systems.",
+//           dAte: "March 21, 2025",
+//           category: "Emergency",
+//     },
+//   ];
 
 function Body(){
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,10 +65,27 @@ function Body(){
         return isMobile ? null : 'ALL'; // Show all on desktop by default
       });
       const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+      const [newsData, setNewsData] = useState([]);
+
       
 
       useEffect(() => {
         window.scrollTo(0, 0);
+        const fetchNews = async () => {
+            try {
+              const querySnapshot = await getDocs(collection(db, "news"));
+              const fetchedNews = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              setNewsData(fetchedNews);
+            } catch (error) {
+              console.error("Error fetching news:", error);
+            }
+          };
+      
+          fetchNews();
+
         const handleResize = () => {
           const mobile = window.innerWidth < 1024;
           setIsMobile(mobile);
@@ -97,19 +116,19 @@ function Body(){
     };
     return(
         <>
-        <main className="bg-gray-150 mt-18">
-            <section className="relative min-h-screen flex flex-col justify-center items-center text-center text-white bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <main id="home" className="bg-gray-150 mt-18">
+            <section className="relative min-h-1/2 md:min-h-screen flex flex-col justify-center items-center text-center text-white bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <div className="absolute inset-0 !bg-black/50"></div>
-                <div className="relative z-10 px-0 md:px-6 text-center">
-                    <p className="mb-4 text-sm md:text-3xl tracking-wide text-white">Welcome to</p>
-                    <h1 className="text-xl font-extrabold uppercase md:text-5xl text-white">
+                <div className="relative z-10 px-4 md:px-25 text-center space-y-4  py-8 md:py-16">
+                    <p>Welcome to</p>
+                    <h1 className="font-extrabold uppercase">
                         Disaster Risk Reduction and Management <br /> in Health Program
                     </h1>
-                    <p className="mt-4 mx-5 text-sm md:text-xl md:mx-20 text-white">
+                    <p className="hidden sm:block">
                         The UPM DRRM-H Program aims to provide virtual disaster training programs to prevent mistakes in actual
                         catastrophic situations using state-of-the-art disaster simulation training technologies.
                     </p>
-                    <p className="mb-4 md:mt-10 text-sm md:text-xl tracking-wide text-white">
+                    <p>
                         TRAININGS | RESEARCH | CONSULTANCY
                     </p>
                 </div>
@@ -163,7 +182,7 @@ function Body(){
                         </h2>
 
                         <div className="grid grid-rows-3 gap-4 flex-grow">
-                            {newsItems.map((news) => (
+                            {newsData.map((news) => (
                                 <Link
                                     key={news.id}
                                     to={`/news/${news.id}`}
@@ -179,7 +198,14 @@ function Body(){
                                         <p className="font-semibold leading-relaxed hover:text-red-900">
                                             {news.title}
                                         </p>
-                                        <p className="text-gray-600 text-sm">{news.date}</p>
+                                        <p className="text-gray-600 text-sm">{news.createdAt?.toDate().toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  }) || "N/A"}</p>
                                     </div>
                                 </Link>
                             ))}
@@ -201,7 +227,7 @@ function Body(){
             
             {/* History Section */}
             <section id="about"
-             className="relative flex flex-col justify-center items-center text-center min-h-screen bg-cover bg-center py-8 px-6 md:px-16"
+             className="relative scroll-mt-16 flex flex-col justify-center items-center text-center min-h-screen bg-cover bg-center py-8 px-6 md:px-16"
              style={{ backgroundImage: `url(${historyImage})` }}
                 >
                 <div className="relative z-10 max-w-4xl bg-white/20 backdrop-blur-xl  p-6 md:p-10 rounded-xl shadow-2xl">
@@ -218,10 +244,10 @@ function Body(){
             </section>
 
             {/* Vision & Mission Section */}
-            <section className="relative grid gap-8 text-center bg-gray-50 py-8 px-4 md:px-16">
+            <section className="relative grid gap-8 text-center  items-center justify-center bg-gray-50 py-8 px-4 md:px-16">
                 {/* Vision */}
-                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg">
-                    <div className="flex items-center gap-5 justify-center my-4">
+                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg max-w-4xl">
+                    <div className="flex items-center gap-5 justify-center  border-b pb-4 mb-4 border-zinc-300">
                         <img src={Vision} alt="Vision" className="h-10 lg:h-15 w-auto" />
                         <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
                             VISION
@@ -234,8 +260,8 @@ function Body(){
                 </div>
 
                 {/* Mission */}
-                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg">
-                    <div className="flex items-center gap-5 justify-center my-4">
+                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg max-w-4xl">
+                    <div className="flex items-center gap-5 justify-center  border-b pb-4 mb-4 border-zinc-300">
                         <img src={Target} alt="Target" className="h-15 lg:h-20 w-auto" />
                         <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
                             MISSION
@@ -262,20 +288,24 @@ function Body(){
                 </div>
                 
                 {/* Core Values */}
-                <div className="bg-white py-6 md:py-10 rounded-2xl shadow-lg grid grid-cols-2 justify-items-start">
-                    <div className="gap-3 my-4">
-                        <img src={Values} alt="Values" className=" h-15 lg:h-25 w-auto" />
-                        <h2 className="font-extrabold uppercase text-red-900">
-                            CORE VALUES
-                        </h2>
-                    </div>
-                    <div className=" max-w-lg gap-2 list-disc-none text-md sm:text-lg text-gray-800 py-2 m-auto">
-                        <p><strong className="text-2xl mr-1">H</strong>onor</p>
-                        <p><strong className="text-2xl mr-1">E</strong>xcellence</p>
-                        <p><strong className="text-2xl mr-1">A</strong>ccountability</p>
-                        <p><strong className="text-2xl mr-1">L</strong>eadership</p>
-                        <p><strong className="text-2xl mr-1">T</strong>ransformation</p>
-                        <p><strong className="text-2xl mr-1">H</strong>armony</p>
+                <div className="bg-white rounded-2xl shadow-lg px-6 py-8 md:px-10 md:py-10 max-w-4xl">
+                    <div className="grid grid-cols-2 items-center">
+                        {/* Left Section */}
+                        <div className="flex flex-col items-center justify-center gap-4 border-r border-gray-300 px-10">
+                            <img src={Values} alt="Values Icon" className="h-20 w-auto" />
+                            <h2 className="text-xl md:text-2xl font-extrabold uppercase text-red-900 text-center">
+                                Core Values
+                            </h2>
+                        </div>
+                        {/* Right Section */}
+                        <div className="mx-auto pl-4 sm:pl-0 text-justify ">
+                            <p><strong className="text-2xl mr-1">H</strong>onor</p>
+                            <p><strong className="text-2xl mr-1">E</strong>xcellence</p>
+                            <p><strong className="text-2xl mr-1">A</strong>ccountability</p>
+                            <p><strong className="text-2xl mr-1">L</strong>eadership</p>
+                            <p><strong className="text-2xl mr-1">T</strong>ransformation</p>
+                            <p><strong className="text-2xl mr-1">H</strong>armony</p>
+                        </div>
                     </div>
                 </div>
             </section>       
@@ -400,7 +430,7 @@ function Body(){
 
 
             {/* Trainings Section */}
-            <sections id="trainings" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 text-center  bg-gray-50 text-white bg-cover bg-center py-8 px-4 md:px-16">
+            <sections id="trainings" className="relative scroll-mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 text-center  bg-gray-50 text-white bg-cover bg-center py-8 px-4 md:px-16">
                 <div className="col-span-full">
                     <h2 className="font-extrabold uppercase text-red-900 tracking-wide">What We Offer?</h2>
                 </div>
@@ -433,7 +463,7 @@ function Body(){
             {/* Contact And Review Section */}
             <section
                 id="contact"
-                className="bg-cover bg-center py-20 px-4 text-white"
+                className="scroll-mt-16 bg-cover bg-center py-20 px-4 text-white"
                 style={{ backgroundImage: `url(${backgroundImage})` }}
                 >
                 <div className="container mx-auto relative flex flex-col md:flex-row max-w-5xl lg:max-w-6xl px-6 md:px-10 py-12 bg-black/50 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] items-start gap-8">

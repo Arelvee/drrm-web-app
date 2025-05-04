@@ -129,14 +129,14 @@ function Header() {
 
             {/* Mobile Sidebar */}
             {menuOpen && (
-                <div className="lg:hidden fixed top-15 left-0 w-64 h-full bg-red-900 text-white p-5 z-50 shadow-lg transition-transform">
+                <div className="lg:hidden fixed top-15 right-0 w-64 h-full bg-red-900 text-white p-5 z-50 shadow-lg transition-transform">
                     {/* <button className="absolute top-4 right-4" onClick={() => setMenuOpen(false)}>
                         <X size={24} />
                     </button> */}
                     <ul className="flex flex-col gap-6 mt-10">
                         <li>
-                            <Link to="/" className="flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}><House size={25}/>Home
-                            </Link>
+                            <HashLink to="/#home" className="flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}><House size={25}/>Home
+                            </HashLink>
                         </li>
                         <li>
                             <HashLink smooth to="/#about"  duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>

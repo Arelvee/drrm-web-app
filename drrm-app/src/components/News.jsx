@@ -8,7 +8,6 @@ import { db } from "../firebase/firebase"; // adjust the path as needed
 function News() {
   const location = useLocation();
   const selectedCategoryFromDetail = location.state?.selectedCategory || "";
-
   const [newsData, setNewsData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState(selectedCategoryFromDetail);
