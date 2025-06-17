@@ -14,6 +14,8 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState(alertMessage || "");
     const [message, setMessage] = useState("");
+    const [privacyAccepted, setPrivacyAccepted] = useState(false);
+    const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
 
     const navigate = useNavigate();
 
@@ -28,9 +30,15 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
         setError("");
         setMessage("");
 
-        if (!isLogin && password !== confirmPassword) {
-            setError("Passwords do not match.");
-            return;
+        if (!isLogin) {
+            if (password !== confirmPassword) {
+                setError("Passwords do not match.");
+                return;
+            }
+            if (!privacyAccepted) {
+                setError("Please accept the privacy policy to continue.");
+                return;
+            }
         }
 
         try {
@@ -150,27 +158,48 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                     </div>
 
                     {!isLogin && (
-                        <div className="mb-4 relative">
-                            <label className="block text-white">Confirm Password</label>
-                            <div className="flex gap-2 items-center p-2 border border-white/50 rounded-md bg-transparent text-white">
-                                <input 
-                                    type={showConfirmPassword ? "text" : "password"} 
-                                    value={confirmPassword} 
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full  focus:outline-none" 
-                                    placeholder="Confirm password" 
-                                    required 
-                                />
-                                <button 
-                                    type="button" 
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
-                                    className="flex items-center justify-center text-white"
-                                >
-                                    {showConfirmPassword ? <EyeOff size={25} /> : <Eye size={25} />}
-                                </button>
-
+                        <>
+                            <div className="mb-4 relative">
+                                <label className="block text-white">Confirm Password</label>
+                                <div className="flex gap-2 items-center p-2 border border-white/50 rounded-md bg-transparent text-white">
+                                    <input 
+                                        type={showConfirmPassword ? "text" : "password"} 
+                                        value={confirmPassword} 
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        className="w-full  focus:outline-none" 
+                                        placeholder="Confirm password" 
+                                        required 
+                                    />
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+                                        className="flex items-center justify-center text-white"
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={25} /> : <Eye size={25} />}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                            
+                            <div className="mb-4 flex items-center">
+                                <input
+                                    type="checkbox"
+                                    id="privacyCheckbox"
+                                    checked={privacyAccepted}
+                                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                                    className="mr-2"
+                                    required
+                                />
+                                <label htmlFor="privacyCheckbox" className="text-white text-sm">
+                                    I agree to the{' '}
+                                    <span 
+                                        className="text-blue-300 hover:text-blue-400 cursor-pointer underline"
+                                        onClick={() => setShowPrivacyPopup(true)}
+                                    >
+                                        Privacy Policy
+                                    </span>
+                                </label>
+                            </div>
+                        </>
                     )}
 
                     <button 
@@ -190,6 +219,47 @@ const LoginRegisterForm = ({ closeForm, setUser, alertMessage }) => {
                     </button>
                 </div>
             </div>
+
+            {showPrivacyPopup && (
+            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+                <div className="backdrop-blur-lg bg-white/20 p-6 rounded-lg max-w-md mx-4 shadow-xl border border-white/30">
+                <h3 className="text-xl font-semibold mb-3 text-white text-center">Privacy Terms and Conditions</h3>
+                
+                <div className="space-y-3 mb-4 text-white text- text-center">
+                    <p>
+                    <br></br>
+                    This website complies with the Philippine Data Privacy Act of 2012 (RA 10173). We are committed to protecting your personal data and ensuring your rights as a data subject.
+                    </p>
+                    <br></br>
+                    <p>
+                    By using this website, you consent to the collection and processing of your personal data as described in this policy.
+                    </p>
+                    
+                    <p>
+                    To know more about your privacy rights, visit:<br />
+                    <a 
+                        href="https://privacy.gov.ph/data-privacy-act/#w11" 
+                        className="text-blue-300 hover:text-blue-400"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        RA 10173 Data Privacy Act of 2012
+                    </a>
+                    </p>
+                    
+                </div>
+                
+                <div className="flex justify-end">
+                    <button
+                    onClick={() => setShowPrivacyPopup(false)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition"
+                    >
+                    I Understand
+                    </button>
+                </div>
+                </div>
+            </div>
+            )}
         </div>
     );
 };
