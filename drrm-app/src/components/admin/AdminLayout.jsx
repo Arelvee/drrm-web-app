@@ -6,6 +6,7 @@ import Sidebar from "./AdminSidebar.jsx";
 import AdminHeader from "./AdminHeader.jsx";
 import Orders from "./Orders.jsx";
 import NewsPost from "./NewsPost.jsx";
+import ReviewsPost from './ReviewsPost.jsx';
 
 function AdminLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -23,6 +24,7 @@ function AdminLayout() {
           <Route path="news-post" element={<NewsPost />} />
           <Route path="manual-post" element={<ManualPost />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="reviews-post" element={<ReviewsPost />} />
         </Routes>
       </main>
     </div>

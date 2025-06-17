@@ -9,6 +9,7 @@ import NewsDetail from './components/NewsDetail.jsx';
 import EventDetail from './components/EventDetails.jsx';
 import Trainings from './components/Berts.jsx';
 import Training2 from './components/Mci.jsx';
+import Training3 from './components/SFATBLS.jsx';
 import ELearning from './components/E-Learning.jsx';
 import Shop from './components/Shop.jsx';
 import ManualDetail from './components/ManualDetail.jsx';
@@ -43,6 +44,7 @@ function App() {
       <Route path="/events/:id" element={<PublicLayout><EventDetail /></PublicLayout>} />
       <Route path="/training1" element={<PublicLayout><Trainings /></PublicLayout>} />
       <Route path="/training2" element={<PublicLayout><Training2 /></PublicLayout>} />
+      <Route path="/training3" element={<PublicLayout><Training3 /></PublicLayout>} />
       <Route path="/e-learning" element={<PublicLayout><ELearning /></PublicLayout>} />
       <Route path="/shop" element={<PublicLayout><Shop /></PublicLayout>} />
       <Route path="/manual-detail" element={<PublicLayout><ManualDetail /></PublicLayout>} />
