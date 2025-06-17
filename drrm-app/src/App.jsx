@@ -11,6 +11,7 @@ import Trainings from './components/Berts.jsx';
 import Training2 from './components/Mci.jsx';
 import ELearning from './components/E-Learning.jsx';
 import Shop from './components/Shop.jsx';
+import Careers from './components/Careers.jsx';
 import ManualDetail from './components/ManualDetail.jsx';
 import OrderDetail from './components/OrderDetails.jsx';
 import CartPage from './components/Cart.jsx';
@@ -45,6 +46,7 @@ function App() {
       <Route path="/training2" element={<PublicLayout><Training2 /></PublicLayout>} />
       <Route path="/e-learning" element={<PublicLayout><ELearning /></PublicLayout>} />
       <Route path="/shop" element={<PublicLayout><Shop /></PublicLayout>} />
+      <Route path="/careers" element={<PublicLayout><Careers /></PublicLayout>} />
       <Route path="/manual-detail" element={<PublicLayout><ManualDetail /></PublicLayout>} />
       <Route path="/terms-condition" element={<PublicLayout><TermsCondition /></PublicLayout>} />
       <Route path="/order/:orderId" element={<PublicLayout><OrderDetail /></PublicLayout>} />

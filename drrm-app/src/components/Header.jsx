@@ -9,7 +9,7 @@ import { Menu, X } from 'lucide-react';
 import UPLogo from '../assets/UP.png';
 import UPDrrm from '../assets/updrrm.png';
 import UPNAME from '../assets/dname-yw-v2.png';
-import { House, Users, Info, MonitorPlay, ShoppingCart, PhoneCall, LogIn } from 'lucide-react';
+import { House, Users, Info, MonitorPlay, ShoppingCart, PhoneCall, LogIn, Briefcase } from 'lucide-react';
 
 function Header() {
     const [showLogin, setShowLogin] = useState(false);
@@ -101,6 +101,13 @@ function Header() {
                                 Contact
                             </HashLink>
                         </li>
+                        <li>
+                          <Link to="/careers" className="flex items-center gap-2 hover:underline hover:decoration-yellow-500 hover:decoration-4 hover:underline-offset-8 hover:text-white">
+                            <Briefcase size={25}/>
+                            Careers
+                          </Link>
+                        </li>
+
                     </ul>
                 </nav>
 
@@ -140,7 +147,7 @@ function Header() {
                         </li>
                         <li>
                             <HashLink smooth to="/#about"  duration={500} className="cursor-pointer flex items-center gap-2 hover:underline" onClick={() => setMenuOpen(false)}>
-                            <Users size={25}/>About Us
+                            <Users size={25}/> UsAbout
                             </HashLink>
                         </li>
                         <li>

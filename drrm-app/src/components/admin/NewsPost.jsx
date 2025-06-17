@@ -184,7 +184,7 @@ const handleImageUpload = async (e) => {
                     hour12: true,
                   }) || "N/A"} • {news.readTime}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {news.tags.map((tag, index) => (
                       <span
                         key={index}
