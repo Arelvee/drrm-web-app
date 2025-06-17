@@ -9,63 +9,28 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Star } from "lucide-react";
 
-const tagOptions = ["Health", "Emergency", "Response", "Training", "Agenda"];
-
-const NewsPost = () => {
-  const [newsList, setNewsList] = useState([]);
-  const [title, setTitle] = useState("");
+const ReviewsPost = () => {
+  const [reviewsList, setReviewsList] = useState([]);
+  const [name, setName] = useState("");
+  const [profession, setProfession] = useState("");
   const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
-  const [tags, setTags] = useState([]);
-  const [view, setView] = useState("list"); 
-  const [selectedNews, setSelectedNews] = useState(null);
-  const [editingId, setEditingId] = useState(null); 
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUrls, setImageUrls] = useState([]);
-const [selectedImage, setSelectedImage] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [view, setView] = useState("list");
+  const [selectedReview, setSelectedReview] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
-
-const handleImageUpload = async (e) => {
-    const files = e.target.files;
-    const formData = new FormData();
-  
-    for (let i = 0; i < files.length; i++) {
-      formData.append("images", files[i]);
-    }
-  
-    const res = await fetch("http://localhost:5000/upload", {
-      method: "POST",
-      body: formData,
-    });
-  
-    const data = await res.json();
-  
-    if (res.ok) {
-      const fullUrls = data.imageUrls.map((url) => `http://localhost:5000${url}`);
-      setImageUrls((prev) => [...prev, ...fullUrls]);
-    } else {
-      alert("Image upload failed");
-    }
-  };
-  
-
-  const fetchNews = async () => {
-    const snapshot = await getDocs(collection(db, "news"));
+  const fetchReviews = async () => {
+    const snapshot = await getDocs(collection(db, "reviews"));
     const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setNewsList(data.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds));
+    setReviewsList(data.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds));
   };
 
   useEffect(() => {
-    fetchNews();
+    fetchReviews();
   }, []);
-
-  const handleCheckboxChange = (tag) => {
-    setTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,48 +38,46 @@ const handleImageUpload = async (e) => {
     try {
       if (editingId) {
         // UPDATE
-        await updateDoc(doc(db, "news", editingId), {
-          title,
+        await updateDoc(doc(db, "reviews", editingId), {
+          name,
+          profession,
           content,
-          image: imageUrls[0] || "",
-          tags,
-          readTime: `${Math.ceil(content.split(" ").length / 200)} min read`,
+          rating,
         });
-        alert("News updated successfully!");
+        alert("Review updated successfully!");
       } else {
         // CREATE
-        await addDoc(collection(db, "news"), {
-          title,
+        await addDoc(collection(db, "reviews"), {
+          name,
+          profession,
           content,
-          image: imageUrls[0] || "", 
-          tags,
+          rating,
           date: new Date().toLocaleDateString(),
-          readTime: `${Math.ceil(content.split(" ").length / 200)} min read`,
           createdAt: serverTimestamp(),
         });
-        alert("News posted successfully!");
+        alert("Review posted successfully!");
       }
 
       setView("list");
-      setTitle("");
+      setName("");
+      setProfession("");
       setContent("");
-      setImage("");
-      setTags([]);
+      setRating(0);
       setEditingId(null);
-      fetchNews();
+      fetchReviews();
     } catch (error) {
-      console.error("Error submitting news:", error);
-      alert("Failed to submit news.");
+      console.error("Error submitting review:", error);
+      alert("Failed to submit review.");
     }
   };
 
-  const deleteNews = async (id) => {
-    if (window.confirm("Are you sure you want to delete this news item?")) {
+  const deleteReview = async (id) => {
+    if (window.confirm("Are you sure you want to delete this review?")) {
       try {
-        await deleteDoc(doc(db, "news", id));
-        alert("News deleted.");
-        fetchNews();
-        if (selectedNews?.id === id) setView("list");
+        await deleteDoc(doc(db, "reviews", id));
+        alert("Review deleted.");
+        fetchReviews();
+        if (selectedReview?.id === id) setView("list");
       } catch (error) {
         console.error("Delete error:", error);
         alert("Failed to delete.");
@@ -122,13 +85,37 @@ const handleImageUpload = async (e) => {
     }
   };
 
-  const startEdit = (news) => {
-    setTitle(news.title);
-    setContent(news.content);
-    setImage(news.image);
-    setTags(news.tags);
-    setEditingId(news.id);
+  const startEdit = (review) => {
+    setName(review.name);
+    setProfession(review.profession);
+    setContent(review.content);
+    setRating(review.rating);
+    setEditingId(review.id);
     setView("form");
+  };
+
+  const renderStars = (count, isEditable = false, size = 24) => {
+    return (
+      <div className="flex">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            className={`cursor-pointer ${isEditable ? "hover:scale-110" : ""}`}
+            onClick={() => isEditable && setRating(star)}
+            onMouseEnter={() => isEditable && setHoverRating(star)}
+            onMouseLeave={() => isEditable && setHoverRating(0)}
+          >
+            <Star
+              size={size}
+              fill={
+                star <= (hoverRating || rating) ? "gold" : "transparent"
+              }
+              color="gold"
+            />
+          </span>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -136,15 +123,15 @@ const handleImageUpload = async (e) => {
       {view === "list" && (
         <>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="font-bold text-red-900">Reviews Posts</h2>
+            <h2 className="font-bold text-red-900">Customer Reviews</h2>
             <button
               onClick={() => {
                 setView("form");
                 setEditingId(null);
-                setTitle("");
+                setName("");
+                setProfession("");
                 setContent("");
-                setImage("");
-                setTags([]);
+                setRating(0);
               }}
               className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
             >
@@ -152,58 +139,44 @@ const handleImageUpload = async (e) => {
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {newsList.map((news) => (
+            {reviewsList.map((review) => (
               <div
-                key={news.id}
+                key={review.id}
                 className="bg-white shadow rounded p-4 relative"
               >
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    setSelectedNews(news);
+                    setSelectedReview(review);
                     setView("detail");
                   }}
                 >
-                  {news.image && (
-                    <img
-                      src={news.image}
-                      alt={news.title}
-                      className="w-full h-40 object-cover mb-2 rounded"
-                    />
-                  )}
                   <h3 className="font-bold text-lg text-red-800 mb-1">
-                    {news.title}
+                    {review.name}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-2">
-                  {news.createdAt?.toDate().toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  }) || "N/A"} • {news.readTime}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {news.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  <p className="text-sm text-gray-600 mb-2">{review.profession}</p>
+                  <div className="mb-2">
+                    {renderStars(review.rating, false, 18)}
                   </div>
+                  <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+                    {review.content}
+                  </p>
                   <div className="grid grid-cols-2 gap-2">
                     <button
-                      onClick={() => startEdit(news)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startEdit(review);
+                      }}
                       title="Edit"
                       className="flex gap-2 text-center bg-yellow-500 p-2 text-white rounded hover:text-blue-800"
                     >
                       <Pencil size={18} /> Edit
                     </button>
                     <button
-                      onClick={() => deleteNews(news.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteReview(review.id);
+                      }}
                       title="Delete"
                       className="text-red-600 hover:text-red-800"
                     >
@@ -217,24 +190,24 @@ const handleImageUpload = async (e) => {
         </>
       )}
 
-      {view === "detail" && selectedNews && (
+      {view === "detail" && selectedReview && (
         <div>
           <div className="flex justify-between items-center mb-4">
             <button
               onClick={() => setView("list")}
               className="text-red-700 underline"
             >
-              ← Back to News List
+              ← Back to Reviews List
             </button>
             <div className="flex gap-4">
               <button
-                onClick={() => startEdit(selectedNews)}
+                onClick={() => startEdit(selectedReview)}
                 className="text-blue-600 hover:text-blue-800"
               >
                 <Pencil size={20} />
               </button>
               <button
-                onClick={() => deleteNews(selectedNews.id)}
+                onClick={() => deleteReview(selectedReview.id)}
                 className="text-red-600 hover:text-red-800"
               >
                 <Trash2 size={20} />
@@ -242,37 +215,32 @@ const handleImageUpload = async (e) => {
             </div>
           </div>
           <div className="bg-white p-4 rounded shadow">
-            {selectedNews.image && (
-              <img
-                src={selectedNews.image}
-                alt={selectedNews.title}
-                className="w-full h-60 object-cover rounded mb-4"
-              />
-            )}
-            <h2 className="text-2xl font-bold text-red-900 mb-2">
-              {selectedNews.title}
-            </h2>
-            <p className="text-sm text-gray-600 mb-4">
-            {selectedNews.createdAt?.toDate().toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  }) || "N/A"} • {selectedNews.readTime}
-            </p>
-            <div className="flex gap-2 mb-4">
-              {selectedNews.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
-                >
-                  {tag}
-                </span>
-              ))}
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h2 className="text-2xl font-bold text-red-900 mb-1">
+                  {selectedReview.name}
+                </h2>
+                <p className="text-lg text-gray-600 mb-2">
+                  {selectedReview.profession}
+                </p>
+              </div>
+              <div>
+                {renderStars(selectedReview.rating, false, 28)}
+              </div>
             </div>
-            <p className="text-gray-800 whitespace-pre-wrap">{selectedNews.content}</p>
+            <p className="text-sm text-gray-600 mb-4">
+              {selectedReview.createdAt?.toDate().toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              }) || "N/A"}
+            </p>
+            <p className="text-gray-800 whitespace-pre-wrap">
+              {selectedReview.content}
+            </p>
           </div>
         </div>
       )}
@@ -286,24 +254,38 @@ const handleImageUpload = async (e) => {
             }}
             className="mb-4 text-red-700 underline"
           >
-            ← Back to News List
+            ← Back to Reviews List
           </button>
           <h2 className="text-2xl font-bold mb-4 text-red-900">
-            {editingId ? "Edit News" : "Post New News"}
+            {editingId ? "Edit Review" : "Add New Review"}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-gray-700">Title</label>
+              <label className="block text-gray-700">Name</label>
               <input
                 className="w-full border px-3 py-2 rounded"
                 type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-700">Content</label>
+              <label className="block text-gray-700">Profession</label>
+              <input
+                className="w-full border px-3 py-2 rounded"
+                type="text"
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Rating</label>
+              {renderStars(5, true)}
+            </div>
+            <div>
+              <label className="block text-gray-700">Review Content</label>
               <textarea
                 className="w-full border px-3 py-2 rounded h-40"
                 value={content}
@@ -311,82 +293,11 @@ const handleImageUpload = async (e) => {
                 required
               />
             </div>
-            <div className="md:flex gap-2 w-full mb-4">
-                <label className="py-2 w-full md:w-1/8 font-bold">Upload Image:</label>
-                <div>
-                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 space-x-2 mt-2">
-                    {imageUrls.map((url, index) => (
-                        <div key={index} className="relative group">
-                        <img
-                            src={url}
-                            alt={`Uploaded ${index}`}
-                            className="w-24 h-24 cursor-pointer hover:scale-105 transition-transform rounded"
-                            onClick={() => setSelectedImage(url)}
-                        />
-                        <button
-                            onClick={(e) => {
-                            e.stopPropagation();
-                            setImageUrls(imageUrls.filter((_, i) => i !== index));
-                            }}
-                            className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                            ✖
-                        </button>
-                        </div>
-                    ))}
-
-                    <label
-                        htmlFor="fileInput"
-                        className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-zinc-300 outline-none rounded cursor-pointer hover:bg-gray-100"
-                    >
-                        <span className="text-gray-400 text-sm">+</span>
-                        <span className="text-gray-400 text-xs">Add Photo</span>
-                    </label>
-                    <input
-                        id="fileInput"
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                    />
-                    </div>
-
-                    {selectedImage && (
-                    <div
-                        className="fixed inset-0 bg-black/50 flex items-center justify-center z-30"
-                        onClick={() => setSelectedImage(null)}
-                    >
-                        <img
-                        src={selectedImage}
-                        alt="Zoomed"
-                        className="max-w-[90%] max-h-[90%] rounded-lg shadow-lg"
-                        />
-                    </div>
-                    )}
-                </div>
-                </div>
-
-            <div>
-              <label className="block text-gray-700 mb-2">Tags</label>
-              <div className="flex flex-wrap gap-4">
-                {tagOptions.map((tag) => (
-                  <label key={tag} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={tags.includes(tag)}
-                      onChange={() => handleCheckboxChange(tag)}
-                    />
-                    <span>{tag}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
             <button
               type="submit"
               className="bg-red-800 text-white px-6 py-2 rounded hover:bg-red-900"
             >
-              {editingId ? "Update News" : "Submit News"}
+              {editingId ? "Update Review" : "Submit Review"}
             </button>
           </form>
         </div>
@@ -395,4 +306,4 @@ const handleImageUpload = async (e) => {
   );
 };
 
-export default NewsPost;
+export default ReviewsPost;
