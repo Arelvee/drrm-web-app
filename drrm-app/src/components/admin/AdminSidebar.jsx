@@ -7,7 +7,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import UPLogo from "../../assets/UP.png";
 import UPDrrm from "../../assets/updrrm.png";
 import UPNAME from "../../assets/dname-yw-v2.png";
-import { BookOpenText, Globe, LogOutIcon, Newspaper, PackageOpenIcon } from "lucide-react";
+import { BookOpenText, Globe, LogOutIcon, Newspaper, PackageOpenIcon, MessageSquareQuote } from "lucide-react";
 
 const AdminSidebar = ({ adminName, menuOpen, setMenuOpen }) => {
   const sidebarClasses = `
@@ -90,6 +90,11 @@ const AdminSidebar = ({ adminName, menuOpen, setMenuOpen }) => {
           <Link to="/admin/news-post" className="flex items-center justify-between px-4 py-2 rounded hover:bg-gray-700">
             <div className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
               <Newspaper size={25} /> News
+            </div>
+          </Link>
+          <Link to="/admin/reviews-post" className="flex items-center justify-between px-4 py-2 rounded hover:bg-gray-700">
+            <div className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+              <MessageSquareQuote size={25}/> Reviews
             </div>
           </Link>
           <Link to="/" className="flex items-center justify-between px-4 py-2 rounded hover:bg-gray-700">

@@ -12,8 +12,9 @@ import News3 from '../assets/news (3).png';
 import Vision from '../assets/Vision.png';
 import Target from '../assets/Target.png';
 import Values from '../assets/Values.png';
-import TrainingImage1 from '../assets/training (1).jpg';
-import TrainingImage2 from '../assets/training (2).jpg';
+import BERSTImage from '../assets/BERSTImage.jpg';
+import SFATBLSImage from '../assets/SFATBLSImage.png';
+import MCIImage from '../assets/mci.jpg';
 import backgroundImage from '../assets/background.png';
 import historyImage from '../assets/history.jpg';
 
@@ -430,34 +431,58 @@ function Body(){
 
 
             {/* Trainings Section */}
-            <sections id="trainings" className="relative scroll-mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 text-center  bg-gray-50 text-white bg-cover bg-center py-8 px-4 md:px-16">
+            <sections
+            id="trainings"
+            className="relative scroll-mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center bg-gray-50 text-white bg-cover bg-center py-8 px-4 md:px-16"
+            >
                 <div className="col-span-full">
-                    <h2 className="font-extrabold uppercase text-red-900 tracking-wide">What We Offer?</h2>
+                    <h1 className="font-extrabold uppercase text-red-900 tracking-wide">What We Offer?</h1>
                 </div>
-               
-                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col">
-                    <img src={TrainingImage1} alt="Broken Image" className="w-full rounded-lg mb-4"/>
-                    <p className="text-gray-600 text-lg font-medium ">Training Program</p>
-                    <p className="text-black font-extrabold uppercase my-3">Basic Emergency Response Team Simulation Training (BERTST)</p>
+
+                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col max-w-xl w-full mx-auto text-center">
+                    <img src={BERSTImage} alt="Broken Image" className="w-full rounded-lg mb-4" />
+                    <p className="text-black font-extrabold uppercase mb-0">
+                        Basic Emergency Response Team Simulation Training (BERTST)
+                    </p>
+                    <p className="text-gray-600 text-lg font-medium mb-2.5">Training Program</p>
                     <Link
                         to="/training1"
-                        className="mt-auto block text-lg bg-red-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-700"
+                        className="mt-0 bg-[#04204a] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#02162f]"
                     >
                         Read and Join Us!
                     </Link>
                 </div>
-                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col">
-                    <img src={TrainingImage2} alt="Broken Image" className="w-full rounded-lg mb-4"/>
-                    <p className="text-gray-600 font-medium ">Training Program</p>
-                    <p className="text-black font-extrabold uppercase my-3">Mass Casualty Incident (MCI) and Triage Training</p>
+
+                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col max-w-xl w-full mx-auto text-center">
+                    <img src={MCIImage} alt="Broken Image" className="w-full rounded-lg mb-4" />
+                    <p className="text-black font-extrabold uppercase mb-0">
+                        Mass Casualty Incident (MCI) and Triage Training
+                    </p>
+                    <p className="text-gray-600 text-lg font-medium mb-2.5">Training Program</p>
                     <Link
                         to="/training2"
-                        className="mt-auto block bg-blue-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
+                        className="mt-0 bg-[#06441f] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#042e16]"
                     >
                         Read and Join Us!
                     </Link>
                 </div>
+
+                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col max-w-xl w-full mx-auto text-center">
+                    <img src={SFATBLSImage} alt="Broken Image" className="w-full rounded-lg mb-4" />
+                    <p className="text-black font-extrabold uppercase mb-0">
+                        Standard First Aid and Basic Life Support (SFATBLS)
+                    </p>
+                    <p className="text-gray-600 text-lg font-medium mb-2.5">Training Program</p>
+                    <Link
+                        to="/training3"
+                        className="mt-0 bg-[#7a0000] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#3b0000]"
+                    >
+                        Read and Join Us!
+                    </Link>
+                </div>
+
             </sections>
+
 
 
             {/* Contact And Review Section */}
