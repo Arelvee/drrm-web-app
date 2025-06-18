@@ -194,50 +194,54 @@ function Body(){
 
 
                     {/* WHAT'S NEW */}
-                    <div className="news-section flex flex-col h-full flex-grow">
-                        <h2 className="font-bold text-center uppercase text-red-900 tracking-wide mb-4">
-                            What's New?
-                        </h2>
+                                        <div className="news-section flex flex-col h-full flex-grow">
+                    <h2 className="font-bold text-center uppercase text-red-900 tracking-wide mb-4">
+                        What's New?
+                    </h2>
 
-                        <div className="grid grid-rows-3 gap-4 flex-grow">
-                            {newsData.map((news) => (
-                                <Link
-                                    key={news.id}
-                                    to={`/news/${news.id}`}
-                                    state={{ news }}
-                                    className="block lg:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative"
-                                >
-                                    <img
-                                        src={news.image}
-                                        alt={news.title}
-                                        className="h-[190px] w-[300px] object-cover rounded-md"
-                                    />
-                                    <div className="flex flex-col justify-between flex-grow">
-                                        <p className="font-semibold leading-relaxed hover:text-red-900">
-                                            {news.title}
-                                        </p>
-                                        <p className="text-gray-600 text-sm">{news.createdAt?.toDate().toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  }) || "N/A"}</p>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-
-
-                        {/* Read All News Button - Fully Aligned */}
-                        <div className="mt-6 flex justify-center items-center">
+                    <div className="grid grid-rows-3 gap-4 flex-grow">
+                        {newsData
+                        .sort((a, b) => b.createdAt?.toDate() - a.createdAt?.toDate()) // Ensure newest first
+                        .slice(0, 3) // Limit to 3 items
+                        .map((news) => (
                             <Link
-                                to="/news"
-                                className="bg-red-900 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-red-700 transition duration-300"
+                            key={news.id}
+                            to={`/news/${news.id}`}
+                            state={{ news }}
+                            className="block lg:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative"
                             >
-                                Read All News
+                            <img
+                                src={news.image}
+                                alt={news.title}
+                                className="h-[190px] w-[300px] object-cover rounded-md"
+                            />
+                            <div className="flex flex-col justify-between flex-grow">
+                                <p className="font-semibold leading-relaxed hover:text-red-900">
+                                {news.title}
+                                </p>
+                                <p className="text-gray-600 text-sm">
+                                {news.createdAt?.toDate().toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                }) || "N/A"}
+                                </p>
+                            </div>
                             </Link>
+                        ))}
+                    </div>
+
+                    {/* Read All News Button - Fully Aligned */}
+                        <div className="mt-6 flex justify-center items-center">
+                        <Link
+                            to="/news"
+                            className="bg-red-900 text-white py-3 rounded-md text-lg font-semibold hover:bg-red-700 transition duration-300 w-[640px] text-center"
+                        >
+                            Read All News
+                        </Link>
                         </div>
                     </div>
                 </div>
