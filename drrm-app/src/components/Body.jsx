@@ -500,97 +500,103 @@ function Body(){
 
             </sections>
 
-            {/* Contact And Review Section */}
-            <section
-              id="contact"
-              className="scroll-mt-16 bg-cover bg-center py-20 px-4 text-white"
-              style={{ backgroundImage: `url(${backgroundImage})` }}
+          {/* Contact And Review Section */}
+<section
+  id="contact"
+  className="scroll-mt-16 bg-cover bg-center py-20 px-4 text-white"
+  style={{ backgroundImage: `url(${backgroundImage})` }}
+>
+  <div className="container mx-auto relative flex flex-col md:flex-row max-w-5xl lg:max-w-6xl px-6 md:px-10 py-12 bg-black/50 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] items-start gap-8">
+
+    {/* Review Section */}
+    <div className="review-section flex-1 z-10 w-full flex flex-col">
+      <div className="mb-6">
+        <h2 className="text-xl md:text-3xl uppercase font-semibold inline border-b-2 border-white">
+          REVIEW
+        </h2>
+      </div>
+
+      {/* Scrollable review content only */}
+      <div className="overflow-y-auto max-h-[500px] pr-2">
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <div
+              key={review.id}
+              className="review-box bg-white/20 p-4 sm:p-6 rounded-lg relative mb-6 shadow-lg backdrop-blur-lg w-[500px] max-w-full break-words"
             >
-              <div className="container mx-auto relative flex flex-col md:flex-row max-w-5xl lg:max-w-6xl px-6 md:px-10 py-12 bg-black/50 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] items-start gap-8">
-
-                {/* Review Section */}
-                <div className="review-section flex-1 z-10 w-full flex flex-col">
-                  <div className="mb-6">
-                    <h2 className="text-xl md:text-3xl uppercase font-semibold inline border-b-2 border-white">
-                      REVIEW
-                    </h2>
-                  </div>
-
-                  {/* Scrollable review content only */}
-                  <div className="overflow-y-auto max-h-[500px] pr-2">
-                    {reviews.length > 0 ? (
-                      reviews.map((review) => (
-                        <div
-                          key={review.id}
-                          className="review-box bg-white/20 p-4 sm:p-6 rounded-lg relative mb-6 shadow-lg backdrop-blur-lg w-[500px] max-w-full break-words"
-                        >
-                          <div className="review-content relative z-10">
-                            <h3 className="text-lg md:text-xl font-bold">
-                              {review.name}{" "}
-                              <span className="text-yellow-500">
-                                {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
-                              </span>
-                            </h3>
-                            <p className="role text-sm opacity-80">{review.profession}</p>
-                            <p className="review-text text-sm mt-4 italic break-words leading-relaxed text-left whitespace-pre-line">
-                              "{review.content}"
-                            </p>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-white italic">No reviews yet.</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Contact Section */}
-                <div className="contact-section flex-1 z-10 w-full max-h-[500px] overflow-y-auto pr-2">
-                  <h2 className="text-xl md:text-3xl uppercase mb-6 font-semibold border-b-2 border-white inline-block">
-                    CONTACT US
-                  </h2>
-                  <form className="flex flex-col w-full">
-                    <input
-                      type="text"
-                      placeholder="NAME"
-                      required
-                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                    />
-                    <input
-                      type="email"
-                      placeholder="EMAIL"
-                      required
-                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                    />
-                    <input
-                      type="text"
-                      placeholder="COMPANY"
-                      required
-                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                    />
-                    <textarea
-                      placeholder="MESSAGE"
-                      required
-                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                    ></textarea>
-                    <button
-                      type="submit"
-                      className="w-full bg-white text-black py-3 px-6 font-bold rounded-md hover:bg-yellow-500 transition"
-                    >
-                      SUBMIT
-                    </button>
-                  </form>
-                </div>
+              <div className="review-content relative z-10">
+                <h3 className="text-lg md:text-xl font-bold">
+                  {review.name}{" "}
+                  <span className="text-yellow-500">
+                    {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                  </span>
+                </h3>
+                <p className="role text-sm opacity-80">{review.profession}</p>
+                <p className="review-text text-sm mt-4 italic break-words leading-relaxed text-left whitespace-pre-line">
+                  {review.content}
+                </p>
               </div>
-            </section>
+            </div>
+          ))
+        ) : (
+          <p className="text-white italic">No reviews yet.</p>
+        )}
+      </div>
+    </div>
 
-          </main>
+    {/* Contact Section */}
+    <div className="contact-section flex-1 z-10 w-full flex flex-col">
+      <div className="mb-6">
+        <h2 className="text-xl md:text-3xl uppercase font-semibold inline border-b-2 border-white">
+          CONTACT US
+        </h2>
+      </div>
+
+      {/* Scrollable form container */}
+      <div className="overflow-y-auto max-h-[500px] pr-2">
+        <form className="flex flex-col w-full">
+          <input
+            type="text"
+            placeholder="NAME"
+            required
+            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+          />
+          <input
+            type="email"
+            placeholder="EMAIL"
+            required
+            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+          />
+          <input
+            type="text"
+            placeholder="COMPANY"
+            required
+            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+          />
+          <textarea
+            placeholder="MESSAGE"
+            required
+            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+          ></textarea>
+          <button
+            type="submit"
+            className="w-full bg-white text-black py-3 px-6 font-bold rounded-md hover:bg-yellow-500 transition"
+          >
+            SUBMIT
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div> 
+</section> 
+
+
+  </main>
         </>
       );
     }
 
 export default Body;
-
-
 
 
