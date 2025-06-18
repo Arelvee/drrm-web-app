@@ -95,28 +95,34 @@ const ReviewsPost = () => {
   };
 
   const renderStars = (count, isEditable = false, size = 24) => {
-    return (
-      <div className="flex">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <span
-            key={star}
-            className={`cursor-pointer ${isEditable ? "hover:scale-110" : ""}`}
-            onClick={() => isEditable && setRating(star)}
-            onMouseEnter={() => isEditable && setHoverRating(star)}
-            onMouseLeave={() => isEditable && setHoverRating(0)}
-          >
-            <Star
-              size={size}
-              fill={
-                star <= (hoverRating || rating) ? "gold" : "transparent"
-              }
-              color="gold"
-            />
-          </span>
-        ))}
-      </div>
-    );
-  };
+  return (
+    <div className="flex">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span
+          key={star}
+          className={`cursor-pointer ${isEditable ? "hover:scale-110" : ""}`}
+          onClick={() => isEditable && setRating(star)}
+          onMouseEnter={() => isEditable && setHoverRating(star)}
+          onMouseLeave={() => isEditable && setHoverRating(0)}
+        >
+          <Star
+            size={size}
+            fill={
+              isEditable 
+                ? star <= (hoverRating || rating) 
+                  ? "gold" 
+                  : "transparent"
+                : star <= count
+                  ? "gold"
+                  : "transparent"
+            }
+            color="gold"
+          />
+        </span>
+      ))}
+    </div>
+  );
+};
 
   return (
     <div className="md:w-4/5 ml-auto">
