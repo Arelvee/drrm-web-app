@@ -67,36 +67,53 @@ function Body(){
       });
       const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
       const [newsData, setNewsData] = useState([]);
+      const [reviews, setReviews] = useState([]);
 
       
 
       useEffect(() => {
-        window.scrollTo(0, 0);
-        const fetchNews = async () => {
-            try {
-              const querySnapshot = await getDocs(collection(db, "news"));
-              const fetchedNews = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-              }));
-              setNewsData(fetchedNews);
-            } catch (error) {
-              console.error("Error fetching news:", error);
-            }
-          };
-      
-          fetchNews();
+  window.scrollTo(0, 0);
 
-        const handleResize = () => {
-          const mobile = window.innerWidth < 1024;
-          setIsMobile(mobile);
-          setActiveSection(mobile ? null : 'ALL');
-        };
-      
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-      }, []);
+  const fetchNews = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "news"));
+      const fetchedNews = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNewsData(fetchedNews);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "reviews"));
+      const fetchedReviews = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setReviews(fetchedReviews.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds));
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
+  fetchNews();
+  fetchReviews(); // ⬅️ Call it here
+
+  const handleResize = () => {
+    const mobile = window.innerWidth < 1024;
+    setIsMobile(mobile);
+    setActiveSection(mobile ? null : 'ALL');
+  };
+
+  handleResize();
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+
       
 
       const toggleSection = (key) => {
@@ -483,103 +500,98 @@ function Body(){
 
             </sections>
 
-
-
             {/* Contact And Review Section */}
             <section
-                id="contact"
-                className="scroll-mt-16 bg-cover bg-center py-20 px-4 text-white"
-                style={{ backgroundImage: `url(${backgroundImage})` }}
-                >
-                <div className="container mx-auto relative flex flex-col md:flex-row max-w-5xl lg:max-w-6xl px-6 md:px-10 py-12 bg-black/50 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] items-start gap-8">
-                   
-                    {/* Review Section */}
-                    <div className="review-section flex-1 z-10 w-full">
-                    <h2 className="text-xl md:text-3xl uppercase mb-6 font-semibold border-b-2 border-white inline-block">
-                        REVIEW
+              id="contact"
+              className="scroll-mt-16 bg-cover bg-center py-20 px-4 text-white"
+              style={{ backgroundImage: `url(${backgroundImage})` }}
+            >
+              <div className="container mx-auto relative flex flex-col md:flex-row max-w-5xl lg:max-w-6xl px-6 md:px-10 py-12 bg-black/50 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] items-start gap-8">
+
+                {/* Review Section */}
+                <div className="review-section flex-1 z-10 w-full flex flex-col">
+                  <div className="mb-6">
+                    <h2 className="text-xl md:text-3xl uppercase font-semibold inline border-b-2 border-white">
+                      REVIEW
                     </h2>
+                  </div>
 
-
-                    {/* Review Box 1 */}
-                    <div className="review-box bg-white/20 p-6 rounded-lg relative mb-6 shadow-lg backdrop-blur-lg ">
-                        <p className="quote text-7xl absolute -top-4 left-4 text-white opacity-30 font-serif">“</p>
-                        <div className="review-content relative z-10">
-                        <h3 className="text-lg md:text-xl font-bold">
-                        JOENEL TAGALOG <span className="text-yellow-500">★★★★★</span>
-                        </h3>
-                        <p className="role text-sm opacity-80">Registered Nurse</p>
-                        <p className="review-text text-sm mt-4 italic text-justify">
-                            "As a Disaster Nursing instructor in the College of Nursing, the MCI and Triage Training was a valuable experience that deepened my understanding of emergency response. The hands-on simulations provided practical skills that I can share with my students. The training made triage systems easy to grasp, enhancing my ability to teach disaster preparedness effectively. I recommend this program to fellow educators and healthcare professionals who want to strengthen their emergency response skills."
-                        </p>
-                        </div>
-                    </div>
-
-
-                    {/* Review Box 2 */}
-                    <div className="review-box bg-white/20 p-6 rounded-lg relative mb-6 shadow-lg backdrop-blur-lg">
-                        <p className="quote text-7xl absolute -top-4 left-4 text-white opacity-30 font-serif">“</p>
-                        <div className="review-content relative z-10">
-                        <h3 className="text-lg md:text-xl font-bold">
-                            Chidi Eze <span className="text-yellow-500">★★★★★</span>
-                        </h3>
-                        <p className="role text-sm opacity-80">Founder & CEO</p>
-                        <p className="review-text text-sm mt-4 italic">
-                            "The explanation is very clear and very helpful..."
-                        </p>
-                        </div>
-                    </div>
-                    </div>
-
-
-                    {/* Contact Section */}
-                    <div className="contact-section flex-1 z-10 w-full">
-                    <h2 className="text-xl md:text-3xl uppercase mb-6 font-semibold border-b-2 border-white inline-block">
-                        CONTACT US
-                    </h2>
-                    <form className="flex flex-col w-full">
-                        <input
-                        type="text"
-                        placeholder="NAME"
-                        required
-                        className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                        />
-                        <input
-                        type="email"
-                        placeholder="EMAIL"
-                        required
-                        className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                        />
-                        <input
-                        type="text"
-                        placeholder="COMPANY"
-                        required
-                        className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                        />
-                        <textarea
-                        placeholder="MESSAGE"
-                        required
-                        className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-                        ></textarea>
-                        <button
-                        type="submit"
-                        className="w-full bg-white text-black py-3 px-6 font-bold rounded-md hover:bg-yellow-500 transition"
+                  {/* Scrollable review content only */}
+                  <div className="overflow-y-auto max-h-[500px] pr-2">
+                    {reviews.length > 0 ? (
+                      reviews.map((review) => (
+                        <div
+                          key={review.id}
+                          className="review-box bg-white/20 p-4 sm:p-6 rounded-lg relative mb-6 shadow-lg backdrop-blur-lg w-[500px] max-w-full break-words"
                         >
-                        SUBMIT
-                        </button>
-                    </form>
-                    </div>
+                          <p className="quote text-7xl absolute -top-4 left-4 text-white opacity-30 font-serif">“</p>
+                          <div className="review-content relative z-10">
+                            <h3 className="text-lg md:text-xl font-bold">
+                              {review.name}{" "}
+                              <span className="text-yellow-500">
+                                {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                              </span>
+                            </h3>
+                            <p className="role text-sm opacity-80">{review.profession}</p>
+                            <p className="review-text text-sm mt-4 italic break-words leading-relaxed text-left whitespace-pre-line">
+                              "{review.content}"
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-white italic">No reviews yet.</p>
+                    )}
+                  </div>
                 </div>
-                </section>
 
+                {/* Contact Section */}
+                <div className="contact-section flex-1 z-10 w-full max-h-[500px] overflow-y-auto pr-2">
+                  <h2 className="text-xl md:text-3xl uppercase mb-6 font-semibold border-b-2 border-white inline-block">
+                    CONTACT US
+                  </h2>
+                  <form className="flex flex-col w-full">
+                    <input
+                      type="text"
+                      placeholder="NAME"
+                      required
+                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                    />
+                    <input
+                      type="email"
+                      placeholder="EMAIL"
+                      required
+                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                    />
+                    <input
+                      type="text"
+                      placeholder="COMPANY"
+                      required
+                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                    />
+                    <textarea
+                      placeholder="MESSAGE"
+                      required
+                      className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                    ></textarea>
+                    <button
+                      type="submit"
+                      className="w-full bg-white text-black py-3 px-6 font-bold rounded-md hover:bg-yellow-500 transition"
+                    >
+                      SUBMIT
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </section>
 
-    </main>
-    </>
-    );
-   
-}
-
+          </main>
+        </>
+      );
+    }
 
 export default Body;
+
 
 
 
