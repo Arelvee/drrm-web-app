@@ -524,7 +524,6 @@ function Body(){
                           key={review.id}
                           className="review-box bg-white/20 p-4 sm:p-6 rounded-lg relative mb-6 shadow-lg backdrop-blur-lg w-[500px] max-w-full break-words"
                         >
-                          <p className="quote text-7xl absolute -top-4 left-4 text-white opacity-30 font-serif">“</p>
                           <div className="review-content relative z-10">
                             <h3 className="text-lg md:text-xl font-bold">
                               {review.name}{" "}
