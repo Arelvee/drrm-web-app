@@ -208,8 +208,9 @@ function Body(){
                             key={news.id}
                             to={`/news/${news.id}`}
                             state={{ news }}
-                            className="block lg:flex bg-white rounded-2xl shadow-lg p-4 gap-6 relative"
+                            className="grid grid-cols-[300px_1fr] bg-white rounded-2xl shadow-lg p-4 gap-6 items-center"
                             >
+
                             <img
                                 src={news.image}
                                 alt={news.title}
@@ -252,7 +253,8 @@ function Body(){
              className="relative scroll-mt-16 flex flex-col justify-center items-center text-center min-h-screen bg-cover bg-center py-8 px-6 md:px-16"
              style={{ backgroundImage: `url(${historyImage})` }}
                 >
-                <div className="relative z-10 max-w-4xl bg-white/20 backdrop-blur-xl  p-6 md:p-10 rounded-xl shadow-2xl">
+                <div className="relative z-10 max-w-4xl bg-white p-6 md:p-10 rounded-xl shadow-2xl">
+
                     <h2 className="text-5xl font-extrabold uppercase text-red-900 tracking-widest mb-6 drop-shadow-lg">
                     HISTORY
                     </h2>
@@ -486,8 +488,7 @@ function Body(){
                 <div className="flex-grow">
                     <p className="text-black font-extrabold uppercase mb-2">{training.title}</p>
                 </div>
-
-                {/* Bottom: "Training Program" + Button */}
+                
                 <div className="mt-auto flex flex-col items-center">
                     <p className="text-gray-600 text-lg font-medium mb-2.5">Training Program</p>
 
@@ -503,9 +504,6 @@ function Body(){
             ))}
             </section>
 
-
-
-            
 
           {/* Contact And Review Section */}
 <section
