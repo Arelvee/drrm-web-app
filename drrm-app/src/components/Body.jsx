@@ -452,57 +452,60 @@ function Body(){
 
 
             {/* Trainings Section */}
-            <sections
+            <section
             id="trainings"
             className="relative scroll-mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center bg-gray-50 text-white bg-cover bg-center py-8 px-4 md:px-16"
             >
-                <div className="col-span-full">
-                    <h1 className="font-extrabold uppercase text-red-900 tracking-wide">What We Offer?</h1>
+            <div className="col-span-full">
+                <h1 className="font-extrabold uppercase text-red-900 tracking-wide">What We Offer?</h1>
+            </div>
+
+            {[{
+                image: BERSTImage,
+                title: "Basic Emergency Response Team Simulation Training (BERTST)",
+                link: "/training1",
+                buttonColor: "bg-[#04204a] hover:bg-[#02162f]"
+            }, {
+                image: MCIImage,
+                title: "Mass Casualty Incident (MCI) and Triage Training",
+                link: "/training2",
+                buttonColor: "bg-[#06441f] hover:bg-[#042e16]"
+            }, {
+                image: SFATBLSImage,
+                title: "Standard First Aid and Basic Life Support (SFATBLS)",
+                link: "/training3",
+                buttonColor: "bg-[#7a0000] hover:bg-[#3b0000]"
+            }].map((training, idx) => (
+                <div
+                key={idx}
+                className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col h-full max-w-xl w-full mx-auto text-center"
+                >
+                <img src={training.image} alt="Training Visual" className="w-full rounded-lg mb-4" />
+
+                {/* Top: Title */}
+                <div className="flex-grow">
+                    <p className="text-black font-extrabold uppercase mb-2">{training.title}</p>
                 </div>
 
-                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col max-w-xl w-full mx-auto text-center">
-                    <img src={BERSTImage} alt="Broken Image" className="w-full rounded-lg mb-4" />
-                    <p className="text-black font-extrabold uppercase mb-0">
-                        Basic Emergency Response Team Simulation Training (BERTST)
-                    </p>
+                {/* Bottom: "Training Program" + Button */}
+                <div className="mt-auto flex flex-col items-center">
                     <p className="text-gray-600 text-lg font-medium mb-2.5">Training Program</p>
-                    <Link
-                        to="/training1"
-                        className="mt-0 bg-[#04204a] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#02162f]"
-                    >
-                        Read and Join Us!
-                    </Link>
-                </div>
 
-                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col max-w-xl w-full mx-auto text-center">
-                    <img src={MCIImage} alt="Broken Image" className="w-full rounded-lg mb-4" />
-                    <p className="text-black font-extrabold uppercase mb-0">
-                        Mass Casualty Incident (MCI) and Triage Training
-                    </p>
-                    <p className="text-gray-600 text-lg font-medium mb-2.5">Training Program</p>
-                    <Link
-                        to="/training2"
-                        className="mt-0 bg-[#06441f] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#042e16]"
+                <Link
+                    to={training.link}
+                    className={`${training.buttonColor} w-full text-white font-semibold px-4 py-2 rounded-lg text-center`}
                     >
-                        Read and Join Us!
+                    Read and Join Us!
                     </Link>
-                </div>
 
-                <div className="relative z-10 p-4 bg-white rounded-2xl shadow-lg flex flex-col max-w-xl w-full mx-auto text-center">
-                    <img src={SFATBLSImage} alt="Broken Image" className="w-full rounded-lg mb-4" />
-                    <p className="text-black font-extrabold uppercase mb-0">
-                        Standard First Aid and Basic Life Support (SFATBLS)
-                    </p>
-                    <p className="text-gray-600 text-lg font-medium mb-2.5">Training Program</p>
-                    <Link
-                        to="/training3"
-                        className="mt-0 bg-[#7a0000] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#3b0000]"
-                    >
-                        Read and Join Us!
-                    </Link>
                 </div>
+                </div>
+            ))}
+            </section>
 
-            </sections>
+
+
+            
 
           {/* Contact And Review Section */}
 <section
