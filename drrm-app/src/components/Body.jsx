@@ -16,7 +16,7 @@ import BERSTImage from '../assets/BERSTImage.jpg';
 import SFATBLSImage from '../assets/SFATBLSImage.png';
 import MCIImage from '../assets/mci.jpg';
 import backgroundImage from '../assets/background.png';
-import historyImage from '../assets/history.jpg';
+import historyImage from '../assets/history-bg.jpg';
 
 
 const slides = [Slide1, Slide2, Slide3];
