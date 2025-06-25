@@ -16,7 +16,7 @@ import BERSTImage from '../assets/BERSTImage.jpg';
 import SFATBLSImage from '../assets/SFATBLSImage.png';
 import MCIImage from '../assets/mci.jpg';
 import backgroundImage from '../assets/background.png';
-import historyImage from '../assets/history-bg.jpg';
+import historyImage from '../assets/history-bg.jpeg';
 
 
 const slides = [Slide1, Slide2, Slide3];
@@ -258,10 +258,10 @@ function Body(){
                     <h2 className="text-5xl font-extrabold uppercase text-red-900 tracking-widest mb-6 drop-shadow-lg">
                     HISTORY
                     </h2>
-                    <p className="text-lg sm:text-xl text-black text-justify font-light">
+                    <p className="text-lg sm:text-xl text-black text-justify font-weight: 550">
                     The University of the Philippines Manila Disaster Risk Reduction and Management in Health (UPM DRRM-H) Center was officially launched on 8 June 2022 to conduct state-of-the-art disaster simulation trainings and evidence-based research. Established to provide virtual disaster training programs, the center aims to prevent mistakes in actual catastrophic situations by utilizing advanced simulation technologies. Located on the 2nd floor of Joaquin Gonzales Hall in UPM, it also serves as a hub for research.
                     </p>
-                    <p className="mt-6 text-lg sm:text-xl text-black leading-relaxed text-justify font-light">
+                    <p className="mt-6 text-lg sm:text-xl text-black leading-relaxed text-justify font-weight: 550">
                     Dr. Carlos Primero Gundran, UPM DRRM-H Center Head, highlighted its significance: "The Philippines is one of the most disaster-prone countries in the world. Through the Center, we seek to conduct training and seminars that will prepare our responders, even ordinary employees, in disaster preparedness through our state-of-the-art facilities. We can finally hold disaster preparedness training virtually, and mistakes could be prevented in actual situations."
                     </p>
                 </div>
