@@ -276,90 +276,109 @@ function Body(){
             </section>
 
         {/* MisVis Section */}
-        <div
-        className="py-16 px-4 flex justify-center items-center bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${MisVisBg3  })` }}
-        >
-        <div className="flex flex-col items-center space-y-6">
-            <h2 className="text-3xl font-bold text-center uppercase text-red-900 tracking-wide">
-            Vision, Mission & Core Values
-            </h2>
-
-            {/* 3D Scene Container */}
-            <div className="scene relative w-[420px] h-[540px] perspective-[1000px] pt-20">
-            <div
-                className="carousel absolute w-full h-full transition-transform duration-700"
-                style={{
-                transform: `translateZ(-288px) rotateY(${rotationCount * -120}deg)`,
-                transformStyle: 'preserve-3d',
-                }}
-            >
-                {/* Slide 1: Mission */}
-                <div
-                className="carousel__cell bg-red-900/83 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
-                style={{ transform: `rotateY(0deg) translateZ(400px)` }}
-                >
-                <Crosshair className="h-13 w-13 text-white" />
-                <h2 className="text-xl font-bold uppercase">Mission</h2>
-                <p className="text-sm">
-                    <strong className="text-3xl">UP</strong>lift the organization...<br />
-                    <strong className="text-3xl">D</strong>evelop competence...<br />
-                    <strong className="text-3xl">R</strong>evitalize linkages...<br />
-                    <strong className="text-3xl">R</strong>einforce research...<br />
-                    <strong className="text-3xl">M</strong>otivate stakeholders...<br />
-                    <strong className="text-3xl">H</strong>arness technology...
-                </p>
-                </div>
-
-                {/* Slide 2: Vision */}
-                <div
-                className="carousel__cell bg-red-900/83 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 px-10 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
-                style={{ transform: `rotateY(120deg) translateZ(400px)` }}
-                >
-                <Eye className="h-13 w-13 text-white" />
-                <h2 className="text-xl font-bold uppercase">Vision</h2>
-                <p className="text-sm">
-                    The academe's center for world class capacity building, research and public services in DRRM-H related issues in the Philippines by 2030.
-                </p>
-                </div>
-
-                {/* Slide 3: Core Values */}
-                <div
-                className="carousel__cell bg-red-900/83 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
-                style={{ transform: `rotateY(240deg) translateZ(400px)` }}
-                >
-                <HeartHandshake className="h-13 w-13 text-white" />
-
-                <h2 className="text-xl font-bold uppercase">Core Values</h2>
-                <p className="text-sm">
-                    <span><strong className="text-3xl">H</strong>onor</span><br />
-                    <span><strong className="text-3xl">E</strong>xcellence</span><br />
-                    <span><strong className="text-3xl">A</strong>ccountability</span><br />
-                    <span><strong className="text-3xl">L</strong>eadership</span><br />
-                    <span><strong className="text-3xl">T</strong>ransformation</span><br />
-                    <span><strong className="text-3xl">H</strong>armony</span>
-                </p>
-                </div>
-            </div>
-            </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-center space-x-4 mt-4">
+        <div className="py-16 px-4 flex justify-center items-center bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${MisVisBg3})` }}>
+            <div className="flex flex-col items-center space-y-6">
+                {/* Header with proper spacing */}
+        <h2 className="text-1xl font-bold text-center uppercase text-red-900 tracking-wide mb-12"> {/* Increased bottom margin */}
+        VISION, MISSION & CORE VALUES
+        </h2>
+        
+        {/* Container for carousel and arrows */}
+        <div className="flex items-center justify-center gap-8 relative"> {/* Added relative here */}
+            {/* Left arrow button */}
             <button
-                onClick={() => setRotationCount((prev) => prev - 1)}  // always rotate counter-clockwise
-                className="bg-white text-red-900 font-bold px-4 py-2 rounded hover:bg-gray-100"
+                onClick={() => setRotationCount((prev) => prev - 1)}
+                className="bg-white text-red-900 font-bold p-3 rounded-full hover:bg-gray-100 shadow-md transform transition hover:scale-110 z-10 -translate-x-30"
+                aria-label="Previous"
             >
-                Next
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
             </button>
-            <button
-                onClick={() => setRotationCount((prev) => prev + 1)}  // always rotate clockwise
-                className="bg-white text-red-900 font-bold px-4 py-2 rounded hover:bg-gray-100"
-            >
-                Prev
-            </button>
+
+            {/* 3D Scene Container - Adjusted for visibility */}
+            <div className="scene relative w-[500px] h-[540px] perspective-[1000px] mx-4 pt-10">
+                <div
+                    className="carousel absolute w-full h-full transition-transform duration-700"
+                    style={{
+                        transform: `translateZ(-340px) rotateY(${rotationCount * -120}deg)`,
+                        transformStyle: 'preserve-3d',
+                    }}
+                >
+                    {/* Slide 1: Mission */}
+                    <div
+                        className="carousel__cell bg-red-900/90 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
+                        style={{ 
+                            transform: `rotateY(0deg) translateZ(400px)`,
+                            left: '50%',
+                            marginLeft: '-245px' /* Half of width */
+                        }}
+                    >
+                        <Crosshair className="h-13 w-13 text-white" />
+                        <h2 className="text-xl font-bold uppercase">Mission</h2>
+                        <p className="text-sm">
+                            <strong className="text-3xl">UP</strong>lift the organization...<br />
+                            <strong className="text-3xl">D</strong>evelop competence...<br />
+                            <strong className="text-3xl">R</strong>evitalize linkages...<br />
+                            <strong className="text-3xl">R</strong>einforce research...<br />
+                            <strong className="text-3xl">M</strong>otivate stakeholders...<br />
+                            <strong className="text-3xl">H</strong>arness technology...
+                        </p>
+                    </div>
+
+                    {/* Slide 2: Vision */}
+                    <div
+                        className="carousel__cell bg-red-900/90 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 px-10 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
+                        style={{ 
+                            transform: `rotateY(120deg) translateZ(400px)`,
+                            left: '50%',
+                            marginLeft: '-245px' /* Half of width */
+                        }}
+                    >
+                        <Eye className="h-13 w-13 text-white" />
+                        <h2 className="text-xl font-bold uppercase">Vision</h2>
+                        <p className="text-sm">
+                            The academe's center for world class capacity building, research and public services in DRRM-H related issues in the Philippines by 2030.
+                        </p>
+                    </div>
+
+                    {/* Slide 3: Core Values */}
+                    <div
+                        className="carousel__cell bg-red-900/90 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
+                        style={{ 
+                            transform: `rotateY(240deg) translateZ(400px)`,
+                            left: '50%',
+                            marginLeft: '-245px' /* Half of width */
+                        }}
+                    >
+                        <HeartHandshake className="h-13 w-13 text-white" />
+                        <h2 className="text-xl font-bold uppercase">Core Values</h2>
+                        <p className="text-sm">
+                            <span><strong className="text-3xl">H</strong>onor</span><br />
+                            <span><strong className="text-3xl">E</strong>xcellence</span><br />
+                            <span><strong className="text-3xl">A</strong>ccountability</span><br />
+                            <span><strong className="text-3xl">L</strong>eadership</span><br />
+                            <span><strong className="text-3xl">T</strong>ransformation</span><br />
+                            <span><strong className="text-3xl">H</strong>armony</span>
+                        </p>
+                    </div>
+                </div>
             </div>
+
+            {/* Right arrow button */}
+            <button
+                onClick={() => setRotationCount((prev) => prev + 1)}
+                className="bg-white text-red-900 font-bold p-3 rounded-full hover:bg-gray-100 shadow-md transform transition hover:scale-110 z-10 translate-x-30"
+                aria-label="Next"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+            </button>
         </div>
-        </div>
+    </div>
+</div>
 
  
 
