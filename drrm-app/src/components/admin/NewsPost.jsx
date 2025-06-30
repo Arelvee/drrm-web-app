@@ -154,73 +154,82 @@ const handleImageUpload = async (e) => {
             </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {newsList.map((news) => (
-              <div
-                key={news.id}
-                className="bg-white shadow rounded p-4 relative"
-              >
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setSelectedNews(news);
-                    setView("detail");
-                  }}
-                >
-                  {news.image && (
-                    <img
-                      src={news.image}
-                      alt={news.title}
-                      className="w-full h-40 object-cover mb-2 rounded"
-                    />
-                  )}
-                  <h3 className="font-bold text-lg text-red-800 mb-1">
-                    {news.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-2">
-                  {news.createdAt?.toDate().toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  }) || "N/A"} • {news.readTime}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {news.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => startEdit(news)}
-                      title="Edit"
-                      className="flex gap-2 text-center bg-yellow-500 p-2 text-white rounded hover:text-blue-800"
-                    >
-                      <Pencil size={18} /> Edit
-                    </button>
-                    <button
-                      onClick={() => deleteNews(news.id)}
-                      title="Delete"
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+  {newsList.map((news) => (
+    <div
+      key={news.id}
+      className="bg-white shadow rounded p-4 flex flex-col justify-between"
+      style={{ minHeight: "100%" }}
+    >
+      {/* TOP CONTENT */}
+      <div
+        className="cursor-pointer"
+        onClick={() => {
+          setSelectedNews(news);
+          setView("detail");
+        }}
+      >
+        {news.image && (
+          <img
+            src={news.image}
+            alt={news.title}
+            className="w-full h-40 object-cover mb-2 rounded"
+          />
+        )}
+        <h3 className="font-bold text-lg text-red-800 mb-2">{news.title}</h3>
+      </div>
+
+      {/* BOTTOM CONTENT */}
+      <div className="mt-auto">
+        {/* DATE & READ TIME */}
+        <p className="text-sm text-gray-600 mb-2">
+          {news.createdAt?.toDate().toLocaleString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          }) || "N/A"}{" "}
+          • {news.readTime}
+        </p>
+
+        {/* TAGS */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {news.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* EDIT/DELETE BUTTONS */}
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => startEdit(news)}
+            title="Edit"
+            className="flex gap-2 text-center bg-yellow-500 p-2 text-white rounded hover:text-blue-800"
+          >
+            <Pencil size={18} /> Edit
+          </button>
+          <button
+            onClick={() => deleteNews(news.id)}
+            title="Delete"
+            className="text-red-600 hover:text-red-800"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
         </>
       )}
       
-      /* Detail View */
-
       {view === "detail" && selectedNews && (
         <div>
           <div className="flex justify-between items-center mb-4">
@@ -281,7 +290,6 @@ const handleImageUpload = async (e) => {
         </div>
       )}
 
-      /* Form View */
       {view === "form" && (
         <div>
           <button
