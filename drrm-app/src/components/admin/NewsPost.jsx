@@ -26,7 +26,7 @@ const NewsPost = () => {
   const [imageUrls, setImageUrls] = useState([]);
 const [selectedImage, setSelectedImage] = useState(null);
 
-
+{/* Image Upload */}
 const handleImageUpload = async (e) => {
     const files = e.target.files;
     const formData = new FormData();
@@ -50,7 +50,7 @@ const handleImageUpload = async (e) => {
     }
   };
   
-
+{/* Fetches News */}
   const fetchNews = async () => {
     const snapshot = await getDocs(collection(db, "news"));
     const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -132,6 +132,8 @@ const handleImageUpload = async (e) => {
   };
 
   return (
+    /* List View */
+
     <div className="md:w-4/5 ml-auto">
       {view === "list" && (
         <>
@@ -216,6 +218,8 @@ const handleImageUpload = async (e) => {
           </div>
         </>
       )}
+      
+      /* Detail View */
 
       {view === "detail" && selectedNews && (
         <div>
@@ -277,6 +281,7 @@ const handleImageUpload = async (e) => {
         </div>
       )}
 
+      /* Form View */
       {view === "form" && (
         <div>
           <button
@@ -315,41 +320,41 @@ const handleImageUpload = async (e) => {
                 <label className="py-2 w-full md:w-1/8 font-bold">Upload Image:</label>
                 <div>
                     <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 space-x-2 mt-2">
-                    {imageUrls.map((url, index) => (
-                        <div key={index} className="relative group">
-                        <img
-                            src={url}
-                            alt={`Uploaded ${index}`}
-                            className="w-24 h-24 cursor-pointer hover:scale-105 transition-transform rounded"
-                            onClick={() => setSelectedImage(url)}
-                        />
-                        <button
-                            onClick={(e) => {
-                            e.stopPropagation();
-                            setImageUrls(imageUrls.filter((_, i) => i !== index));
-                            }}
-                            className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                            ✖
-                        </button>
-                        </div>
-                    ))}
+                      {imageUrls.map((url, index) => (
+                          <div key={index} className="relative group">
+                          <img
+                              src={url}
+                              alt={`Uploaded ${index}`}
+                              className="w-24 h-24 cursor-pointer hover:scale-105 transition-transform rounded"
+                              onClick={() => setSelectedImage(url)}
+                          />
+                          <button
+                              onClick={(e) => {
+                              e.stopPropagation();
+                              setImageUrls(imageUrls.filter((_, i) => i !== index));
+                              }}
+                              className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                              ✖
+                          </button>
+                          </div>
+                        ))}
 
-                    <label
-                        htmlFor="fileInput"
-                        className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-zinc-300 outline-none rounded cursor-pointer hover:bg-gray-100"
-                    >
-                        <span className="text-gray-400 text-sm">+</span>
-                        <span className="text-gray-400 text-xs">Add Photo</span>
-                    </label>
-                    <input
-                        id="fileInput"
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                    />
+                          <label
+                              htmlFor="fileInput"
+                              className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-zinc-300 outline-none rounded cursor-pointer hover:bg-gray-100"
+                          >
+                              <span className="text-gray-400 text-sm">+</span>
+                              <span className="text-gray-400 text-xs">Add Photo</span>
+                          </label>
+                          <input
+                              id="fileInput"
+                              type="file"
+                              multiple
+                              accept="image/*"
+                              onChange={handleImageUpload}
+                              className="hidden"
+                          />
                     </div>
 
                     {selectedImage && (

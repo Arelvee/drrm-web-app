@@ -17,6 +17,8 @@ import SFATBLSImage from '../assets/SFATBLSImage.png';
 import MCIImage from '../assets/mci.jpg';
 import backgroundImage from '../assets/background.png';
 import historyImage from '../assets/history-bg.jpeg';
+import MisVisBg3 from '../assets/misvis-bg3.png';
+import { ChevronLeft, ChevronRight, Crosshair, Eye, HeartHandshake } from 'lucide-react';
 
 
 const slides = [Slide1, Slide2, Slide3];
@@ -61,6 +63,10 @@ const slides = [Slide1, Slide2, Slide3];
 
 function Body(){
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [rotationCount, setRotationCount] = useState(0);
+
+
+    
     const [activeSection, setActiveSection] = useState(() => {
         const isMobile = window.innerWidth < 1024;
         return isMobile ? null : 'ALL'; // Show all on desktop by default
@@ -125,13 +131,15 @@ function Body(){
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-        }, 3000);
+        }, 6000);
         return () => clearInterval(interval);
     }, []);
 
     const goToSlide = (index) => {
         setCurrentIndex(index);
     };
+
+    
     return(
         <>
         <main id="home" className="bg-gray-150 mt-18">
@@ -235,7 +243,7 @@ function Body(){
                         ))}
                     </div>
 
-                    {/* Read All News Button - Fully Aligned */}
+                    {/* Read All News Button*/}
                         <div className="mt-6 flex justify-center items-center">
                         <Link
                             to="/news"
@@ -267,72 +275,93 @@ function Body(){
                 </div>
             </section>
 
-            {/* Vision & Mission Section */}
-            <section className="relative grid gap-8 text-center  items-center justify-center bg-gray-50 py-8 px-4 md:px-16">
-                {/* Vision */}
-                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg max-w-4xl">
-                    <div className="flex items-center gap-5 justify-center  border-b pb-4 mb-4 border-zinc-300">
-                        <img src={Vision} alt="Vision" className="h-10 lg:h-15 w-auto" />
-                        <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
-                            VISION
-                        </h2>
-                    </div>
-                    
-                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify">
-                    The academe's center for world class capacity building, research and public services in DRRM-H related issues in the Philippines by 2030.
-                    </p>
+        {/* MisVis Section */}
+        <div
+        className="py-16 px-4 flex justify-center items-center bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${MisVisBg3  })` }}
+        >
+        <div className="flex flex-col items-center space-y-6">
+            <h2 className="text-3xl font-bold text-center uppercase text-red-900 tracking-wide">
+            Vision, Mission & Core Values
+            </h2>
+
+            {/* 3D Scene Container */}
+            <div className="scene relative w-[420px] h-[540px] perspective-[1000px] pt-20">
+            <div
+                className="carousel absolute w-full h-full transition-transform duration-700"
+                style={{
+                transform: `translateZ(-288px) rotateY(${rotationCount * -120}deg)`,
+                transformStyle: 'preserve-3d',
+                }}
+            >
+                {/* Slide 1: Mission */}
+                <div
+                className="carousel__cell bg-red-900/83 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
+                style={{ transform: `rotateY(0deg) translateZ(400px)` }}
+                >
+                <Crosshair className="h-13 w-13 text-white" />
+                <h2 className="text-xl font-bold uppercase">Mission</h2>
+                <p className="text-sm">
+                    <strong className="text-3xl">UP</strong>lift the organization...<br />
+                    <strong className="text-3xl">D</strong>evelop competence...<br />
+                    <strong className="text-3xl">R</strong>evitalize linkages...<br />
+                    <strong className="text-3xl">R</strong>einforce research...<br />
+                    <strong className="text-3xl">M</strong>otivate stakeholders...<br />
+                    <strong className="text-3xl">H</strong>arness technology...
+                </p>
                 </div>
 
-                {/* Mission */}
-                <div className="bg-white p-6 md:p-10 rounded-2xl shadow-lg max-w-4xl">
-                    <div className="flex items-center gap-5 justify-center  border-b pb-4 mb-4 border-zinc-300">
-                        <img src={Target} alt="Target" className="h-15 lg:h-20 w-auto" />
-                        <h2 className="text-4xl font-extrabold uppercase text-red-900 tracking-wide">
-                            MISSION
-                        </h2>
-                    </div>
-                    <p className="sm:text-sm text-gray-800 leading-relaxed text-justify py-2">
-                        <strong className="text-2xl mr-1">UP</strong>lift the value and status level of the organization as the lead resource in disaster risk reduction and management in health. 
-                    </p>
-                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
-                        <strong className="text-2xl mr-1">D</strong>evelop individual’s competence in disaster risk reduction and management in health to minimize disaster related injuries, disabilities, diseases, and deaths through capacity building programs, research, and public service. 
-                    </p>
-                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
-                        <strong className="text-2xl mr-1">R</strong>evitalize institutional linkages with multiple stakeholders enabling enhanced collaborationg among healthcare providers, community leaders, private institutions, and the academe.
-                    </p>
-                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
-                        <strong className="text-2xl mr-1">R</strong>einforce research agendas to gather evidence based data. create policies, programs, and publications to contribute knowledge and build capacity towards health resilient communities during disaster.
-                    </p>
-                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
-                        <strong className="text-2xl mr-1">M</strong>otivate internal stakeholders towards professional and personal upliftment while managing scarce resources to achieve  sustainability.
-                    </p>
-                    <p className="text-md sm:text-lg text-gray-800 leading-relaxed text-justify py-2">
-                        <strong className="text-2xl mr-1">H</strong>airness technological advancement to create world-class processes and    systems that would promote innovative programs and technical know news promoting quality of life and sustainability of the communities we serve.
-                    </p>
+                {/* Slide 2: Vision */}
+                <div
+                className="carousel__cell bg-red-900/83 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 px-10 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
+                style={{ transform: `rotateY(120deg) translateZ(400px)` }}
+                >
+                <Eye className="h-13 w-13 text-white" />
+                <h2 className="text-xl font-bold uppercase">Vision</h2>
+                <p className="text-sm">
+                    The academe's center for world class capacity building, research and public services in DRRM-H related issues in the Philippines by 2030.
+                </p>
                 </div>
-                
-                {/* Core Values */}
-                <div className="bg-white rounded-2xl shadow-lg px-6 py-8 md:px-10 md:py-10 max-w-4xl">
-                    <div className="grid grid-cols-2 items-center">
-                        {/* Left Section */}
-                        <div className="flex flex-col items-center justify-center gap-4 border-r border-gray-300 px-10">
-                            <img src={Values} alt="Values Icon" className="h-20 w-auto" />
-                            <h2 className="text-xl md:text-2xl font-extrabold uppercase text-red-900 text-center">
-                                Core Values
-                            </h2>
-                        </div>
-                        {/* Right Section */}
-                        <div className="mx-auto pl-4 sm:pl-0 text-justify ">
-                            <p><strong className="text-2xl mr-1">H</strong>onor</p>
-                            <p><strong className="text-2xl mr-1">E</strong>xcellence</p>
-                            <p><strong className="text-2xl mr-1">A</strong>ccountability</p>
-                            <p><strong className="text-2xl mr-1">L</strong>eadership</p>
-                            <p><strong className="text-2xl mr-1">T</strong>ransformation</p>
-                            <p><strong className="text-2xl mr-1">H</strong>armony</p>
-                        </div>
-                    </div>
+
+                {/* Slide 3: Core Values */}
+                <div
+                className="carousel__cell bg-red-900/83 backdrop-blur-lg rounded-2xl shadow-[0_0_25px_rgba(0,0,0,0.5)] text-white p-6 w-[490px] h-[390px] absolute flex flex-col justify-start items-center text-justify space-y-3"
+                style={{ transform: `rotateY(240deg) translateZ(400px)` }}
+                >
+                <HeartHandshake className="h-13 w-13 text-white" />
+
+                <h2 className="text-xl font-bold uppercase">Core Values</h2>
+                <p className="text-sm">
+                    <span><strong className="text-3xl">H</strong>onor</span><br />
+                    <span><strong className="text-3xl">E</strong>xcellence</span><br />
+                    <span><strong className="text-3xl">A</strong>ccountability</span><br />
+                    <span><strong className="text-3xl">L</strong>eadership</span><br />
+                    <span><strong className="text-3xl">T</strong>ransformation</span><br />
+                    <span><strong className="text-3xl">H</strong>armony</span>
+                </p>
                 </div>
-            </section>       
+            </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-center space-x-4 mt-4">
+            <button
+                onClick={() => setRotationCount((prev) => prev - 1)}  // always rotate counter-clockwise
+                className="bg-white text-red-900 font-bold px-4 py-2 rounded hover:bg-gray-100"
+            >
+                Next
+            </button>
+            <button
+                onClick={() => setRotationCount((prev) => prev + 1)}  // always rotate clockwise
+                className="bg-white text-red-900 font-bold px-4 py-2 rounded hover:bg-gray-100"
+            >
+                Prev
+            </button>
+            </div>
+        </div>
+        </div>
+
+ 
 
             {/*DRRM-H BRIDGE-2030 */}
             {/* <section className="grid gap-4 text-white text-center bg-gray-50 py-8 px-4 md:px-16">
@@ -456,7 +485,7 @@ function Body(){
             {/* Trainings Section */}
             <section
             id="trainings"
-            className="relative scroll-mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center bg-gray-50 text-white bg-cover bg-center py-8 px-4 md:px-16"
+            className="relative scroll-mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center bg-gray-150 text-white bg-cover bg-center py-8 px-4 md:px-16"
             >
             <div className="col-span-full">
                 <h1 className="font-extrabold uppercase text-red-900 tracking-wide">What We Offer?</h1>
@@ -549,52 +578,64 @@ function Body(){
       </div>
     </div>
 
-    {/* Contact Section */}
-    <div className="contact-section flex-1 z-10 w-full flex flex-col">
-      <div className="mb-6">
-        <h2 className="text-xl md:text-3xl uppercase font-semibold inline border-b-2 border-white">
-          CONTACT US
-        </h2>
-      </div>
+                {/* Contact Section */}
+            <div className="contact-section flex-1 z-10 w-full flex flex-col">
+            <div className="mb-6">
+                <h2 className="text-xl md:text-3xl uppercase font-semibold inline border-b-2 border-white">
+                CONTACT US
+                </h2>
+            </div>
 
-      {/* Scrollable form container */}
-      <div className="overflow-y-auto max-h-[500px] pr-2">
-        <form className="flex flex-col w-full">
-          <input
-            type="text"
-            placeholder="NAME"
-            required
-            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-          />
-          <input
-            type="email"
-            placeholder="EMAIL"
-            required
-            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-          />
-          <input
-            type="text"
-            placeholder="COMPANY"
-            required
-            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-          />
-          <textarea
-            placeholder="MESSAGE"
-            required
-            className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
-          ></textarea>
-          <button
-            type="submit"
-            className="w-full bg-white text-black py-3 px-6 font-bold rounded-md hover:bg-yellow-500 transition"
-          >
-            SUBMIT
-          </button>
-        </form>
-      </div>
-    </div>
+            <div className="overflow-y-auto max-h-[500px] pr-2">
+                <form 
+                action="https://formsubmit.co/rgvisaya@up.edu.ph" 
+                method="POST" 
+                className="flex flex-col w-full"
+                >
+                {/* Optional settings for FormSubmit */}
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_template" value="table" />
 
-  </div> 
-</section> 
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="NAME"
+                    required
+                    className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                />
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="EMAIL"
+                    required
+                    className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                />
+                <input
+                    type="text"
+                    name="company"
+                    placeholder="COMPANY"
+                    required
+                    className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                />
+                <textarea
+                    name="message"
+                    placeholder="MESSAGE"
+                    required
+                    className="w-full bg-transparent border border-white text-white p-3 mb-4 rounded-md focus:ring-2 focus:ring-yellow-500"
+                ></textarea>
+                <button
+                    type="submit"
+                    className="w-full bg-white text-black py-3 px-6 font-bold rounded-md hover:bg-yellow-500 transition"
+                >
+                    SUBMIT
+                </button>
+                </form>
+            </div>
+            </div>
+
+
+            </div> 
+    </section> 
 
 
   </main>
